@@ -1,5 +1,5 @@
 const answer = 'yo!';
 
 export default () => {
-  console.log(`the answer is ${answer}`);
+  document.write(`the answer is ${answer}`);
 }
