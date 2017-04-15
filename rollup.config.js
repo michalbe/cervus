@@ -6,7 +6,7 @@ import livereload from 'rollup-plugin-livereload'
 export default {
   entry: 'src/main.js',
   format: 'umd',
-  moduleName: 'CERVUS',
+  moduleName: 'Cervus',
   plugins: [
     resolve({
       customResolveOptions: {
@@ -20,7 +20,9 @@ export default {
       open: true,
       contentBase: ['example', 'dist']
     }),
-    livereload()
+    livereload({
+      watch: ['dist', 'example']
+    })
   ],
   // external: [], // external shit goes here
   dest: 'dist/cervus.js'
