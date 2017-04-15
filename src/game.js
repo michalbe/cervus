@@ -1,4 +1,4 @@
-import { canvas, gl } from './context.js';
+import { canvas } from './context.js';
 
 const default_options = {
   width: 800,
