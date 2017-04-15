@@ -4,7 +4,7 @@ const game = new Cervus.Game({
   width: window.innerWidth,
   height: window.innerHeight,
   // dom: document.body,
-  fps: 10
+  // fps: 10
 });
 
 // const model = game.model('model.vox');
