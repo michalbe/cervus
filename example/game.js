@@ -4,7 +4,7 @@ const game = new Cervus.Game({
   width: window.innerWidth,
   height: window.innerHeight,
   // dom: document.body,
-  // fps: 1000/60
+  fps: 10
 });
 
 // const model = game.model('model.vox');
@@ -60,6 +60,8 @@ var indices = [
   21, 20, 23,
   21, 23, 22
 ];
+
+game.create_object(indices, vertices);
 
 game.tick((delta) => {
   console.log(delta);
