@@ -61,8 +61,9 @@ var indices = [
   21, 23, 22
 ];
 
-game.create_object(indices, vertices);
+const cube = game.create_object(indices, vertices);
 
-game.tick((delta) => {
-  console.log(delta);
+game.add_frame_listener('cube::rotation', (delta) => {
+  // console.log(delta);
+  cube.rotation.x += 10;
 });
