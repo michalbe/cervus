@@ -41,7 +41,7 @@ class Game {
 
     gl.enableVertexAttribArray(aVertex);
 
-    set_projection(program, 60, this.options.width / this.options.height, 0.1, 100);
+    set_projection(program, 95, this.options.width / this.options.height, 0.1, 100);
 
   }
 
@@ -88,8 +88,8 @@ class Game {
       }
     });
 
-    const rotation = Date.now() / 1000;
-    const axis = [0, 1, 0.5];
+    const rotation = tick_time / 1000;
+    const axis = [0.5, 1, 0.5];
     const position = [0, 0, -5];
 
 		set_model_view(program, position, rotation, axis);
