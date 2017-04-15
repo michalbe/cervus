@@ -2,5 +2,16 @@
   "name": "cervus",
   "version": "0.0.1",
   "author": "Michał Budzyński <michal@virtualdesign.pl>",
-  "repository": "git@github.com:michalbe/cervus.git"
+  "repository": "git@github.com:michalbe/cervus.git",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "eslint": "^3.19.0",
+    "eslint-config-defaults": "^9.0.0",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-watch": "^3.2.2"
+  }
 }
