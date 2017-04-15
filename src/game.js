@@ -5,6 +5,7 @@ const default_options = {
   height: 600,
   dom: document.body,
   fps: 60,
+  autostart: true
 };
 
 class Game {
@@ -17,7 +18,70 @@ class Game {
       this.options[key] = options[key];
     });
 
-    console.log(this.options);
+    canvas.width = this.options.width;
+    canvas.height = this.options.height;
+
+    this.options.dom.appendChild(canvas);
+
+    this.running = this.options.autostart;
+
+    this.last_tick = performance.now();
+    this.last_render = this.last_tick;
+    this.tick_length = 1000/this.options.fps;
+
+    this.actions = {};
+
+    this.tick((typeof performance !== 'undefined' && performance.now()) || 0);
+  }
+
+  stop() {
+    this.running = false;
+  }
+
+  start() {
+    this.running = true;
+  }
+
+  tick(tick_time) {
+    window.requestAnimationFrame((tick_time) => this.tick(tick_time));
+    const next_tick = this.last_tick + this.tick_length;
+
+
+    if (tick_time > next_tick) {
+      const ticks_qty = Math.floor((tick_time - this.last_tick) / this.tick_length);
+      this.perform_ticks(ticks_qty);
+      this.draw();
+    }
+
+  }
+
+  add_frame_listener(name, action) {
+    this.actions[name] = action;
+  }
+
+  remove_frame_listener(name) {
+    delete this.actions[name];
+  }
+
+  perform_ticks(ticks_qty) {
+    for(var i=0; i < ticks_qty; i++) {
+      this.last_tick = this.last_tick + this.tick_length;
+      this.update( this.last_tick );
+    }
+  }
+
+  update(tick_time) {
+    Object.keys(this.actions).forEach(action => {
+      if (this.actions[action]) {
+        this.actions[action](tick_time);
+      }
+    });
+
+    // console.log('update');
+  }
+
+  draw() {
+    // console.log('draw');
   }
 }
 
