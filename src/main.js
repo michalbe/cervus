@@ -1,7 +1,5 @@
-import foo from './foo.js';
+const answer = 'yo!';
 
-export default function () {
-
-  console.log(foo);
-
+export default () => {
+  console.log(`the answer is ${answer}`);
 }
