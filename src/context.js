@@ -1,4 +1,5 @@
 import { mat4 } from 'gl-matrix';
+import { vertex_code, fragment_code } from './shaders.js';
 
 const canvas = document.createElement('canvas');
 const gl = canvas.getContext('webgl');
@@ -7,7 +8,7 @@ function create_float_buffer(data) {
   const buffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
-  
+
   return buffer;
 }
 
@@ -56,11 +57,11 @@ function create_texture_object(image) {
 function set_projection(program, fov, aspect, near, far) {
   const projection_matrix = mat4.create();
   mat4.perspective(
+    projection_matrix,
     fov,
     aspect,
     near,
-    far,
-    projection_matrix
+    far
   );
 
   gl.uniformMatrix4fv(
@@ -91,9 +92,10 @@ function set_normal_matrix(program, mv) {
 
 function set_model_view(program, pos, rot, axis) {
   const model_view_matrix = mat4.identity(mat4.create());
-
-  mat4.translate(model_view_matrix, pos);
-  mat4.rotate(model_view_matrix, rot, axis);
+  // const translation = vec3.create();
+  // vec3.set (translation, 0, 0, -2.0);
+  mat4.translate(model_view_matrix, model_view_matrix, pos);
+  mat4.rotate(model_view_matrix, model_view_matrix, rot, axis);
 
   gl.uniformMatrix4fv(
     gl.getUniformLocation(program, "uModelView"),
@@ -103,6 +105,11 @@ function set_model_view(program, pos, rot, axis) {
 
   return model_view_matrix;
 }
+
+const program = create_program_object(
+  create_shader_object(gl.VERTEX_SHADER, vertex_code),
+  create_shader_object(gl.FRAGMENT_SHADER, fragment_code)
+);
 
 export {
   gl,
@@ -114,5 +121,6 @@ export {
   create_texture_object,
   set_projection,
   set_normal_matrix,
-  set_model_view
+  set_model_view,
+  program
 };

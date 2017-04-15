@@ -1,4 +1,4 @@
-import { canvas } from './context.js';
+import { gl, canvas, create_float_buffer, create_index_buffer, program, set_model_view, set_projection } from './context.js';
 
 const default_options = {
   width: 800,
@@ -32,6 +32,17 @@ class Game {
     this.actions = {};
 
     this.tick((typeof performance !== 'undefined' && performance.now()) || 0);
+
+
+    gl.clearColor(0.15,0.15,0.15,1);
+    gl.enable(gl.DEPTH_TEST);
+    gl.useProgram(program);
+    const aVertex = gl.getAttribLocation(program, "aVertex");
+
+    gl.enableVertexAttribArray(aVertex);
+
+    set_projection(program, 60, this.options.width / this.options.height, 0.1, 100);
+
   }
 
   stop() {
@@ -77,11 +88,33 @@ class Game {
       }
     });
 
+    const rotation = Date.now() / 1000;
+    const axis = [0, 1, 0.5];
+    const position = [0, 0, -5];
+
+		set_model_view(program, position, rotation, axis);
     // console.log('update');
   }
 
   draw() {
-    // console.log('draw');
+    if (this.object) {
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+			gl.viewport(0, 0, canvas.width, canvas.height);
+
+			gl.bindBuffer(gl.ARRAY_BUFFER, this.object.vbo);
+			gl.vertexAttribPointer(gl.getAttribLocation(program, "aVertex"), 3, gl.FLOAT, false, 0, 0);
+
+			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.object.ibo);
+			gl.drawElements(gl.TRIANGLES, this.object.num, gl.UNSIGNED_SHORT, 0);
+    }
+  }
+
+  create_object(indices, vertices) {
+    this.object = {
+        vbo : create_float_buffer(vertices),
+        ibo : create_index_buffer(indices),
+        num : indices.length
+      }
   }
 }
 

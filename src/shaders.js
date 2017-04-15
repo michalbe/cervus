@@ -9,7 +9,7 @@ const vertex_code =
   "}"
 ;
 
-const fragment_source =
+const fragment_code =
   "#ifdef GL_ES\r\n" +
     "precision mediump float;\r\n" +
   "#endif\r\n" +
@@ -18,3 +18,5 @@ const fragment_source =
     "gl_FragColor = vColor;" +
   "}"
 ;
+
+export { vertex_code, fragment_code };
