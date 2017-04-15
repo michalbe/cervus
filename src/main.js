@@ -1,5 +1,6 @@
-const answer = 'yo!';
+import { Game } from './game.js';
 
-export default () => {
-  document.write(`the answer is ${answer}`);
+// const Cervus = { Game };
+export {
+  Game
 }
