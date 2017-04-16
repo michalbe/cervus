@@ -74,10 +74,12 @@ const cube2 = new Cervus.Entity({ vertices, indices });
 cube2.position.z = -10;
 cube2.position.x = -5;
 cube2.position.y = 3;
+cube2.color = "#FF00FF";
 game.add(cube2);
 
 const cube = new Cervus.Entity({ vertices, indices });
 cube.position.z = -10;
+cube.color = "#BADA55";
 game.add(cube);
 
 
