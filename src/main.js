@@ -1,5 +1,5 @@
-import { Game } from './game.js';
-import { Entity } from './entity.js';
+import { Game } from './core/game.js';
+import { Entity } from './core/entity.js';
 
 // const Cervus = { Game };
 export {
