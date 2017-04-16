@@ -63,6 +63,8 @@ var indices = [
 
 const cube = new Cervus.Entity({ vertices, indices });
 
+cube.position.z = -10;
+
 game.add(cube);
 
 // game.add_frame_listener('cube::rotation', (delta) => {

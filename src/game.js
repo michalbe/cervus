@@ -1,4 +1,4 @@
-import { gl, canvas, program, set_model_view, set_projection } from './context.js';
+import { gl, canvas, program, set_projection } from './context.js';
 
 const default_options = {
   width: 800,
@@ -92,7 +92,7 @@ class Game {
       }
     });
 
-    this.entities.forEach((entity) => entity.update());
+    this.entities.forEach((entity) => entity.update(tick_time));
     // console.log('update');
   }
 
