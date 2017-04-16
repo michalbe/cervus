@@ -4,7 +4,7 @@ const game = new Cervus.Game({
   width: window.innerWidth,
   height: window.innerHeight,
   // dom: document.body,
-  // fps: 10
+  fps: 60
 });
 
 // const model = game.model('model.vox');
@@ -61,9 +61,11 @@ var indices = [
   21, 23, 22
 ];
 
-const cube = game.create_object(indices, vertices);
+const cube = new Cervus.Entity({ vertices, indices });
 
-game.add_frame_listener('cube::rotation', (delta) => {
-  // console.log(delta);
-  cube.rotation.x += 10;
-});
+game.add(cube);
+
+// game.add_frame_listener('cube::rotation', (delta) => {
+//   // console.log(delta);
+//   cube.rotation.x += 10;
+// });
