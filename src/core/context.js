@@ -1,5 +1,5 @@
 import { mat4 } from 'gl-matrix';
-import { vertex_code, fragment_code } from './shaders.js';
+import { vertex_code, fragment_code } from '../shaders/shaders.js';
 
 const canvas = document.createElement('canvas');
 const gl = canvas.getContext('webgl');

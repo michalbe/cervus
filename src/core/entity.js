@@ -1,6 +1,6 @@
 import { create_float_buffer, create_index_buffer, gl, program } from './context.js';
 import { mat4 } from 'gl-matrix';
-import { obj_to_vec, hex_to_vec } from './utils.js';
+import { obj_to_vec, hex_to_vec } from '../misc/utils.js';
 
 const zero_vector = {
   x: 0,
