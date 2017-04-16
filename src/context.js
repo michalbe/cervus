@@ -42,18 +42,6 @@ function create_program_object(vs, fs) {
   return program;
 }
 
-function create_texture_object(image) {
-  const texture = gl.createTexture();
-  gl.bindTexture(gl.TEXTURE_2D, texture);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-  gl.bindTexture(gl.TEXTURE_2D, null);
-
-  return texture;
-}
-
 function set_projection(program, fov, aspect, near, far) {
   const projection_matrix = mat4.create();
   mat4.perspective(
@@ -118,7 +106,6 @@ export {
   create_index_buffer,
   create_shader_object,
   create_program_object,
-  create_texture_object,
   set_projection,
   set_normal_matrix,
   set_model_view,
