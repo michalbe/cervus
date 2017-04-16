@@ -45,7 +45,7 @@ class Game {
 
     gl.enableVertexAttribArray(aVertex);
 
-    set_projection(program, 45, this.options.width / this.options.height, 0.1, 100);
+    set_projection(program, 45, this.options.width / this.options.height, 0.1, 300);
 
   }
 
@@ -65,7 +65,7 @@ class Game {
     if (tick_time > next_tick) {
       const ticks_qty = Math.floor((tick_time - this.last_tick) / this.tick_length);
       this.perform_ticks(ticks_qty);
-      this.draw();
+      this.draw(this.last_tick);
     }
 
   }
@@ -92,15 +92,15 @@ class Game {
       }
     });
 
-    this.entities.forEach((entity) => entity.update(tick_time));
+    this.entities.forEach((entity) => entity.update());
     // console.log('update');
   }
 
-  draw() {
+  draw(ticks_qty) {
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 			gl.viewport(0, 0, canvas.width, canvas.height);
       // gl.cullFace(gl.BACK);
-      this.entities.forEach((entity) => entity.render());
+      this.entities.forEach((entity) => entity.render(ticks_qty));
   }
 
   add(entity) {

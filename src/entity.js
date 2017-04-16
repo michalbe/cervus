@@ -1,4 +1,5 @@
-import { create_float_buffer, create_index_buffer, set_model_view, gl, program } from './context.js';
+import { create_float_buffer, create_index_buffer, gl, program } from './context.js';
+import { mat4 } from 'gl-matrix';
 
 const zero_vector = {
   x: 0,
@@ -6,18 +7,29 @@ const zero_vector = {
   z: 0
 };
 
+const unit_vector = {
+  x: 1,
+  y: 1,
+  z: 1
+};
+
+let id = 0;
+
 const to_vec = (obj) => [obj.x, obj.y, obj.z];
 
 class Entity {
   constructor(options) {
+    this.id = id++;
     this.position = Object.assign({}, zero_vector);
     this.rotation = Object.assign({}, zero_vector);
-    this.scale = Object.assign({}, zero_vector);
+    this.scale = Object.assign({}, unit_vector);
 
     this.indices = options.indices;
     this.vertices = options.vertices;
 
     this.create_buffers();
+
+    this.rotation_offset = Math.random();
   }
 
   create_buffers() {
@@ -28,11 +40,15 @@ class Entity {
     }
   }
 
-  update(tick_time) {
-    const rotation = tick_time / 1000;
-    const axis = [0, 0, 0];
+  update() {
+    const model_view_matrix = mat4.identity(mat4.create());
+    mat4.translate(model_view_matrix, model_view_matrix, to_vec(this.position));
+    mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.x, [1, 0, 0]);
+    mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.y, [0, 1, 0]);
+    mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.z, [0, 0, 1]);
+    mat4.scale(model_view_matrix, model_view_matrix, to_vec(this.scale));
 
-		set_model_view(program, to_vec(this.position), rotation, axis);
+    this.model_view_matrix = model_view_matrix;
   }
 
   render() {
@@ -41,6 +57,12 @@ class Entity {
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers.indices);
     gl.drawElements(gl.TRIANGLES, this.buffers.qty, gl.UNSIGNED_SHORT, 0);
+
+    gl.uniformMatrix4fv(
+      gl.getUniformLocation(program, "uModelView"),
+      false,
+      this.model_view_matrix
+    );
   }
 }
 
