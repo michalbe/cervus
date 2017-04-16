@@ -1,10 +1,12 @@
-import { create_float_buffer, create_index_buffer, gl, program } from './context.js';
+import { create_float_buffer, create_index_buffer, set_model_view, gl, program } from './context.js';
 
 const zero_vector = {
   x: 0,
   y: 0,
   z: 0
 };
+
+const to_vec = (obj) => [obj.x, obj.y, obj.z];
 
 class Entity {
   constructor(options) {
@@ -24,6 +26,13 @@ class Entity {
       indices: create_index_buffer(this.indices),
       qty: this.indices.length
     }
+  }
+
+  update(tick_time) {
+    const rotation = tick_time / 1000;
+    const axis = [0, 0, 0];
+
+		set_model_view(program, to_vec(this.position), rotation, axis);
   }
 
   render() {
