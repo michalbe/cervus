@@ -1,4 +1,4 @@
-import { gl, canvas, create_float_buffer, create_index_buffer, program, set_model_view, set_projection } from './context.js';
+import { gl, canvas, program, set_model_view, set_projection } from './context.js';
 
 const default_options = {
   width: 800,
@@ -11,6 +11,8 @@ const default_options = {
 class Game {
 
   constructor(options) {
+    this.entities = [];
+
     this.options = default_options;
 
     options = options || {};
@@ -36,12 +38,14 @@ class Game {
 
     gl.clearColor(0.15,0.15,0.15,1);
     gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.CULL_FACE);
+    gl.enable(gl.BLEND);
     gl.useProgram(program);
     const aVertex = gl.getAttribLocation(program, "aVertex");
 
     gl.enableVertexAttribArray(aVertex);
 
-    set_projection(program, 95, this.options.width / this.options.height, 0.1, 100);
+    set_projection(program, 45, this.options.width / this.options.height, 0.1, 100);
 
   }
 
@@ -88,33 +92,19 @@ class Game {
       }
     });
 
-    const rotation = tick_time / 1000;
-    const axis = [0.5, 1, 0.5];
-    const position = [0, 0, -5];
-
-		set_model_view(program, position, rotation, axis);
+    this.entities.forEach((entity) => entity.update());
     // console.log('update');
   }
 
   draw() {
-    if (this.object) {
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 			gl.viewport(0, 0, canvas.width, canvas.height);
-
-			gl.bindBuffer(gl.ARRAY_BUFFER, this.object.vbo);
-			gl.vertexAttribPointer(gl.getAttribLocation(program, "aVertex"), 3, gl.FLOAT, false, 0, 0);
-
-			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.object.ibo);
-			gl.drawElements(gl.TRIANGLES, this.object.num, gl.UNSIGNED_SHORT, 0);
-    }
+      // gl.cullFace(gl.BACK);
+      this.entities.forEach((entity) => entity.render());
   }
 
-  create_object(indices, vertices) {
-    this.object = {
-        vbo : create_float_buffer(vertices),
-        ibo : create_index_buffer(indices),
-        num : indices.length
-      }
+  add(entity) {
+    this.entities.push(entity);
   }
 }
 
