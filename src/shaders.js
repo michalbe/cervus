@@ -11,9 +11,9 @@ const fragment_code =
   "#ifdef GL_ES\r\n" +
     "precision mediump float;\r\n" +
   "#endif\r\n" +
-  "uniform vec4 vColor;" +
+  "uniform vec3 uColor;" +
   "void main(void) {" +
-    "gl_FragColor = vColor;" +
+    "gl_FragColor = vec4(uColor, 1.0);" +
   "}"
 ;
 
