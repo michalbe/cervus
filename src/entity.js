@@ -1,5 +1,6 @@
 import { create_float_buffer, create_index_buffer, gl, program } from './context.js';
 import { mat4 } from 'gl-matrix';
+import { obj_to_vec } from './utils.js';
 
 const zero_vector = {
   x: 0,
@@ -13,13 +14,8 @@ const unit_vector = {
   z: 1
 };
 
-let id = 0;
-
-const to_vec = (obj) => [obj.x, obj.y, obj.z];
-
 class Entity {
   constructor(options) {
-    this.id = id++;
     this.position = Object.assign({}, zero_vector);
     this.rotation = Object.assign({}, zero_vector);
     this.scale = Object.assign({}, unit_vector);
@@ -42,11 +38,11 @@ class Entity {
 
   update() {
     const model_view_matrix = mat4.identity(mat4.create());
-    mat4.translate(model_view_matrix, model_view_matrix, to_vec(this.position));
+    mat4.translate(model_view_matrix, model_view_matrix, obj_to_vec(this.position));
     mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.x, [1, 0, 0]);
     mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.y, [0, 1, 0]);
     mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.z, [0, 0, 1]);
-    mat4.scale(model_view_matrix, model_view_matrix, to_vec(this.scale));
+    mat4.scale(model_view_matrix, model_view_matrix, obj_to_vec(this.scale));
 
     this.model_view_matrix = model_view_matrix;
   }
