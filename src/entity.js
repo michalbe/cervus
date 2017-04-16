@@ -1,6 +1,6 @@
 import { create_float_buffer, create_index_buffer, gl, program } from './context.js';
 import { mat4 } from 'gl-matrix';
-import { obj_to_vec } from './utils.js';
+import { obj_to_vec, hex_to_vec } from './utils.js';
 
 const zero_vector = {
   x: 0,
@@ -19,6 +19,11 @@ class Entity {
     this.position = Object.assign({}, zero_vector);
     this.rotation = Object.assign({}, zero_vector);
     this.scale = Object.assign({}, unit_vector);
+
+    this.color = '#CCCCCC';
+    this.color_opacity = 1.0;
+
+    this.color_vec = [...hex_to_vec(this.color), this.color_opacity];
 
     this.indices = options.indices;
     this.vertices = options.vertices;
@@ -45,6 +50,8 @@ class Entity {
     mat4.scale(model_view_matrix, model_view_matrix, obj_to_vec(this.scale));
 
     this.model_view_matrix = model_view_matrix;
+
+    this.color_vec = [...hex_to_vec(this.color), this.color_opacity];
   }
 
   render() {
@@ -54,9 +61,9 @@ class Entity {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers.indices);
     gl.drawElements(gl.TRIANGLES, this.buffers.qty, gl.UNSIGNED_SHORT, 0);
 
-    gl.uniform3fv(
+    gl.uniform4fv(
       gl.getUniformLocation(program, "uColor"),
-      [0.1, 0.8, 0.1]
+      this.color_vec
     );
 
     gl.uniformMatrix4fv(
