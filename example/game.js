@@ -83,10 +83,17 @@ cube.color = "#BADA55";
 game.add(cube);
 
 
-
+let dir = 1;
 game.add_frame_listener('cube_rotation', (delta) => {
   // console.log(delta);
   cube.rotation.y = delta / 1000;
-  cube2.position.x += 0.01;
+  if (cube2.position.x > 5) {
+    dir = -1;
+  } else if (cube2.position.x < -5) {
+    dir = 1;
+  }
+
+  cube2.position.x += 0.06 * dir;
   cube2.scale = {x: 0.5, y:0.5, z: 0.5};
+  // cube2.color = '#' + Math.floor(Math.random() * 250).toString(16) + '' + Math.floor(Math.random() * 250).toString(16) + Math.floor(Math.random() * 250).toString(16);
 });
