@@ -78,22 +78,6 @@ function set_normal_matrix(program, mv) {
   return normal_matrix;
 }
 
-function set_model_view(program, pos, rot, axis) {
-  const model_view_matrix = mat4.identity(mat4.create());
-  // const translation = vec3.create();
-  // vec3.set (translation, 0, 0, -2.0);
-  mat4.translate(model_view_matrix, model_view_matrix, pos);
-  mat4.rotate(model_view_matrix, model_view_matrix, rot, axis);
-
-  gl.uniformMatrix4fv(
-    gl.getUniformLocation(program, "uModelView"),
-    false,
-    model_view_matrix
-  );
-
-  return model_view_matrix;
-}
-
 const program = create_program_object(
   create_shader_object(gl.VERTEX_SHADER, vertex_code),
   create_shader_object(gl.FRAGMENT_SHADER, fragment_code)
@@ -108,6 +92,5 @@ export {
   create_program_object,
   set_projection,
   set_normal_matrix,
-  set_model_view,
   program
 };
