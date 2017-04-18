@@ -20,13 +20,13 @@ class Entity {
     this.rotation = Object.assign({}, zero_vector);
     this.scale = Object.assign({}, unit_vector);
 
-    this.color = '#CCCCCC';
+    this.color = options.color || '#CCCCCC';
     this.color_opacity = 1.0;
 
     this.color_vec = [...hex_to_vec(this.color), this.color_opacity];
 
-    this.indices = options.indices;
-    this.vertices = options.vertices;
+    this.indices = this.indices || options.indices;
+    this.vertices = this.vertices || options.vertices;
 
     this.create_buffers();
 
