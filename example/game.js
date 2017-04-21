@@ -18,7 +18,7 @@ const game = new Cervus.Game({
 //   cube.position.y = (Math.random()*200)-100;
 //   game.add(cube);
 // }
-const cube2 = new Cervus.shapes.Box();
+const cube2 = new Cervus.shapes.Sphere();
 cube2.position.z = -10;
 cube2.position.x = -5;
 cube2.position.y = 3;
@@ -27,9 +27,17 @@ game.add(cube2);
 
 const cube = new Cervus.shapes.Box();
 cube.position.z = -10;
+cube.position.x = 3;
 cube.color = "#BADA55";
 game.add(cube);
 
+
+const floor = new Cervus.shapes.Sphere();
+floor.position.y = 2;
+floor.position.z = -30;
+// floor.scale.y = ;
+floor.color = '#CCCCCC';
+game.add(floor);
 
 let dir = 1;
 game.add_frame_listener('cube_rotation', (delta) => {
