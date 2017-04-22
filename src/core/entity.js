@@ -1,24 +1,13 @@
 import { create_float_buffer, create_index_buffer, gl, program } from './context.js';
 import { mat4 } from 'gl-matrix';
 import { obj_to_vec, hex_to_vec } from '../misc/utils.js';
-
-const zero_vector = {
-  x: 0,
-  y: 0,
-  z: 0
-};
-
-const unit_vector = {
-  x: 1,
-  y: 1,
-  z: 1
-};
+import { zero_vector, unit_vector } from '../misc/defaults.js';
 
 class Entity {
-  constructor(options) {
-    this.position = Object.assign({}, zero_vector);
-    this.rotation = Object.assign({}, zero_vector);
-    this.scale = Object.assign({}, unit_vector);
+  constructor(options = {}) {
+    this.position = options.position || Object.assign({}, zero_vector);
+    this.rotation = options.rotation || Object.assign({}, zero_vector);
+    this.scale = options.scale || Object.assign({}, unit_vector);
 
     this.color = options.color || '#CCCCCC';
     this.color_opacity = 1.0;
@@ -29,8 +18,6 @@ class Entity {
     this.vertices = this.vertices || options.vertices;
 
     this.create_buffers();
-
-    this.rotation_offset = Math.random();
   }
 
   create_buffers() {
