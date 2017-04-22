@@ -25,7 +25,18 @@ class Basic {
     return instance;
   }
 
+  update(entity) {
+    gl.uniform4fv(
+      gl.getUniformLocation(this.program, "uColor"),
+      entity.color_vec
+    );
 
+    gl.uniformMatrix4fv(
+      gl.getUniformLocation(this.program, "uModelView"),
+      false,
+      entity.model_view_matrix
+    );
+  }
 }
 
 export { Basic };

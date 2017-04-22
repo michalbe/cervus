@@ -55,16 +55,7 @@ class Entity {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers.indices);
     gl.drawElements(gl.TRIANGLES, this.buffers.qty, gl.UNSIGNED_SHORT, 0);
 
-    gl.uniform4fv(
-      gl.getUniformLocation(this.program, "uColor"),
-      this.color_vec
-    );
-
-    gl.uniformMatrix4fv(
-      gl.getUniformLocation(this.program, "uModelView"),
-      false,
-      this.model_view_matrix
-    );
+    this.material.update(this);
   }
 }
 
