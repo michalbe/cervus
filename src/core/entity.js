@@ -1,7 +1,8 @@
-import { create_float_buffer, create_index_buffer, gl, program } from './context.js';
+import { create_float_buffer, create_index_buffer, gl } from './context.js';
 import { mat4 } from 'gl-matrix';
 import { obj_to_vec, hex_to_vec } from '../misc/utils.js';
 import { zero_vector, unit_vector } from '../misc/defaults.js';
+import { materials } from '../materials/materials.js';
 
 class Entity {
   constructor(options = {}) {
@@ -17,6 +18,12 @@ class Entity {
     this.indices = this.indices || options.indices;
     this.vertices = this.vertices || options.vertices;
 
+    this.material_type = 'basic';
+    this.material = materials[this.material_type];
+    // console.log(materials);
+    this.program = this.material.get_program();
+
+    // console.log(this.program);
     this.create_buffers();
   }
 
@@ -42,19 +49,21 @@ class Entity {
   }
 
   render() {
+    gl.useProgram(this.program);
+    
     gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.vertices);
-    gl.vertexAttribPointer(gl.getAttribLocation(program, "aVertex"), 3, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(gl.getAttribLocation(this.program, "aVertex"), 3, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers.indices);
     gl.drawElements(gl.TRIANGLES, this.buffers.qty, gl.UNSIGNED_SHORT, 0);
 
     gl.uniform4fv(
-      gl.getUniformLocation(program, "uColor"),
+      gl.getUniformLocation(this.program, "uColor"),
       this.color_vec
     );
 
     gl.uniformMatrix4fv(
-      gl.getUniformLocation(program, "uModelView"),
+      gl.getUniformLocation(this.program, "uModelView"),
       false,
       this.model_view_matrix
     );
