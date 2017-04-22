@@ -1,8 +1,9 @@
 import { Game } from './core/game.js';
 import { Entity } from './core/entity.js';
+import { shapes } from './shapes/shapes.js';
 
-// const Cervus = { Game };
 export {
   Game,
-  Entity
+  Entity,
+  shapes
 }
