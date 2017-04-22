@@ -1,4 +1,5 @@
-import { basic } from './basic/basic.js'
+import { Basic } from './basic/basic.js'
 
-const materials = { basic };
+const materials = { basic: Basic };
+
 export { materials };
