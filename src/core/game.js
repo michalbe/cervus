@@ -1,4 +1,5 @@
-import { gl, canvas, program, set_projection } from './context.js';
+// import { gl, canvas, programs, set_projection } from './context.js';
+import { gl, canvas } from './context.js';
 
 const default_options = {
   width: 800,
@@ -34,18 +35,14 @@ class Game {
     this.actions = {};
 
     this.tick((typeof performance !== 'undefined' && performance.now()) || 0);
-
+    // const program = programs.basic;
 
     gl.clearColor(0.15,0.15,0.15,1);
     gl.enable(gl.DEPTH_TEST);
-    gl.enable(gl.CULL_FACE);
-    gl.enable(gl.BLEND);
-    gl.useProgram(program);
-    const aVertex = gl.getAttribLocation(program, "aVertex");
+    // gl.enable(gl.CULL_FACE);
+    // gl.enable(gl.BLEND);
 
-    gl.enableVertexAttribArray(aVertex);
-
-    set_projection(program, 45, this.options.width / this.options.height, 0.1, 300);
+    // set_projection(program, 45, this.options.width / this.options.height, 0.1, 300);
 
   }
 

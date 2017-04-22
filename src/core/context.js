@@ -1,5 +1,5 @@
 import { mat4 } from 'gl-matrix';
-import { vertex_code, fragment_code } from '../shaders/shaders.js';
+// import { shaders } from '../shaders/shaders.js';
 
 const canvas = document.createElement('canvas');
 const gl = canvas.getContext('webgl');
@@ -78,10 +78,18 @@ function set_normal_matrix(program, mv) {
   return normal_matrix;
 }
 
-const program = create_program_object(
-  create_shader_object(gl.VERTEX_SHADER, vertex_code),
-  create_shader_object(gl.FRAGMENT_SHADER, fragment_code)
-);
+// const programs = {};
+//
+// function create_programs(types) {
+//   types.forEach((type) => {
+//     programs[type] = create_program_object(
+//       create_shader_object(gl.VERTEX_SHADER, shaders[type].vertex_code),
+//       create_shader_object(gl.FRAGMENT_SHADER, shaders[type].fragment_code)
+//     );
+//   });
+// }
+//
+// create_programs(Object.keys(shaders));
 
 export {
   gl,
@@ -92,5 +100,6 @@ export {
   create_program_object,
   set_projection,
   set_normal_matrix,
-  program
+  // programs,
+  // create_programs
 };
