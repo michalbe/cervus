@@ -19,11 +19,9 @@ class Entity {
     this.vertices = this.vertices || options.vertices;
 
     this.material_type = 'basic';
-    this.material = materials[this.material_type];
-    // console.log(materials);
-    this.program = this.material.get_program();
+    this.material = new materials[this.material_type];
+    this.program = this.material.program;
 
-    // console.log(this.program);
     this.create_buffers();
   }
 
@@ -50,7 +48,7 @@ class Entity {
 
   render() {
     gl.useProgram(this.program);
-    
+
     gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.vertices);
     gl.vertexAttribPointer(gl.getAttribLocation(this.program, "aVertex"), 3, gl.FLOAT, false, 0, 0);
 
