@@ -23,7 +23,7 @@ export default {
       exclude: 'node_modules/**'
     }),
     serve({
-      open: true,
+      // open: true,
       contentBase: ['example', 'dist']
     }),
     livereload({
