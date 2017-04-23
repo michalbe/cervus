@@ -1,4 +1,4 @@
-import { mat4 } from 'gl-matrix';
+import { mat4, mat3 } from 'gl-matrix';
 
 const canvas = document.createElement('canvas');
 const gl = canvas.getContext('webgl');
@@ -23,6 +23,7 @@ function create_shader_object(shader_type, source) {
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+    console.log(shader_type, gl.VERTEX_SHADER, gl.FRAGMENT_SHADER);
     throw gl.getShaderInfoLog(shader);
   }
 
@@ -61,17 +62,21 @@ function set_projection(program, fov, aspect, near, far) {
 }
 
 function set_normal_matrix(program, mv) {
-  // use this instead if model-view has been scaled
-  /*
-  const normal_matrix = mat4.toInverseMat3(mv);
-  mat3.transpose(normal_matrix);
-  */
+  // // use this instead if model-view has been scaled
+  // let normal_matrix = mat3.create();
+  // normal_matrix = mat3.fromMat4([], mv);
+  // normal_matrix = mat3.transpose([], normal_matrix);
+  // normal_matrix = mat3.invert([], normal_matrix);
+  const normal_matrix = mat3.normalFromMat4([], mv);
 
-  const normal_matrix = mat4.toMat3(mv);
+
+  // const normal_matrix = mat4.toMat3(mv);
+  // const normal_matrix = mat3.fromMat4(mat3.create(), mv);
   gl.uniformMatrix3fv(
     gl.getUniformLocation(program, "uNormalMatrix"),
     false,
     normal_matrix
+    // mv
   );
 
   return normal_matrix;
