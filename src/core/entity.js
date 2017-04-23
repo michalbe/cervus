@@ -17,6 +17,7 @@ class Entity {
 
     this.indices = this.indices || options.indices;
     this.vertices = this.vertices || options.vertices;
+    this.normals = this.normals || options.normals;
 
     this.material_type = 'phong';//'basic';
     this.material = new materials[this.material_type];
@@ -29,7 +30,8 @@ class Entity {
     this.buffers = {
       vertices: create_float_buffer(this.vertices),
       indices: create_index_buffer(this.indices),
-      qty: this.indices.length
+      qty: this.indices.length,
+      normals: create_float_buffer(this.normals)
     }
   }
 
