@@ -1,61 +1,118 @@
 import { Entity } from '../core/entity.js';
+import { mat3 } from 'gl-matrix';
 
-const vertices = [
-  -1,  1,  1,
-   1,  1,  1,
-   1, -1,  1,
-  -1, -1,  1,
+const vertices = [];
+const indices = [];
+const normals = [];
 
-  -1,  1, -1,
-   1,  1, -1,
-   1, -1, -1,
-  -1, -1, -1,
+let numberOfVertices = 0;
 
-   1,  1,  1,
-   1,  1, -1,
-   1, -1, -1,
-   1, -1,  1,
+function buildPlane( u, v, w, udir, vdir, width, height, depth, gridX, gridY, materialIndex ) {
 
-  -1,  1,  1,
-  -1,  1, -1,
-   1,  1, -1,
-   1,  1,  1,
+  var segmentWidth = width / gridX;
+  var segmentHeight = height / gridY;
 
-   1, -1,  1,
-   1, -1, -1,
-  -1, -1, -1,
-  -1, -1,  1,
+  var widthHalf = width / 2;
+  var heightHalf = height / 2;
+  var depthHalf = depth / 2;
 
-  -1, -1,  1,
-  -1, -1, -1,
-  -1,  1, -1,
-  -1,  1,  1
-];
+  var gridX1 = gridX + 1;
+  var gridY1 = gridY + 1;
 
-const indices = [
-   1,  0,  3,
-   1,  3,  2,
-   
-   4,  5,  7,
-   5,  6,  7,
+  var vertexCounter = 0;
 
-   9,  8, 11,
-   9, 11, 10,
+  var ix, iy;
 
-  13, 12, 15,
-  13, 15, 14,
+  var vector = [];
 
-  17, 16, 19,
-  17, 19, 18,
+  // generate vertices, normals and uvs
 
-  21, 20, 23,
-  21, 23, 22
-];
+  for ( iy = 0; iy < gridY1; iy ++ ) {
 
+    var y = iy * segmentHeight - heightHalf;
+
+    for ( ix = 0; ix < gridX1; ix ++ ) {
+
+      var x = ix * segmentWidth - widthHalf;
+
+      // set values to correct vector component
+
+      vector[ u ] = x * udir;
+      vector[ v ] = y * vdir;
+      vector[ w ] = depthHalf;
+
+      // now apply vector to vertex buffer
+
+      vertices.push( vector.x, vector.y, vector.z );
+
+      // set values to correct vector component
+
+      vector[ u ] = 0;
+      vector[ v ] = 0;
+      vector[ w ] = depth > 0 ? 1 : - 1;
+
+      // now apply vector to normal buffer
+
+      normals.push( vector.x, vector.y, vector.z );
+
+      // counters
+
+      vertexCounter += 1;
+
+    }
+
+  }
+
+  // indices
+
+  // 1. you need three indices to draw a single face
+  // 2. a single segment consists of two faces
+  // 3. so we need to generate six (2*3) indices per segment
+
+  for ( iy = 0; iy < gridY; iy ++ ) {
+
+    for ( ix = 0; ix < gridX; ix ++ ) {
+
+      var a = numberOfVertices + ix + gridX1 * iy;
+      var b = numberOfVertices + ix + gridX1 * ( iy + 1 );
+      var c = numberOfVertices + ( ix + 1 ) + gridX1 * ( iy + 1 );
+      var d = numberOfVertices + ( ix + 1 ) + gridX1 * iy;
+
+      // faces
+
+      indices.push( a, b, d );
+      indices.push( b, c, d );
+
+    }
+
+  }
+
+  numberOfVertices += vertexCounter;
+
+}
+
+const depth = 1;
+const height = 1;
+const width = 1;
+const depthSegments = 1;
+const heightSegments = 1;
+const widthSegments = 1;
+
+buildPlane( 'z', 'y', 'x', - 1, - 1, depth, height,   width,  depthSegments, heightSegments, 0 ); // px
+buildPlane( 'z', 'y', 'x',   1, - 1, depth, height, - width,  depthSegments, heightSegments, 1 ); // nx
+buildPlane( 'x', 'z', 'y',   1,   1, width, depth,    height, widthSegments, depthSegments,  2 ); // py
+buildPlane( 'x', 'z', 'y',   1, - 1, width, depth,  - height, widthSegments, depthSegments,  3 ); // ny
+buildPlane( 'x', 'y', 'z',   1, - 1, width, height,   depth,  widthSegments, heightSegments, 4 ); // pz
+buildPlane( 'x', 'y', 'z', - 1, - 1, width, height, - depth,  widthSegments, heightSegments, 5 ); // nz
+
+console.log(indices);
+console.log(vertices);
+console.log(normals);
 class Box extends Entity {
   constructor(options = {}) {
     options.vertices = vertices;
     options.indices = indices;
+    options.normals = normals;
 
     super(options);
   }
