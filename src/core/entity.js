@@ -10,6 +10,8 @@ class Entity {
     this.rotation = options.rotation || Object.assign({}, zero_vector);
     this.scale = options.scale || Object.assign({}, unit_vector);
 
+    this.material = options.material || 'basic';
+
     this.color = options.color || '#CCCCCC';
     this.color_opacity = 1.0;
 
@@ -19,9 +21,8 @@ class Entity {
     this.vertices = this.vertices || options.vertices;
     this.normals = this.normals || options.normals;
 
-    this.material_type = 'phong';//'basic';
-    this.material = new materials[this.material_type];
-    this.program = this.material.program;
+    this.material_desc = new materials[this.material];
+    this.program = this.material_desc.program;
 
     this.create_buffers();
   }
@@ -49,7 +50,7 @@ class Entity {
   }
 
   render() {
-    this.material.update(this);
+    this.material_desc.update(this);
   }
 }
 
