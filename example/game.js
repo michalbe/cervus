@@ -8,7 +8,7 @@ const game = new Cervus.Game({
 });
 
 const cube2 = new Cervus.shapes.Box({
-  material: 'basic'
+  material: 'phong'
 });
 cube2.position.z = -10;
 cube2.position.x = -5;
@@ -26,7 +26,7 @@ cube.scale.x = 2;
 cube.scale.z = 0.1;
 game.add(cube);
 
-const cube3 = new Cervus.shapes.Box({
+const cube3 = new Cervus.shapes.Sphere({
   material: 'phong',
   color: '#ff0000',
   rotation: {

@@ -62,21 +62,12 @@ function set_projection(program, fov, aspect, near, far) {
 }
 
 function set_normal_matrix(program, mv) {
-  // // use this instead if model-view has been scaled
-  // let normal_matrix = mat3.create();
-  // normal_matrix = mat3.fromMat4([], mv);
-  // normal_matrix = mat3.transpose([], normal_matrix);
-  // normal_matrix = mat3.invert([], normal_matrix);
   const normal_matrix = mat3.normalFromMat4([], mv);
 
-
-  // const normal_matrix = mat4.toMat3(mv);
-  // const normal_matrix = mat3.fromMat4(mat3.create(), mv);
   gl.uniformMatrix3fv(
     gl.getUniformLocation(program, "uNormalMatrix"),
     false,
     normal_matrix
-    // mv
   );
 
   return normal_matrix;
