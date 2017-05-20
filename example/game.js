@@ -19,11 +19,25 @@ game.add(cube2);
 const cube = new Cervus.shapes.Box({
   material: 'phong'
 });
-
 cube.position.z = -10;
 cube.position.x = 3;
 cube.color = "#BADA55";
+cube.scale.x = 2;
+cube.scale.z = 0.1;
 game.add(cube);
+
+const cube3 = new Cervus.shapes.Box({
+  material: 'phong',
+  color: '#ff0000',
+  rotation: {
+    x: Math.PI/4,
+    y: Math.PI/4,
+    z: 0
+  }
+});
+cube3.position.z = -10;
+// cube3.color = '#ff00ff';
+game.add(cube3);
 
 let dir = 1;
 
@@ -37,3 +51,11 @@ game.add_frame_listener('cube_rotation', (delta) => {
 
   cube2.position.x += 0.06 * dir;
 });
+
+// document.body.addEventListener('click', () => {
+//   if (cube.material === 'basic') {
+//     cube.material = cube2.material = 'phong';
+//   } else {
+//     cube.material = cube2.material = 'basic';
+//   }
+// });
