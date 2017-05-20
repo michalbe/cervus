@@ -47,6 +47,8 @@ class Entity {
     this.model_view_matrix = model_view_matrix;
 
     this.color_vec = [...hex_to_vec(this.color), this.color_opacity];
+
+    // this.material_desc = new materials[this.material];
   }
 
   render() {
