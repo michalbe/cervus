@@ -6,9 +6,9 @@ let instance = null;
 class Phong {
 
   constructor() {
-    if(!instance) {
-      instance = this;
-    }
+    // if(!instance) {
+    //   instance = this;
+    // }
 
     this.program = create_program_object(
       create_shader_object(gl.VERTEX_SHADER, vertex_code),
@@ -27,7 +27,7 @@ class Phong {
     // TODO: This should use global camera settings...
     set_projection(this.program, 45, window.innerWidth / window.innerHeight, 0.1, 300);
 
-    return instance;
+    // return instance;
   }
 
   update(entity) {
