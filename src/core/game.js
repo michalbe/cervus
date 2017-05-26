@@ -65,7 +65,7 @@ class Game {
     window.addEventListener('keydown', this.key_down.bind(this));
     window.addEventListener('keyup', this.key_up.bind(this));
 
-    this.actions = {};
+    this.actions = [];
 
     this.tick(performance.now());
 
@@ -107,12 +107,14 @@ class Game {
 
   }
 
-  add_frame_listener(name, action) {
-    this.actions[name] = action;
+  add_frame_listener(action) {
+    this.actions.push(action);
   }
 
-  remove_frame_listener(name) {
-    delete this.actions[name];
+  remove_frame_listener(action_to_remove) {
+    this.actions = this.actions.filter(action => {
+      return action !== action_to_remove;
+    });
   }
 
   key_down(e) {
