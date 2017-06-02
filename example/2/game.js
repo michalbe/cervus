@@ -31,7 +31,7 @@ group.add(cube);
 
 game.add(group);
 
-game.add_frame_listener(delta => {
+game.add_frame_action(() => {
   //console.log(game.camera.position);
   // game.camera.look_at(cube.position);
 });

@@ -107,11 +107,11 @@ class Game {
 
   }
 
-  add_frame_listener(action) {
+  add_frame_action(action) {
     this.actions.push(action);
   }
 
-  remove_frame_listener(action_to_remove) {
+  remove_frame_action(action_to_remove) {
     this.actions = this.actions.filter(action => {
       return action !== action_to_remove;
     });
