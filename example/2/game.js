@@ -31,7 +31,15 @@ group.add(cube);
 
 game.add(group);
 
-game.add_frame_action(() => {
+let times = 100;
+const rotate_cube = () => {
+  times--;
   //console.log(game.camera.position);
   // game.camera.look_at(cube.position);
-});
+  cube.rotate_rl(16/1000);
+  if (!times) {
+    game.remove_frame_action(rotate_cube);
+  }
+};
+
+game.add_frame_action(rotate_cube);
