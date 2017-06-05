@@ -1,5 +1,4 @@
 import { mat4 } from 'gl-matrix';
-import { vertex_code, fragment_code } from '../shaders/shaders.js';
 
 const canvas = document.createElement('canvas');
 const gl = canvas.getContext('webgl');
@@ -78,11 +77,6 @@ function set_normal_matrix(program, mv) {
   return normal_matrix;
 }
 
-const program = create_program_object(
-  create_shader_object(gl.VERTEX_SHADER, vertex_code),
-  create_shader_object(gl.FRAGMENT_SHADER, fragment_code)
-);
-
 export {
   gl,
   canvas,
@@ -91,6 +85,5 @@ export {
   create_shader_object,
   create_program_object,
   set_projection,
-  set_normal_matrix,
-  program
+  set_normal_matrix
 };

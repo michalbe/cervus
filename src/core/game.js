@@ -1,4 +1,4 @@
-import { gl, canvas, program, set_projection } from './context.js';
+import { gl, canvas } from './context.js';
 
 const default_options = {
   width: 800,
@@ -35,18 +35,10 @@ class Game {
 
     this.tick((typeof performance !== 'undefined' && performance.now()) || 0);
 
-
     gl.clearColor(0.15,0.15,0.15,1);
     gl.enable(gl.DEPTH_TEST);
-    gl.enable(gl.CULL_FACE);
-    gl.enable(gl.BLEND);
-    gl.useProgram(program);
-    const aVertex = gl.getAttribLocation(program, "aVertex");
-
-    gl.enableVertexAttribArray(aVertex);
-
-    set_projection(program, 45, this.options.width / this.options.height, 0.1, 300);
-
+    // gl.enable(gl.CULL_FACE);
+    // gl.enable(gl.BLEND);
   }
 
   stop() {
@@ -93,13 +85,11 @@ class Game {
     });
 
     this.entities.forEach((entity) => entity.update());
-    // console.log('update');
   }
 
   draw(ticks_qty) {
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 			gl.viewport(0, 0, canvas.width, canvas.height);
-      // gl.cullFace(gl.BACK);
       this.entities.forEach((entity) => entity.render(ticks_qty));
   }
 
