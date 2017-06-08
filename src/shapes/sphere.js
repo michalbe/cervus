@@ -1,7 +1,22 @@
 import { Entity } from '../core/entity.js';
 
-const t = 0.5 + Math.sqrt(5) / 2
+const t = 0.5 + Math.sqrt(5) / 2;
 const vertices = [
+  -1, t,  0,
+  1, t,  0,
+  -1, -t,  0,
+  1, -t,  0,
+  0, -1, t,
+  0, 1, t,
+  0, -1, -t,
+  0, 1, -t,
+  t,  0, -1,
+  t,  0, 1,
+  -t,  0, -1,
+  -t,  0, 1
+];
+
+const normals = [
   -1, t,  0,
   1, t,  0,
   -1, -t,  0,
@@ -43,6 +58,7 @@ class Sphere extends Entity {
   constructor(options = {}) {
     options.vertices = vertices;
     options.indices = indices;
+    options.normals = normals;
 
     super(options);
   }

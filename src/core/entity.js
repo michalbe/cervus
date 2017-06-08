@@ -1,4 +1,4 @@
-import { create_float_buffer, create_index_buffer, gl } from './context.js';
+import { create_float_buffer, create_index_buffer } from './context.js';
 import { mat4 } from 'gl-matrix';
 import { obj_to_vec, hex_to_vec } from '../misc/utils.js';
 import { zero_vector, unit_vector } from '../misc/defaults.js';
@@ -17,8 +17,9 @@ class Entity {
 
     this.indices = this.indices || options.indices;
     this.vertices = this.vertices || options.vertices;
+    this.normals = this.normals || options.normals;
 
-    this.material_type = 'basic';
+    this.material_type = 'phong';//'basic';
     this.material = new materials[this.material_type];
     this.program = this.material.program;
 
@@ -29,7 +30,8 @@ class Entity {
     this.buffers = {
       vertices: create_float_buffer(this.vertices),
       indices: create_index_buffer(this.indices),
-      qty: this.indices.length
+      qty: this.indices.length,
+      normals: create_float_buffer(this.normals)
     }
   }
 
@@ -47,14 +49,6 @@ class Entity {
   }
 
   render() {
-    gl.useProgram(this.program);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.vertices);
-    gl.vertexAttribPointer(gl.getAttribLocation(this.program, "aVertex"), 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers.indices);
-    gl.drawElements(gl.TRIANGLES, this.buffers.qty, gl.UNSIGNED_SHORT, 0);
-
     this.material.update(this);
   }
 }
