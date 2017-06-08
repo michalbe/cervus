@@ -53,7 +53,6 @@ class Game {
     window.requestAnimationFrame((tick_time) => this.tick(tick_time));
     const next_tick = this.last_tick + this.tick_length;
 
-
     if (tick_time > next_tick) {
       const ticks_qty = Math.floor((tick_time - this.last_tick) / this.tick_length);
       this.perform_ticks(ticks_qty);

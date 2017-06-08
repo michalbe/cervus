@@ -4,7 +4,7 @@ const game = new Cervus.Game({
   width: window.innerWidth,
   height: window.innerHeight,
   // dom: document.body,
-  // fps: 60
+  // fps: 1
 });
 
 // const model = game.model('model.vox');
@@ -18,7 +18,7 @@ const game = new Cervus.Game({
 //   cube.position.y = (Math.random()*200)-100;
 //   game.add(cube);
 // }
-const cube2 = new Cervus.shapes.Sphere();
+const cube2 = new Cervus.shapes.Box();
 cube2.position.z = -10;
 cube2.position.x = -5;
 cube2.position.y = 3;
@@ -31,24 +31,37 @@ cube.position.x = 3;
 cube.color = "#BADA55";
 game.add(cube);
 
+// const light = new Cervus.shapes.Box();
+// // cube.color = "#BADA55";
+// game.add(light);
 
-const floor = new Cervus.shapes.Sphere();
-floor.position.y = 2;
-floor.position.z = -30;
-// floor.scale.y = ;
-floor.color = '#CCCCCC';
-game.add(floor);
+//
+// const floor = new Cervus.shapes.Sphere();
+// floor.position.y = 2;
+// floor.position.z = -30;
+// // floor.scale.y = ;
+// floor.color = '#CCCCCC';
+// game.add(floor);
 
 let dir = 1;
+// let dir2 = 1;
 game.add_frame_listener('cube_rotation', (delta) => {
-  cube.rotation.y = delta / 1000;
+  cube.rotation.x = delta / 1000;
   if (cube2.position.x > 5) {
     dir = -1;
   } else if (cube2.position.x < -5) {
     dir = 1;
   }
 
+  // if (cube.position.y > 5) {
+  //   dir2 = -1;
+  // } else if (cube.position.y < -5) {
+  //   dir2 = 1;
+  // }
+
   cube2.position.x += 0.06 * dir;
-  cube2.scale = {x: 0.5, y:0.5, z: 0.5};
+  // cube.position.y += 0.06 * dir2;
+  // cube.position.z += 0.06 * dir2;
+  // cube2.scale = {x: 0.5, y:0.5, z: 0.5};
   // cube2.color = '#' + Math.floor(Math.random() * 250).toString(16) + '' + Math.floor(Math.random() * 250).toString(16) + Math.floor(Math.random() * 250).toString(16);
 });

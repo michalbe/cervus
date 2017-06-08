@@ -26,6 +26,14 @@ class Basic {
   }
 
   update(entity) {
+    gl.useProgram(this.program);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, entity.buffers.vertices);
+    gl.vertexAttribPointer(gl.getAttribLocation(this.program, "aVertex"), 3, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, entity.buffers.indices);
+    gl.drawElements(gl.TRIANGLES, entity.buffers.qty, gl.UNSIGNED_SHORT, 0);
+    
     gl.uniform4fv(
       gl.getUniformLocation(this.program, "uColor"),
       entity.color_vec
