@@ -31,20 +31,8 @@ cube.position.x = 3;
 cube.color = "#BADA55";
 game.add(cube);
 
-// const light = new Cervus.shapes.Box();
-// // cube.color = "#BADA55";
-// game.add(light);
-
-//
-// const floor = new Cervus.shapes.Sphere();
-// floor.position.y = 2;
-// floor.position.z = -30;
-// // floor.scale.y = ;
-// floor.color = '#CCCCCC';
-// game.add(floor);
-
 let dir = 1;
-// let dir2 = 1;
+
 game.add_frame_listener('cube_rotation', (delta) => {
   cube.rotation.x = delta / 1000;
   if (cube2.position.x > 5) {
