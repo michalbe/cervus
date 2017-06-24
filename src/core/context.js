@@ -1,7 +1,7 @@
 import { mat4, mat3 } from 'gl-matrix';
 
 const canvas = document.createElement('canvas');
-const gl = canvas.getContext('webgl');
+const gl = canvas.getContext('webgl2');
 
 function create_float_buffer(data) {
   const buffer = gl.createBuffer();
