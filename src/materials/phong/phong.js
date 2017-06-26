@@ -51,6 +51,7 @@ class Phong {
         gl.getUniformLocation(this.program, "uAmbient"),
         0.12
     );
+
     gl.uniform3f(
         gl.getUniformLocation(this.program, "uLightPosition"),
         5, 5, 5
