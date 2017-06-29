@@ -23,7 +23,6 @@ cube.position.z = -10;
 cube.position.x = 3;
 cube.color = "#BADA55";
 cube.scale.x = 2;
-cube.scale.z = 0.1;
 game.add(cube);
 
 const cube3 = new Cervus.shapes.Sphere({
@@ -36,13 +35,21 @@ const cube3 = new Cervus.shapes.Sphere({
   }
 });
 cube3.position.z = -10;
-// cube3.color = '#ff00ff';
+// cube3.color = '#ffffff';
 game.add(cube3);
 
 let dir = 1;
 
+const plane = new Cervus.shapes.Plane({
+  material: 'basic',
+  color: '#ffffff',
+});
+plane.position.z = plane.position.x = -5;
+game.add(plane);
+plane.scale = {x: 3, y:3, z:1 }
+
 game.add_frame_listener('cube_rotation', (delta) => {
-  cube.rotation.x = delta / 1000;
+  cube.rotation.x = cube3.rotation.x = plane.rotation.x = delta / 1000;
   if (cube2.position.x > 5) {
     dir = -1;
   } else if (cube2.position.x < -5) {
