@@ -42,14 +42,17 @@ let dir = 1;
 
 const plane = new Cervus.shapes.Plane({
   material: 'basic',
-  color: '#ffffff',
+  color: '#cccccc',
 });
-plane.position.z = plane.position.x = -10;
+plane.position.z = -50;
+plane.position.y = -1;
+plane.rotation.x = Math.PI/2;
+plane.scale = {x: 100, y:100, z:1 };
 game.add(plane);
-plane.scale = {x: 3, y:3, z:1 }
+
 
 game.add_frame_listener('cube_rotation', (delta) => {
-  cube.rotation.x = cube3.rotation.x = plane.rotation.x = delta / 1000;
+  cube.rotation.x = cube3.rotation.x = delta / 1000;
   if (cube2.position.x > 5) {
     dir = -1;
   } else if (cube2.position.x < -5) {
