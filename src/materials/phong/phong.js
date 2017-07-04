@@ -54,7 +54,7 @@ class Phong {
 
     gl.uniform3f(
         gl.getUniformLocation(this.program, "uLightPosition"),
-        5, 5, 5
+        0, 0, 5
     );
 
     gl.uniform3fv(
