@@ -1,57 +1,41 @@
-const vertex_code =`#version 300 es
+const vertex_code =`
+  precision mediump float;
 
-  in vec3 aVertex;
-  in vec3 aNormal;
+  uniform mat4 mProj;
+  uniform mat4 mView;
+  uniform mat4 mWorld;
 
-  uniform mat4 uModelView;
-  uniform mat4 uProjection;
-  uniform mat3 uNormalMatrix;
-  uniform vec3 uLightPosition;
+  attribute vec3 vPos;
+  attribute vec3 vNorm;
 
-  out float vDiffuse;
-  out float vSpecular;
-  out vec4 vPosition;
-  out vec3 vNormal;
+  varying vec3 fPos;
+  varying vec3 fNorm;
 
-  void main(void) {
-    vPosition = uModelView * vec4(aVertex, 1.0);
-    vNormal = normalize(aVertex);
+  void main()
+  {
+  	fPos = (mWorld * vec4(vPos, 1.0)).xyz;
+  	fNorm = (mWorld * vec4(vNorm, 0.0)).xyz;
 
-    vec3 normal = normalize(uNormalMatrix * aNormal);
-    vec3 lightDir = uLightPosition - vPosition.xyz;
-    lightDir = normalize(lightDir);
-
-    vDiffuse = max(dot(normal, lightDir), 0.0);
-
-    vec3 viewDir = normalize(vPosition.xyz);
-    vec3 reflectDir = reflect(lightDir, normal);
-    float specular = dot(reflectDir, viewDir);
-    vSpecular = pow(specular, 16.0);
-
-
-    gl_Position = uProjection * uModelView * vec4(aVertex, 1.0);
+  	gl_Position = mProj * mView * vec4(fPos, 1.0);
   }
 `;
 
-const fragment_code =`#version 300 es
+const fragment_code =`
+  precision mediump float;
 
-  #ifdef GL_ES
-    precision mediump float;
-  #endif
+  uniform vec3 pointLightPosition;
+  uniform vec4 meshColor;
 
-  uniform float uAmbient;
-  uniform vec3 uColor;
+  varying vec3 fPos;
+  varying vec3 fNorm;
 
-  in float vDiffuse;
-  in float vSpecular;
-  in vec3 vNormal;
+  void main()
+  {
+  	vec3 toLightNormal = normalize(pointLightPosition - fPos);
 
-  out vec4 outColor;
-  void main(void) {
+  	float lightIntensity = 0.6 + 0.4 * max(dot(fNorm, toLightNormal), 0.0);
 
-    float light = uAmbient + vDiffuse + vSpecular;
-
-    outColor = vec4(uColor * light, 0.9);
+  	gl_FragColor = vec4(meshColor.rgb * lightIntensity, meshColor.a);
   }
 `;
 
