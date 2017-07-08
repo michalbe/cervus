@@ -31,7 +31,7 @@ export class Camera {
     this.realign();
   }
 
-  realign = function() {
+  realign() {
     vec3.cross(this.right, this.forward, this.up);
     vec3.cross(this.up, this.right, this.forward);
 
