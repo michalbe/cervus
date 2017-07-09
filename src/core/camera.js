@@ -38,7 +38,7 @@ export class Camera {
     vec3.normalize(this.forward, this.forward);
     vec3.normalize(this.right, this.right);
     vec3.normalize(this.up, this.up);
-  };
+  }
 
   moveForward(dist) {
     vec3.scaleAndAdd(this.position, this.position, this.forward, dist);
