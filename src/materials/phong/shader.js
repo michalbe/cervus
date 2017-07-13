@@ -13,10 +13,10 @@ const vertex_code =`
 
   void main()
   {
-  	fPos = (mWorld * vec4(vPos, 1.0)).xyz;
-  	fNorm = (mWorld * vec4(vNorm, 0.0)).xyz;
+    fPos = (mWorld * vec4(vPos, 1.0)).xyz;
+    fNorm = (mWorld * vec4(vNorm, 0.0)).xyz;
 
-  	gl_Position = mProj * mView * vec4(fPos, 1.0);
+    gl_Position = mProj * mView * vec4(fPos, 1.0);
   }
 `;
 
@@ -31,11 +31,11 @@ const fragment_code =`
 
   void main()
   {
-  	vec3 toLightNormal = normalize(pointLightPosition - fPos);
+    vec3 toLightNormal = normalize(pointLightPosition - fPos);
 
-  	float lightIntensity = 0.6 + 0.4 * max(dot(fNorm, toLightNormal), 0.0);
+    float lightIntensity = 0.6 + 0.4 * max(dot(fNorm, toLightNormal), 0.0);
 
-  	gl_FragColor = vec4(meshColor.rgb * lightIntensity, meshColor.a);
+    gl_FragColor = vec4(meshColor.rgb * lightIntensity, meshColor.a);
   }
 `;
 
