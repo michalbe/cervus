@@ -1,5 +1,7 @@
 /* global Cervus */
 
+const material = 'phong';
+
 const game = new Cervus.Game({
   width: window.innerWidth,
   height: window.innerHeight,
@@ -8,7 +10,7 @@ const game = new Cervus.Game({
 });
 
 const cube2 = new Cervus.shapes.Box({
-  material: 'phong'
+  material: material
 });
 cube2.position.z = -10;
 cube2.position.x = -5;
@@ -17,14 +19,14 @@ cube2.color = "#FF00FF";
 game.add(cube2);
 
 const cube8 = new Cervus.shapes.Box({
-  material: 'basic'
+  material: material
 });
 cube8.position = {x: 0, y: 0, z: -5};
 cube8.color = "#ffffff";
 // game.add(cube8);
 
 const cube = new Cervus.shapes.Box({
-  material: 'phong'
+  material: material
 });
 cube.position.z = -12;
 cube.position.x = 3;
@@ -33,7 +35,7 @@ cube.scale.x = cube.scale.y = 2;
 game.add(cube);
 
 const sphere = new Cervus.shapes.Sphere({
-  material: 'phong',
+  material: material,
   color: '#ff0000',
   rotation: {
     x: Math.PI/4,
@@ -50,7 +52,7 @@ game.add(sphere);
 let dir = 1;
 
 const plane = new Cervus.shapes.Plane({
-  material: 'phong',
+  material: material,
   color: '#ffffff'
 });
 
@@ -61,7 +63,7 @@ plane.scale = {x: 100, y:100, z:1 };
 game.add(plane);
 
 const plane2 = new Cervus.shapes.Plane({
-  material: 'phong',
+  material: material,
   color: '#cc00cc',
 });
 plane2.position.z = -15;
@@ -86,7 +88,7 @@ game.add_frame_listener('cube_rotation', (delta) => {
 
 // document.body.addEventListener('click', () => {
 //   if (cube.material === 'basic') {
-//     cube.material = cube2.material = 'phong';
+//     cube.material = cube2.material = material;
 //   } else {
 //     cube.material = cube2.material = 'basic';
 //   }
