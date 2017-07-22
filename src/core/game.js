@@ -1,4 +1,6 @@
 import { gl, canvas } from './context.js';
+import { vec3, mat4, glMatrix } from 'gl-matrix';
+import { Camera } from './camera.js';
 
 const default_options = {
   width: 800,
@@ -14,6 +16,23 @@ class Game {
     this.entities = [];
 
     this.options = default_options;
+
+    this.camera = new Camera(
+      vec3.fromValues(0, 0, 1.85),
+      vec3.fromValues(0, -1, 1.85),
+      vec3.fromValues(0, 0, 1)
+    );
+
+    this.projMatrix = mat4.create();
+    this.viewMatrix = mat4.create();
+
+    mat4.perspective(
+      this.projMatrix,
+      glMatrix.toRadian(90),
+      canvas.width / canvas.height,
+      0.35,
+      85.0
+    );
 
     options = options || {};
     Object.keys(options).forEach(key => {
@@ -35,8 +54,12 @@ class Game {
 
     this.tick((typeof performance !== 'undefined' && performance.now()) || 0);
 
-    gl.clearColor(0.15,0.15,0.15,1);
+    gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
+
+    gl.clearColor(0.15, 0.15, 0.15, 1);
+    gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
+
     // gl.enable(gl.CULL_FACE);
     // gl.enable(gl.BLEND);
   }
@@ -88,11 +111,12 @@ class Game {
 
   draw(ticks_qty) {
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-			gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.viewport(0, 0, canvas.width, canvas.height);
       this.entities.forEach((entity) => entity.render(ticks_qty));
   }
 
   add(entity) {
+    entity.game = this;
     this.entities.push(entity);
   }
 }
