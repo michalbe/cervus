@@ -7,6 +7,22 @@ export class Camera {
     this.right = vec3.create();
 
     this.position = position;
+    this.moveable = false;
+
+    this.MoveForwardSpeed = 3.5;
+    this.RotateSpeed = 1.5;
+
+    this.directions = {
+      Up: false,
+      Right: false,
+      Down: false,
+      Left: false,
+      Forward: false,
+      Back: false,
+
+      RotLeft: false,
+      RotRight: false,
+    };
 
     vec3.subtract(this.forward, lookAt, this.position);
     vec3.cross(this.right, this.forward, up);
@@ -15,6 +31,9 @@ export class Camera {
     vec3.normalize(this.forward, this.forward);
     vec3.normalize(this.right, this.right);
     vec3.normalize(this.up, this.up);
+
+    window.addEventListener('keydown', this.keyDownWindowListener.bind(this));
+    window.addEventListener('keyup', this.keyUpWindowListener.bind(this));
   }
 
   getViewMatrix (out) {
@@ -25,6 +44,7 @@ export class Camera {
   }
 
   rotateRight(rad) {
+    console.log(rad);
     const rightMatrix = mat4.create();
     mat4.rotate(rightMatrix, rightMatrix, rad, vec3.fromValues(0, 0, 1));
     vec3.transformMat4(this.forward, this.forward, rightMatrix);
@@ -50,5 +70,70 @@ export class Camera {
 
   moveUp(dist) {
     vec3.scaleAndAdd(this.position, this.position, this.up, dist);
+  }
+
+  keyDownWindowListener(e) {
+    if (!this.moveable) {
+      return;
+    }
+    console.log('DOWN');
+    switch(e.code) {
+      case 'KeyW':
+        this.directions.Forward = true;
+        break;
+      case 'KeyA':
+        this.directions.Left = true;
+        break;
+      case 'KeyD':
+        this.directions.Right = true;
+        break;
+      case 'KeyS':
+        this.directions.Back = true;
+        break;
+      case 'ArrowUp':
+        this.directions.Up = true;
+        break;
+      case 'ArrowDown':
+        this.directions.Down = true;
+        break;
+      case 'ArrowRight':
+        this.directions.RotRight = true;
+        break;
+      case 'ArrowLeft':
+        this.directions.RotLeft = true;
+        break;
+    }
+  }
+
+  keyUpWindowListener(e) {
+    if (!this.moveable) {
+      return;
+    }
+    switch(e.code) {
+      case 'KeyW':
+        this.directions.Forward = false;
+        break;
+      case 'KeyA':
+        this.directions.Left = false;
+        break;
+      case 'KeyD':
+        this.directions.Right = false;
+        break;
+      case 'KeyS':
+        this.directions.Back = false;
+        break;
+      case 'ArrowUp':
+        this.directions.Up = false;
+        break;
+      case 'ArrowDown':
+        this.directions.Down = false;
+        break;
+      case 'ArrowRight':
+        this.directions.RotRight = false;
+        break;
+      case 'ArrowLeft':
+        this.directions.RotLeft = false;
+        break;
+    }
   }
 }
