@@ -1,15 +1,9 @@
 import { vertex_code, fragment_code } from './shader.js';
-import { create_program_object, create_shader_object, gl, set_projection, set_normal_matrix } from '../../core/context.js';
-
-let instance = null;
+import { create_program_object, create_shader_object, gl } from '../../core/context.js';
 
 class Phong {
 
   constructor() {
-    // if(!instance) {
-    //   instance = this;
-    // }
-
     this.program = create_program_object(
       create_shader_object(gl.VERTEX_SHADER, vertex_code),
       create_shader_object(gl.FRAGMENT_SHADER, fragment_code)
@@ -32,16 +26,10 @@ class Phong {
       vPos: gl.getAttribLocation(this.program, 'vPos'),
       vNorm: gl.getAttribLocation(this.program, 'vNorm'),
     };
-
-    // TODO: This should use global camera settings...
-    // set_projection(this.program, 45, window.innerWidth / window.innerHeight, 0.1, 300);
-
-    // return instance;
   }
 
   update(entity) {
     gl.useProgram(this.program);
-    // this should happen in `game`
     gl.uniformMatrix4fv(this.uniforms.mProj, gl.FALSE, entity.game.projMatrix);
     gl.uniformMatrix4fv(this.uniforms.mView, gl.FALSE, entity.game.viewMatrix);
     gl.uniform3fv(this.uniforms.pointLightPosition, [0, 2, 2]);

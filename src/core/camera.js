@@ -75,7 +75,6 @@ export class Camera {
     if (!this.moveable) {
       return;
     }
-    console.log('DOWN');
     switch(e.code) {
       case 'KeyW':
         this.directions.Forward = true;
