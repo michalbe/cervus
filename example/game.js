@@ -1,6 +1,6 @@
 /* global Cervus */
 
-const material = 'phong';
+const material = 'shadow_phong';
 
 const game = new Cervus.Game({
   width: window.innerWidth,
@@ -62,6 +62,16 @@ plane.position.y = 0;
 plane.rotation.x = Math.PI/2 + 0.03;
 plane.scale = {x: 100, y:100, z:1 };
 game.add(plane);
+
+const plane3 = new Cervus.shapes.Plane({
+  material: material,
+  color: '#ffffff'
+});
+
+plane3.position.z = -15;
+plane3.position.y = 0;
+plane3.scale = {x: 20, y: 7, z: 1 };
+game.add(plane3);
 
 const plane2 = new Cervus.shapes.Plane({
   material: material,
