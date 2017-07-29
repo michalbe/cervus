@@ -111,7 +111,7 @@ class Game {
 
 
     this.entities.forEach((entity) => entity.update());
-
+    // this probably should be moved to the camera itself
     if (this.options.movable_camera) {
       if (this.camera.directions.Forward && !this.camera.directions.Back) {
         this.camera.moveForward(this.tick_length / 1000 * this.camera.MoveForwardSpeed);
