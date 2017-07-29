@@ -57,7 +57,7 @@ class Game {
 
     this.tick((typeof performance !== 'undefined' && performance.now()) || 0);
 
-    gl.enable(gl.CULL_FACE);
+    // gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
 
     gl.clearColor(0.15, 0.15, 0.15, 1);
