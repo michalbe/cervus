@@ -44,7 +44,7 @@ class Phong {
     // this should happen in `game`
     gl.uniformMatrix4fv(this.uniforms.mProj, gl.FALSE, entity.game.projMatrix);
     gl.uniformMatrix4fv(this.uniforms.mView, gl.FALSE, entity.game.viewMatrix);
-    gl.uniform3fv(this.uniforms.pointLightPosition, [0, 0, 2]);
+    gl.uniform3fv(this.uniforms.pointLightPosition, [0, 2, 2]);
 
     gl.uniformMatrix4fv(
         this.uniforms.mWorld,
@@ -56,7 +56,6 @@ class Phong {
         entity.color_vec
       );
 
-      // Set attributes
       gl.bindBuffer(gl.ARRAY_BUFFER, entity.buffers.vertices);
       gl.vertexAttribPointer(
         this.attribs.vPos,
@@ -67,10 +66,12 @@ class Phong {
 
       gl.bindBuffer(gl.ARRAY_BUFFER, entity.buffers.normals);
       gl.vertexAttribPointer(
+
         this.attribs.vNorm,
         3, gl.FLOAT, gl.FALSE,
         0, 0
       );
+
       gl.enableVertexAttribArray(this.attribs.vNorm);
 
       gl.bindBuffer(gl.ARRAY_BUFFER, null);
@@ -78,43 +79,6 @@ class Phong {
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, entity.buffers.indices);
       gl.drawElements(gl.TRIANGLES, entity.buffers.qty, gl.UNSIGNED_SHORT, 0);
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
-    // console.log(entity.buffers);
-    //
-    // gl.enableVertexAttribArray(this.aVertex);
-    // gl.bindBuffer(gl.ARRAY_BUFFER, entity.buffers.vertices);
-    // gl.vertexAttribPointer(this.aVertex, 3, gl.FLOAT, false, 0, 0);
-    //
-    // // Find out how to calculate NORMALS for vertices
-    // gl.enableVertexAttribArray(this.aNormal);
-    // gl.bindBuffer(gl.ARRAY_BUFFER, entity.buffers.normals);
-    // gl.vertexAttribPointer(this.aNormal, 3, gl.FLOAT, false, 0, 0);
-    //
-    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, entity.buffers.indices);
-    // gl.drawElements(gl.TRIANGLES, entity.buffers.qty, gl.UNSIGNED_SHORT, 0);
-    //
-    //
-    // gl.uniform1f(
-    //     gl.getUniformLocation(this.program, "uAmbient"),
-    //     0.12
-    // );
-    //
-    // gl.uniform3f(
-    //     gl.getUniformLocation(this.program, "uLightPosition"),
-    //     0, 0, 5
-    // );
-    //
-    // gl.uniform3fv(
-    //   gl.getUniformLocation(this.program, "uColor"),
-    //   [entity.color_vec[0], entity.color_vec[1], entity.color_vec[2]]
-    // );
-    //
-    // gl.uniformMatrix4fv(
-    //   gl.getUniformLocation(this.program, "uModelView"),
-    //   false,
-    //   entity.model_view_matrix
-    // );
-    //
-    // set_normal_matrix(this.program, entity.model_view_matrix);
   }
 }
 
