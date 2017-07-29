@@ -7,7 +7,8 @@ const default_options = {
   height: 600,
   dom: document.body,
   fps: 60,
-  autostart: true
+  autostart: true,
+  movable_camera: false
 };
 
 class Game {
@@ -18,9 +19,9 @@ class Game {
     this.options = default_options;
 
     this.camera = new Camera(
-      vec3.fromValues(0, 0, 1.85),
-      vec3.fromValues(0, -1, 1.85),
-      vec3.fromValues(0, 0, 1)
+      vec3.fromValues(0, 1.85, 0),
+      vec3.fromValues(0, 1.85, -1),
+      vec3.fromValues(0, 1, 0)
     );
 
     this.projMatrix = mat4.create();
@@ -38,6 +39,8 @@ class Game {
     Object.keys(options).forEach(key => {
       this.options[key] = options[key];
     });
+
+    this.camera.moveable = this.options.movable_camera;
 
     canvas.width = this.options.width;
     canvas.height = this.options.height;
@@ -106,7 +109,44 @@ class Game {
       }
     });
 
+
     this.entities.forEach((entity) => entity.update());
+
+    if (this.options.movable_camera) {
+      if (this.camera.directions.Forward && !this.camera.directions.Back) {
+        this.camera.moveForward(this.tick_length / 1000 * this.camera.MoveForwardSpeed);
+      }
+
+      if (this.camera.directions.Back && !this.camera.directions.Forward) {
+        this.camera.moveForward(-this.tick_length / 1000 * this.camera.MoveForwardSpeed);
+      }
+
+      if (this.camera.directions.Right && !this.camera.directions.Left) {
+        this.camera.moveRight(this.tick_length / 1000 * this.camera.MoveForwardSpeed);
+      }
+
+      if (this.camera.directions.Left && !this.camera.directions.Right) {
+        this.camera.moveRight(-this.tick_length / 1000 * this.camera.MoveForwardSpeed);
+      }
+
+      if (this.camera.directions.Up && !this.camera.directions.Down) {
+        this.camera.moveUp(this.tick_length / 1000 * this.camera.MoveForwardSpeed);
+      }
+
+      if (this.camera.directions.Down && !this.camera.directions.Up) {
+        this.camera.moveUp(-this.tick_length / 1000 * this.camera.MoveForwardSpeed);
+      }
+
+      if (this.camera.directions.RotRight && !this.camera.directions.RotLeft) {
+        this.camera.rotateRight(-this.tick_length / 1000 * this.camera.RotateSpeed);
+      }
+
+      if (this.camera.directions.RotLeft && !this.camera.directions.RotRight) {
+        this.camera.rotateRight(this.tick_length / 1000 * this.camera.RotateSpeed);
+      }
+
+      this.camera.getViewMatrix(this.viewMatrix);
+    }
   }
 
   draw(ticks_qty) {
