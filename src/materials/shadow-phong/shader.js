@@ -29,8 +29,6 @@ const fragment_code =`
   uniform samplerCube lightShadowMap;
   uniform vec2 shadowClipNearFar;
 
-  uniform float bias;
-
   varying vec3 fPos;
   varying vec3 fNorm;
 
@@ -45,8 +43,8 @@ const fragment_code =`
 
     float shadowMapValue = textureCube(lightShadowMap, -toLightNormal).r;
 
-    float lightIntensity = 0.6;
-    if ((shadowMapValue + bias) >= fromLightToFrag) {
+    float lightIntensity = 0.8;
+    if ((shadowMapValue + 0.3) >= fromLightToFrag) {
       lightIntensity += 0.4 * max(dot(fNorm, toLightNormal), 0.0);
     }
 
