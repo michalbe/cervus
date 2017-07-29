@@ -67,7 +67,7 @@ const plane2 = new Cervus.shapes.Plane({
   material: material,
   color: '#cc00cc',
 });
-plane2.position.z = -15;
+plane2.position.z = -12;
 plane2.position.y = 1;
 plane2.position.x = -3;
 plane2.rotation.x = 0;//Math.PI/2;
