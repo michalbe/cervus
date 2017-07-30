@@ -36,17 +36,17 @@ const fragment_code =`
   {
     vec3 toLightNormal = normalize(pointLightPosition - fPos);
 
-    float fromLightToFrag =
-      (length(fPos - pointLightPosition) - shadowClipNearFar.x)
-      /
-      (shadowClipNearFar.y - shadowClipNearFar.x);
+  	float fromLightToFrag =
+  		(length(fPos - pointLightPosition) - shadowClipNearFar.x)
+  		/
+  		(shadowClipNearFar.y - shadowClipNearFar.x);
 
-    float shadowMapValue = textureCube(lightShadowMap, -toLightNormal).x;
+  	float shadowMapValue = textureCube(lightShadowMap, -toLightNormal).r;
 
-    float lightIntensity = 0.6;
-    if ((shadowMapValue + 0.03) >= fromLightToFrag) {
-      lightIntensity += 0.4 * max(dot(fNorm, toLightNormal), 0.0);
-    }
+  	float lightIntensity = 0.6;
+  	if ((shadowMapValue + 0.003) >= fromLightToFrag) {
+  		lightIntensity += 0.4 * max(dot(fNorm, toLightNormal), 0.0);
+  	}
 
     gl_FragColor = vec4(meshColor.rgb * lightIntensity, meshColor.a);
   }
