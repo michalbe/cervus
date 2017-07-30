@@ -7,8 +7,8 @@ import { Camera } from '../../core/camera.js';
 class ShadowPhong {
 
   constructor() {
-    window.lightPosition = this.lightPosition = [6, 5, -8];
-    this.textureSize = 512;
+    window.lightPosition = this.lightPosition = [6, 1, 5];
+    this.textureSize = 2048;
 
     window.shadow_program = this.program = create_program_object(
       create_shader_object(gl.VERTEX_SHADER, vertex_code),
@@ -92,7 +92,7 @@ class ShadowPhong {
       new Camera(
         this.lightPosition,
         vec3.add(vec3.create(), this.lightPosition, vec3.fromValues(1, 0, 0)),
-        vec3.fromValues(0, 1, 0)
+        vec3.fromValues(0, -1, 0)
       ),
       // Negative X
       new Camera(
@@ -104,25 +104,25 @@ class ShadowPhong {
       new Camera(
         this.lightPosition,
         vec3.add(vec3.create(), this.lightPosition, vec3.fromValues(0, 1, 0)),
-        vec3.fromValues(0, -1, 0)
+        vec3.fromValues(0, 0, 1)
       ),
       // Negative Y
       new Camera(
         this.lightPosition,
         vec3.add(vec3.create(), this.lightPosition, vec3.fromValues(0, -1, 0)),
-        vec3.fromValues(0, -1, 0)
+        vec3.fromValues(0, 0, -1)
       ),
       // Positive Z
       new Camera(
         this.lightPosition,
         vec3.add(vec3.create(), this.lightPosition, vec3.fromValues(0, 0, 1)),
-        vec3.fromValues(0, 0, 1)
+        vec3.fromValues(0, -1, 0)
       ),
       // Negative Z
       new Camera(
         this.lightPosition,
         vec3.add(vec3.create(), this.lightPosition, vec3.fromValues(0, 0, -1)),
-        vec3.fromValues(0, 0, -1)
+        vec3.fromValues(0, -1, 0)
       )
     ];
 
@@ -170,19 +170,19 @@ class ShadowPhong {
       new Camera(
         this.lightPosition,
         vec3.add(vec3.create(), this.lightPosition, vec3.fromValues(0, 1, 0)),
-        vec3.fromValues(0, -1, 0)
+        vec3.fromValues(0, 0, 1)
       ),
       // Negative Y
       new Camera(
         this.lightPosition,
         vec3.add(vec3.create(), this.lightPosition, vec3.fromValues(0, -1, 0)),
-        vec3.fromValues(0, 1, 0)
+        vec3.fromValues(0, 0, -1)
       ),
       // Positive Z
       new Camera(
         this.lightPosition,
         vec3.add(vec3.create(), this.lightPosition, vec3.fromValues(0, 0, 1)),
-        vec3.fromValues(0, 1, 0)
+        vec3.fromValues(0, -1, 0)
       ),
       // Negative Z
       new Camera(

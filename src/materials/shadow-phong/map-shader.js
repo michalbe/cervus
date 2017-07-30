@@ -27,14 +27,14 @@ varying vec3 fPos;
 
 void main()
 {
-  vec3 fromLightToFrag = (fPos - pointLightPosition);
+	vec3 fromLightToFrag = (fPos - pointLightPosition);
 
-  float lightFragDist =
-    (length(fromLightToFrag) - shadowClipNearFar.x)
-    /
-    (shadowClipNearFar.y - shadowClipNearFar.x);
+	float lightFragDist =
+		(length(fromLightToFrag) - shadowClipNearFar.x)
+		/
+		(shadowClipNearFar.y - shadowClipNearFar.x);
 
-  gl_FragColor = vec4(lightFragDist, lightFragDist, lightFragDist, 1.0);
+	gl_FragColor = vec4(lightFragDist, lightFragDist, lightFragDist, 1.0);
 }
 `;
 
