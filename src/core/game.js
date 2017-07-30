@@ -19,9 +19,9 @@ class Game {
     this.options = default_options;
 
     this.camera = new Camera(
-      vec3.fromValues(0, 1.85, 0),
-      vec3.fromValues(0, 1.85, -1),
-      vec3.fromValues(0, 1, 0)
+      vec3.fromValues(0, 0, 1.85),
+      vec3.fromValues(0, -1, 1.85),
+      vec3.fromValues(0, 0, 1)
     );
 
     this.projMatrix = mat4.create();
@@ -60,7 +60,7 @@ class Game {
     // gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
 
-    gl.clearColor(1, 1, 1, 1);
+    gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
 
     // gl.enable(gl.CULL_FACE);

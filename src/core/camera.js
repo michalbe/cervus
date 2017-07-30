@@ -45,7 +45,7 @@ export class Camera {
 
   rotateRight(rad) {
     const rightMatrix = mat4.create();
-    mat4.rotate(rightMatrix, rightMatrix, rad, vec3.fromValues(0, 1, 0));
+    mat4.rotate(rightMatrix, rightMatrix, rad, vec3.fromValues(0, 0, 1));
     vec3.transformMat4(this.forward, this.forward, rightMatrix);
     this.realign();
   }
