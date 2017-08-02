@@ -1,11 +1,14 @@
 import { gl, canvas } from './context.js';
+import { vec3, mat4, glMatrix } from 'gl-matrix';
+import { Camera } from './camera.js';
 
 const default_options = {
   width: 800,
   height: 600,
   dom: document.body,
   fps: 60,
-  autostart: true
+  autostart: true,
+  movable_camera: false
 };
 
 class Game {
@@ -15,10 +18,29 @@ class Game {
 
     this.options = default_options;
 
+    this.camera = new Camera(
+      vec3.fromValues(0, 1.85, 0),
+      vec3.fromValues(0, 1.85, -1),
+      vec3.fromValues(0, 1, 0)
+    );
+
+    this.projMatrix = mat4.create();
+    this.viewMatrix = mat4.create();
+
+    mat4.perspective(
+      this.projMatrix,
+      glMatrix.toRadian(90),
+      canvas.width / canvas.height,
+      0.35,
+      85.0
+    );
+
     options = options || {};
     Object.keys(options).forEach(key => {
       this.options[key] = options[key];
     });
+
+    this.camera.moveable = this.options.movable_camera;
 
     canvas.width = this.options.width;
     canvas.height = this.options.height;
@@ -35,8 +57,12 @@ class Game {
 
     this.tick((typeof performance !== 'undefined' && performance.now()) || 0);
 
-    gl.clearColor(0.15,0.15,0.15,1);
+    // gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
+
+    gl.clearColor(0.15, 0.15, 0.15, 1);
+    gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
+
     // gl.enable(gl.CULL_FACE);
     // gl.enable(gl.BLEND);
   }
@@ -83,16 +109,54 @@ class Game {
       }
     });
 
+
     this.entities.forEach((entity) => entity.update());
+    // this probably should be moved to the camera itself
+    if (this.options.movable_camera) {
+      if (this.camera.directions.Forward && !this.camera.directions.Back) {
+        this.camera.moveForward(this.tick_length / 1000 * this.camera.MoveForwardSpeed);
+      }
+
+      if (this.camera.directions.Back && !this.camera.directions.Forward) {
+        this.camera.moveForward(-this.tick_length / 1000 * this.camera.MoveForwardSpeed);
+      }
+
+      if (this.camera.directions.Right && !this.camera.directions.Left) {
+        this.camera.moveRight(this.tick_length / 1000 * this.camera.MoveForwardSpeed);
+      }
+
+      if (this.camera.directions.Left && !this.camera.directions.Right) {
+        this.camera.moveRight(-this.tick_length / 1000 * this.camera.MoveForwardSpeed);
+      }
+
+      if (this.camera.directions.Up && !this.camera.directions.Down) {
+        this.camera.moveUp(this.tick_length / 1000 * this.camera.MoveForwardSpeed);
+      }
+
+      if (this.camera.directions.Down && !this.camera.directions.Up) {
+        this.camera.moveUp(-this.tick_length / 1000 * this.camera.MoveForwardSpeed);
+      }
+
+      if (this.camera.directions.RotRight && !this.camera.directions.RotLeft) {
+        this.camera.rotateRight(-this.tick_length / 1000 * this.camera.RotateSpeed);
+      }
+
+      if (this.camera.directions.RotLeft && !this.camera.directions.RotRight) {
+        this.camera.rotateRight(this.tick_length / 1000 * this.camera.RotateSpeed);
+      }
+
+      this.camera.getViewMatrix(this.viewMatrix);
+    }
   }
 
   draw(ticks_qty) {
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-			gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.viewport(0, 0, canvas.width, canvas.height);
       this.entities.forEach((entity) => entity.render(ticks_qty));
   }
 
   add(entity) {
+    entity.game = this;
     this.entities.push(entity);
   }
 }
