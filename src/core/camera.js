@@ -22,6 +22,8 @@ export class Camera {
 
       RotLeft: false,
       RotRight: false,
+      RotUp: false,
+      RotDown: false
     };
 
     vec3.subtract(this.forward, lookAt, this.position);
@@ -46,6 +48,13 @@ export class Camera {
   rotateRight(rad) {
     const rightMatrix = mat4.create();
     mat4.rotate(rightMatrix, rightMatrix, rad, vec3.fromValues(0, 0, 1));
+    vec3.transformMat4(this.forward, this.forward, rightMatrix);
+    this.realign();
+  }
+
+  rotateUp(rad) {
+    const rightMatrix = mat4.create();
+    mat4.rotate(rightMatrix, rightMatrix, rad, vec3.fromValues(1, 0, 0));
     vec3.transformMat4(this.forward, this.forward, rightMatrix);
     this.realign();
   }
@@ -88,11 +97,17 @@ export class Camera {
       case 'KeyS':
         this.directions.Back = true;
         break;
-      case 'ArrowUp':
+      case 'KeyQ':
         this.directions.Up = true;
         break;
-      case 'ArrowDown':
+      case 'KeyE':
         this.directions.Down = true;
+        break;
+      case 'ArrowUp':
+        this.directions.RotUp = true;
+        break;
+      case 'ArrowDown':
+        this.directions.RotDown = true;
         break;
       case 'ArrowRight':
         this.directions.RotRight = true;
@@ -120,11 +135,17 @@ export class Camera {
       case 'KeyS':
         this.directions.Back = false;
         break;
-      case 'ArrowUp':
+      case 'KeyQ':
         this.directions.Up = false;
         break;
-      case 'ArrowDown':
+      case 'KeyE':
         this.directions.Down = false;
+        break;
+      case 'ArrowUp':
+        this.directions.RotUp = false;
+        break;
+      case 'ArrowDown':
+        this.directions.RotDown = false;
         break;
       case 'ArrowRight':
         this.directions.RotRight = false;

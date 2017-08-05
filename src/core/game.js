@@ -145,6 +145,14 @@ class Game {
         this.camera.rotateRight(this.tick_length / 1000 * this.camera.RotateSpeed);
       }
 
+      if (this.camera.directions.RotUp && !this.camera.directions.RotDown) {
+        this.camera.rotateUp(-this.tick_length / 1000 * this.camera.RotateSpeed);
+      }
+
+      if (this.camera.directions.RotDown && !this.camera.directions.RotUp) {
+        this.camera.rotateUp(this.tick_length / 1000 * this.camera.RotateSpeed);
+      }
+
       this.camera.getViewMatrix(this.viewMatrix);
     }
   }
