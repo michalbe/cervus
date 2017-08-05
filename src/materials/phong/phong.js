@@ -30,8 +30,8 @@ class Phong {
 
   render(entity) {
     gl.useProgram(this.program);
-    gl.uniformMatrix4fv(this.uniforms.mProj, gl.FALSE, entity.game.projMatrix);
-    gl.uniformMatrix4fv(this.uniforms.mView, gl.FALSE, entity.game.viewMatrix);
+    gl.uniformMatrix4fv(this.uniforms.mProj, gl.FALSE, entity.game ? entity.game.projMatrix : entity.parent.game.projMatrix);
+    gl.uniformMatrix4fv(this.uniforms.mView, gl.FALSE, entity.game ? entity.game.viewMatrix : entity.parent.game.viewMatrix);
     gl.uniform3fv(this.uniforms.pointLightPosition, [0, 2, 2]);
 
     gl.uniformMatrix4fv(
@@ -39,11 +39,15 @@ class Phong {
         gl.FALSE,
         entity.model_view_matrix
       );
+      // console.trace();
+      // console.log(entity.color_vec.length, entity.color_vec);
+      // debugger;
       gl.uniform4fv(
         this.uniforms.meshColor,
         entity.color_vec
       );
 
+      // debugger;
       gl.bindBuffer(gl.ARRAY_BUFFER, entity.buffers.vertices);
       gl.vertexAttribPointer(
         this.attribs.vPos,

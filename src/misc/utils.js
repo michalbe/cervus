@@ -10,9 +10,9 @@ const hex_to_vec = (hex) => {
       return el + '' +  el;
     });
   }
-  
+
   return hex.match(/.{1,2}/g).map((el) => {
-    return (parseInt(el, 16) / 255);
+    return parseFloat((parseInt(el, 16) / 255).toFixed(1));
   });
 };
 
