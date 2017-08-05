@@ -57,7 +57,7 @@ class Game {
 
     this.tick((typeof performance !== 'undefined' && performance.now()) || 0);
 
-    // gl.enable(gl.CULL_FACE);
+    gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
 
     gl.clearColor(0, 0, 0, 1);
@@ -152,7 +152,7 @@ class Game {
   draw(ticks_qty) {
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
       gl.viewport(0, 0, canvas.width, canvas.height);
-      this.entities.forEach((entity) => entity.generate_shadow_map(ticks_qty));
+      this.entities.forEach((entity) => entity.generate_shadow_map && entity.generate_shadow_map(ticks_qty));
 
       gl.viewport(0, 0, canvas.width, canvas.height);
       this.entities.forEach((entity) => entity.render(ticks_qty));
