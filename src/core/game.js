@@ -60,7 +60,7 @@ class Game {
     gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
 
-    gl.clearColor(0, 0, 0, 1);
+    gl.clearColor(0, 0.49, 1, 1);
     gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
 
     // gl.enable(gl.CULL_FACE);
