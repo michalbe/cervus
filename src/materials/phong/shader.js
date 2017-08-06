@@ -33,7 +33,7 @@ const fragment_code =`
   {
     vec3 toLightNormal = normalize(pointLightPosition - fPos);
 
-    float lightIntensity = 0.6 + 0.4 * max(dot(fNorm, toLightNormal), 0.0);
+    float lightIntensity = 0.8 + 0.2 * max(dot(fNorm, toLightNormal), 0.0);
 
     gl_FragColor = vec4(meshColor.rgb * lightIntensity, meshColor.a);
   }

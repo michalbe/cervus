@@ -1,49 +1,72 @@
 import { vertex_code, fragment_code } from './shader.js';
-import { create_program_object, create_shader_object, gl, set_projection } from '../../core/context.js';
-
-// let instance = null;
+import { create_program_object, create_shader_object, gl } from '../../core/context.js';
+import { obj_to_vec } from '../../misc/utils.js';
 
 class Basic {
 
   constructor() {
-    // if(!instance) {
-    //   instance = this;
-    // }
-
     this.program = create_program_object(
       create_shader_object(gl.VERTEX_SHADER, vertex_code),
       create_shader_object(gl.FRAGMENT_SHADER, fragment_code)
     );
 
-    gl.useProgram(this.program);
-    const aVertex = gl.getAttribLocation(this.program, "aVertex");
-    gl.enableVertexAttribArray(aVertex);
+    if (this.program.error) {
+      console.log(this.program.error); return;
+    }
 
-    // TODO: This should use global camera settings...
-    set_projection(this.program, 45, window.innerWidth / window.innerHeight, 0.1, 300);
+    this.uniforms = {
+      mProj: gl.getUniformLocation(this.program, 'mProj'),
+      mView: gl.getUniformLocation(this.program, 'mView'),
+      mWorld: gl.getUniformLocation(this.program, 'mWorld'),
 
-    // return instance;
+      meshColor: gl.getUniformLocation(this.program, 'meshColor'),
+    };
+
+    this.attribs = {
+      vPos: gl.getAttribLocation(this.program, 'vPos')
+    };
   }
 
   render(entity) {
     gl.useProgram(this.program);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, entity.buffers.vertices);
-    gl.vertexAttribPointer(gl.getAttribLocation(this.program, "aVertex"), 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, entity.buffers.indices);
-    gl.drawElements(gl.TRIANGLES, entity.buffers.qty, gl.UNSIGNED_SHORT, 0);
-
-    gl.uniform4fv(
-      gl.getUniformLocation(this.program, "uColor"),
-      entity.color_vec
-    );
+    gl.uniformMatrix4fv(this.uniforms.mProj, gl.FALSE, entity.game ? entity.game.projMatrix : entity.parent.game.projMatrix);
+    gl.uniformMatrix4fv(this.uniforms.mView, gl.FALSE, entity.game ? entity.game.viewMatrix : entity.parent.game.viewMatrix);
 
     gl.uniformMatrix4fv(
-      gl.getUniformLocation(this.program, "uModelView"),
-      false,
-      entity.model_view_matrix
-    );
+        this.uniforms.mWorld,
+        gl.FALSE,
+        entity.model_view_matrix
+      );
+
+      gl.uniform4fv(
+        this.uniforms.meshColor,
+        entity.color_vec
+      );
+
+      // debugger;
+      gl.bindBuffer(gl.ARRAY_BUFFER, entity.buffers.vertices);
+      gl.vertexAttribPointer(
+        this.attribs.vPos,
+        3, gl.FLOAT, gl.FALSE,
+        0, 0
+      );
+      gl.enableVertexAttribArray(this.attribs.vPos);
+
+      // gl.bindBuffer(gl.ARRAY_BUFFER, entity.buffers.normals);
+      // gl.vertexAttribPointer(
+      //
+      //   this.attribs.vNorm,
+      //   3, gl.FLOAT, gl.FALSE,
+      //   0, 0
+      // );
+
+      // gl.enableVertexAttribArray(this.attribs.vNorm);
+
+      // gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, entity.buffers.indices);
+      gl.drawElements(gl.TRIANGLES, entity.buffers.qty, gl.UNSIGNED_SHORT, 0);
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
   }
 }
 
