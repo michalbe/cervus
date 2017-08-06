@@ -1,6 +1,6 @@
 /* global Cervus */
 
-const material = 'phong';
+const material = 'basic';
 const meshes = [];
 const colors = ['#00ff00', '#A52A2A', '#006400'];
 
@@ -64,8 +64,8 @@ fetch('models/scene.json')
         vertices: json.meshes[mesh_i].vertices,
         indices: [].concat.apply([], json.meshes[mesh_i].faces),
         normals: json.meshes[mesh_i].normals,
-        material: 'phong',
-        color:  '#FFFFFF' //+ col + 'ff' +  col//colors[i]
+        material: 'basic',
+        color:  '#' + col + col + col//'#FFFFFF' //+ col + 'ff' +  col//colors[i]
       });
 
       let transform = mat4.getTranslation([], child.transformation);
