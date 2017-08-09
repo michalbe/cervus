@@ -54,12 +54,12 @@ let dir = 1;
 
 const plane = new Cervus.shapes.Plane({
   material: material,
-  color: '#ffffff'
+  color: '#CCCCCC'
 });
 
 plane.position.z = -50;
-plane.position.y = 0;
-plane.rotation.x = Math.PI/2 + 0.03;
+plane.position.y = -2;
+plane.rotation.x = -Math.PI/2 + 0.03;
 plane.scale = {x: 100, y:100, z:1 };
 game.add(plane);
 
@@ -70,7 +70,7 @@ const plane3 = new Cervus.shapes.Plane({
 
 plane3.position.z = -15;
 plane3.position.y = 0;
-plane3.scale = {x: 20, y: 7, z: 1 };
+plane3.scale = {x: 15, y: 7, z: 1 };
 game.add(plane3);
 
 const plane2 = new Cervus.shapes.Plane({
@@ -85,8 +85,18 @@ plane2.scale = {x: 2, y:2, z:1 };
 game.add(plane2);
 
 
+const light = new Cervus.shapes.Sphere({
+  material: 'phong',
+  color: '#32cd32'
+});
+light.position.x = window.lightPosition[0];
+light.position.y = window.lightPosition[1];
+light.position.z = window.lightPosition[2];
+light.scale = {x: 0.1, y: 0.1, z: 0.1};
+game.add(light);
+
 game.add_frame_listener('cube_rotation', (delta) => {
-  cube.rotation.x = sphere.rotation.x = delta / 1000;
+  cube.rotation.x = sphere.rotation.x = light.rotation.x = delta / 1000;
   if (cube2.position.x > 5) {
     dir = -1;
   } else if (cube2.position.x < -5) {
@@ -95,7 +105,71 @@ game.add_frame_listener('cube_rotation', (delta) => {
 
   sphere.position.x += 0.06 * dir * -1;
   cube2.position.x += 0.06 * dir;
+
+  // var lightDisplacementInputAngle = 0;
+  // lightDisplacementInputAngle += delta / 2337;
+  //
+  // var xDisplacement  = Math.sin(lightDisplacementInputAngle) * 10;
+  // window.lightPosition = [
+  //   xDisplacement,//window.lightPosition[0],
+  //   window.lightPosition[1],
+  //   window.lightPosition[2],
+  // ];
+  //
+  // light.position.x = window.lightPosition[0];
+  // light.position.y = window.lightPosition[1];
+  // light.position.z = window.lightPosition[2];
+
 });
+
+
+const wall = new Cervus.shapes.Plane({
+  material: material,
+  color: '#ffffff',
+});
+wall.position.z = -10;
+wall.position.x = -15;
+wall.position.y = 0;
+// wall.rotation.x = Math.PI;
+wall.rotation.y = Math.PI/2;
+wall.scale = {x: 15, y:7, z:1 };
+game.add(wall);
+
+const wall2 = new Cervus.shapes.Plane({
+  material: material,
+  color: '#ffffff',
+});
+wall2.position.z = -10;
+wall2.position.x = 15;
+wall2.position.y = 0;
+// wall.rotation.x = Math.PI;
+wall2.rotation.y = -Math.PI/2;
+wall2.scale = {x: 15, y:7, z:1 };
+game.add(wall2);
+
+const wall3 = new Cervus.shapes.Plane({
+  material: material,
+  color: '#ffffff',
+});
+wall3.position.z = 5;
+// wall3.position.x = 15;
+wall3.position.y = 0;
+// wall.rotation.x = Math.PI;
+wall3.rotation.y = Math.PI;
+wall3.scale = {x: 15, y:7, z:1 };
+game.add(wall3);
+
+const wall5 = new Cervus.shapes.Plane({
+  material: material,
+  color: '#ffffff',
+});
+wall5.position.z = -3;
+// wall3.position.x = 15;
+wall5.position.y = 7;
+// wall.rotation.x = Math.PI;
+wall5.rotation.x = Math.PI/2;
+wall5.scale = {x: 15, y:15, z:1 };
+game.add(wall5);
 
 // document.body.addEventListener('click', () => {
 //   if (cube.material === 'basic') {

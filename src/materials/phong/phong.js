@@ -28,7 +28,7 @@ class Phong {
     };
   }
 
-  update(entity) {
+  render(entity) {
     gl.useProgram(this.program);
     gl.uniformMatrix4fv(this.uniforms.mProj, gl.FALSE, entity.game.projMatrix);
     gl.uniformMatrix4fv(this.uniforms.mView, gl.FALSE, entity.game.viewMatrix);

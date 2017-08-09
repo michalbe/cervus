@@ -52,7 +52,11 @@ class Entity {
   }
 
   render() {
-    this.material_desc.update(this);
+    this.material_desc.render(this);
+  }
+
+  generate_shadow_map() {
+    this.material_desc.generate_shadow_map && this.material_desc.generate_shadow_map(this);
   }
 }
 
