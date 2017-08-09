@@ -41,10 +41,10 @@ const fragment_code =`
       /
       (shadowClipNearFar.y - shadowClipNearFar.x);
 
-    float shadowMapValue = textureCube(lightShadowMap, -toLightNormal).r;
+    float shadowMapValue = textureCube(lightShadowMap, -toLightNormal).x;
 
-    float lightIntensity = 0.8;
-    if ((shadowMapValue + 0.3) >= fromLightToFrag) {
+    float lightIntensity = 0.6;
+    if ((shadowMapValue + 0.03) >= fromLightToFrag) {
       lightIntensity += 0.4 * max(dot(fNorm, toLightNormal), 0.0);
     }
 

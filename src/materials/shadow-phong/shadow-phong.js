@@ -1,16 +1,16 @@
 import { vertex_code, fragment_code } from './shader.js';
 import { generator_vertex_code, generator_fragment_code } from './map-shader.js';
-import { create_program_object, create_shader_object, gl , canvas} from '../../core/context.js';
+import { create_program_object, create_shader_object, gl } from '../../core/context.js';
 import { vec3, mat4, vec2, glMatrix } from 'gl-matrix';
 import { Camera } from '../../core/camera.js';
 
 class ShadowPhong {
 
   constructor() {
-    this.lightPosition = [0, 2, -2];
-    this.textureSize = 512 * 4;
+    window.lightPosition = this.lightPosition = [6, 5, -8];
+    this.textureSize = 512;
 
-    this.program = create_program_object(
+    window.shadow_program = this.program = create_program_object(
       create_shader_object(gl.VERTEX_SHADER, vertex_code),
       create_shader_object(gl.FRAGMENT_SHADER, fragment_code)
     );
@@ -19,7 +19,7 @@ class ShadowPhong {
       console.log(this.program.error); return;
     }
 
-    this.map_program = create_program_object(
+    window.map_program = this.map_program = create_program_object(
       create_shader_object(gl.VERTEX_SHADER, generator_vertex_code),
       create_shader_object(gl.FRAGMENT_SHADER, generator_fragment_code)
     );
@@ -61,8 +61,8 @@ class ShadowPhong {
     gl.bindTexture(gl.TEXTURE_CUBE_MAP, this.shadowMapCube);
     gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_S, gl.MIRRORED_REPEAT);
-    gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_T, gl.MIRRORED_REPEAT);
+    // gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_S, gl.MIRRORED_REPEAT);
+    // gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_T, gl.MIRRORED_REPEAT);
     for (var i = 0; i < 6; i++) {
       gl.texImage2D(
         gl.TEXTURE_CUBE_MAP_POSITIVE_X + i,
@@ -92,7 +92,7 @@ class ShadowPhong {
       new Camera(
         this.lightPosition,
         vec3.add(vec3.create(), this.lightPosition, vec3.fromValues(1, 0, 0)),
-        vec3.fromValues(0, -1, 0)
+        vec3.fromValues(0, 1, 0)
       ),
       // Negative X
       new Camera(
@@ -104,27 +104,28 @@ class ShadowPhong {
       new Camera(
         this.lightPosition,
         vec3.add(vec3.create(), this.lightPosition, vec3.fromValues(0, 1, 0)),
-        vec3.fromValues(0, 0, 1)
+        vec3.fromValues(0, -1, 0)
       ),
       // Negative Y
       new Camera(
         this.lightPosition,
         vec3.add(vec3.create(), this.lightPosition, vec3.fromValues(0, -1, 0)),
-        vec3.fromValues(0, 0, -1)
+        vec3.fromValues(0, -1, 0)
       ),
       // Positive Z
       new Camera(
         this.lightPosition,
         vec3.add(vec3.create(), this.lightPosition, vec3.fromValues(0, 0, 1)),
-        vec3.fromValues(0, -1, 0)
+        vec3.fromValues(0, 0, 1)
       ),
       // Negative Z
       new Camera(
         this.lightPosition,
         vec3.add(vec3.create(), this.lightPosition, vec3.fromValues(0, 0, -1)),
-        vec3.fromValues(0, -1, 0)
-      ),
+        vec3.fromValues(0, 0, -1)
+      )
     ];
+
     this.shadowMapViewMatrices = [
       mat4.create(),
       mat4.create(),
@@ -146,6 +147,51 @@ class ShadowPhong {
   }
 
   generate_shadow_map(entity) {
+    // for (var i = 0; i < this.shadowMapCameras.length; i++) {
+    //   mat4.getTranslation(this.shadowMapCameras[i].position, this.lightPosition);
+    //   this.shadowMapCameras[i].getViewMatrix(this.shadowMapViewMatrices[i]);
+    // }
+    this.lightPosition = window.lightPosition;
+
+    this.shadowMapCameras = [
+      // Positive X
+      new Camera(
+        this.lightPosition,
+        vec3.add(vec3.create(), this.lightPosition, vec3.fromValues(1, 0, 0)),
+        vec3.fromValues(0, -1, 0)
+      ),
+      // Negative X
+      new Camera(
+        this.lightPosition,
+        vec3.add(vec3.create(), this.lightPosition, vec3.fromValues(-1, 0, 0)),
+        vec3.fromValues(0, -1, 0)
+      ),
+      // Positive Y
+      new Camera(
+        this.lightPosition,
+        vec3.add(vec3.create(), this.lightPosition, vec3.fromValues(0, 1, 0)),
+        vec3.fromValues(0, -1, 0)
+      ),
+      // Negative Y
+      new Camera(
+        this.lightPosition,
+        vec3.add(vec3.create(), this.lightPosition, vec3.fromValues(0, -1, 0)),
+        vec3.fromValues(0, 1, 0)
+      ),
+      // Positive Z
+      new Camera(
+        this.lightPosition,
+        vec3.add(vec3.create(), this.lightPosition, vec3.fromValues(0, 0, 1)),
+        vec3.fromValues(0, 1, 0)
+      ),
+      // Negative Z
+      new Camera(
+        this.lightPosition,
+        vec3.add(vec3.create(), this.lightPosition, vec3.fromValues(0, 0, -1)),
+        vec3.fromValues(0, -1, 0)
+      )
+    ];
+
     // Set GL state status
     gl.useProgram(this.map_program);
     gl.bindTexture(gl.TEXTURE_CUBE_MAP, this.shadowMapCube);
@@ -153,8 +199,8 @@ class ShadowPhong {
     gl.bindRenderbuffer(gl.RENDERBUFFER, this.shadowMapRenderbuffer);
 
     gl.viewport(0, 0, this.textureSize, this.textureSize);
-    gl.enable(gl.DEPTH_TEST);
-    gl.enable(gl.CULL_FACE);
+    // gl.enable(gl.DEPTH_TEST);
+    // gl.enable(gl.CULL_FACE);
 
     // Set per-frame uniforms
     gl.uniform2fv(
@@ -187,6 +233,7 @@ class ShadowPhong {
         this.shadowMapCube,
         0
       );
+
       gl.framebufferRenderbuffer(
         gl.FRAMEBUFFER,
         gl.DEPTH_ATTACHMENT,
@@ -194,8 +241,8 @@ class ShadowPhong {
         this.shadowMapRenderbuffer
       );
 
-      gl.clearColor(0, 0, 0, 1);
-      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+      // gl.clearColor(0, 0, 0, 1);
+      // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
       // Per object uniforms
       gl.uniformMatrix4fv(
@@ -213,7 +260,7 @@ class ShadowPhong {
       );
       gl.enableVertexAttribArray(this.map_attribs.vPos);
 
-      gl.bindBuffer(gl.ARRAY_BUFFER, null);
+      // gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, entity.buffers.indices);
       gl.drawElements(gl.TRIANGLES, entity.buffers.qty, gl.UNSIGNED_SHORT, 0);
@@ -226,16 +273,10 @@ class ShadowPhong {
 
   }
 
-  update(entity) {
-    this.generate_shadow_map(entity);
-
-
-
+  render(entity) {
     // Clear back buffer, set per-frame uniforms
     // gl.enable(gl.CULL_FACE);
     // gl.enable(gl.DEPTH_TEST);
-
-    gl.viewport(0, 0, canvas.width, canvas.height);
 
     // gl.clearColor(0, 0, 0, 1);
     // gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
