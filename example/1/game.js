@@ -28,7 +28,7 @@ cube8.color = "#ffffff";
 // game.add(cube8);
 
 const cube = new Cervus.shapes.Box({
-  material: material
+  material: 'basic'//material
 });
 cube.position.y = -12;
 cube.position.x = 3;
