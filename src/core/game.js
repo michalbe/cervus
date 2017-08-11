@@ -22,7 +22,7 @@ class Game {
     this.run = true;
 
     this.options = default_options;
-    console.log(math);
+
     this.camera = new Camera(
       math.vec3.from_values(0, 0, 1.85),
       math.vec3.from_values(0, -1, 1.85),
