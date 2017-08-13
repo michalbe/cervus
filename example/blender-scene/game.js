@@ -65,7 +65,7 @@ fetch('models/scene.json')
         indices: [].concat.apply([], json.meshes[mesh_i].faces),
         normals: json.meshes[mesh_i].normals,
         material: 'phong',
-        color:  '#00ff00' //+ col + 'ff' +  col//colors[i]
+        color:  '#FFFFFF' //+ col + 'ff' +  col//colors[i]
       });
 
       let transform = mat4.getTranslation([], child.transformation);
