@@ -19,9 +19,9 @@ class Game {
     this.options = default_options;
 
     this.camera = new Camera(
-      vec3.fromValues(0, 1.85, 0),
-      vec3.fromValues(0, 1.85, -1),
-      vec3.fromValues(0, 1, 0)
+      vec3.fromValues(0, 0, 1.85),
+      vec3.fromValues(0, -1, 1.85),
+      vec3.fromValues(0, 0, 1)
     );
 
     this.projMatrix = mat4.create();
@@ -57,10 +57,10 @@ class Game {
 
     this.tick((typeof performance !== 'undefined' && performance.now()) || 0);
 
-    // gl.enable(gl.CULL_FACE);
+    gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
 
-    gl.clearColor(0.15, 0.15, 0.15, 1);
+    gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
 
     // gl.enable(gl.CULL_FACE);
@@ -145,12 +145,23 @@ class Game {
         this.camera.rotateRight(this.tick_length / 1000 * this.camera.RotateSpeed);
       }
 
+      if (this.camera.directions.RotUp && !this.camera.directions.RotDown) {
+        this.camera.rotateUp(-this.tick_length / 1000 * this.camera.RotateSpeed);
+      }
+
+      if (this.camera.directions.RotDown && !this.camera.directions.RotUp) {
+        this.camera.rotateUp(this.tick_length / 1000 * this.camera.RotateSpeed);
+      }
+
       this.camera.getViewMatrix(this.viewMatrix);
     }
   }
 
   draw(ticks_qty) {
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      this.entities.forEach((entity) => entity.generate_shadow_map && entity.generate_shadow_map(ticks_qty));
+
       gl.viewport(0, 0, canvas.width, canvas.height);
       this.entities.forEach((entity) => entity.render(ticks_qty));
   }

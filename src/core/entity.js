@@ -12,7 +12,7 @@ class Entity {
 
     this.material = options.material || 'basic';
 
-    this.color = options.color || '#CCCCCC';
+    this.color = options.color || '#FF00FF';
     this.color_opacity = 1.0;
 
     this.color_vec = [...hex_to_vec(this.color), this.color_opacity];
@@ -37,22 +37,26 @@ class Entity {
   }
 
   update() {
+    const model_view_matrix_from = (this.parent && this.parent.model_view_matrix) || mat4.create();
     const model_view_matrix = mat4.identity(mat4.create());
-    mat4.translate(model_view_matrix, model_view_matrix, obj_to_vec(this.position));
+    mat4.translate(model_view_matrix, model_view_matrix_from, obj_to_vec(this.position));
     mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.x, [1, 0, 0]);
     mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.y, [0, 1, 0]);
     mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.z, [0, 0, 1]);
     mat4.scale(model_view_matrix, model_view_matrix, obj_to_vec(this.scale));
 
     this.model_view_matrix = model_view_matrix;
-
     this.color_vec = [...hex_to_vec(this.color), this.color_opacity];
 
     // this.material_desc = new materials[this.material];
   }
 
   render() {
-    this.material_desc.update(this);
+    this.material_desc.render(this);
+  }
+
+  generate_shadow_map() {
+    this.material_desc.generate_shadow_map && this.material_desc.generate_shadow_map(this);
   }
 }
 
