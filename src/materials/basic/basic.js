@@ -25,7 +25,7 @@ class Basic {
     // return instance;
   }
 
-  update(entity) {
+  render(entity) {
     gl.useProgram(this.program);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, entity.buffers.vertices);
