@@ -7,8 +7,10 @@ class Group {
     this.position = options.position || Object.assign({}, zero_vector);
     this.rotation = options.rotation || Object.assign({}, zero_vector);
     this.scale = options.scale || Object.assign({}, unit_vector);
-
+    this.origin = options.origin || Object.assign({}, zero_vector);
     this.entities = [];
+
+    this.skip = false;
   }
 
   add(entity) {
@@ -17,11 +19,24 @@ class Group {
   }
 
   update() {
+    if (this.skip) {
+      return;
+    }
     const model_view_matrix = mat4.identity(mat4.create());
     mat4.translate(model_view_matrix, model_view_matrix, obj_to_vec(this.position));
+
+    const origin = obj_to_vec(this.origin);
+    const rev_origin = obj_to_vec({
+      x: -this.origin.x,
+      y: -this.origin.y,
+      z: -this.origin.z
+    });
+
+    mat4.translate(model_view_matrix, model_view_matrix, rev_origin);
     mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.x, [1, 0, 0]);
     mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.y, [0, 1, 0]);
     mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.z, [0, 0, 1]);
+    mat4.translate(model_view_matrix, model_view_matrix, origin);
     mat4.scale(model_view_matrix, model_view_matrix, obj_to_vec(this.scale));
 
     this.model_view_matrix = model_view_matrix;
@@ -34,7 +49,7 @@ class Group {
   }
 
   render(ticks) {
-    this.entities.forEach((entity) => {
+    !this.skip && this.entities.forEach((entity) => {
       entity.render(ticks);
     });
   }

@@ -1,5 +1,6 @@
 import { vertex_code, fragment_code } from './shader.js';
 import { create_program_object, create_shader_object, gl } from '../../core/context.js';
+import { obj_to_vec } from '../../misc/utils.js';
 
 class Phong {
 
@@ -32,7 +33,8 @@ class Phong {
     gl.useProgram(this.program);
     gl.uniformMatrix4fv(this.uniforms.mProj, gl.FALSE, entity.game ? entity.game.projMatrix : entity.parent.game.projMatrix);
     gl.uniformMatrix4fv(this.uniforms.mView, gl.FALSE, entity.game ? entity.game.viewMatrix : entity.parent.game.viewMatrix);
-    gl.uniform3fv(this.uniforms.pointLightPosition, [0, 2, 2]);
+    // gl.uniform3fv(this.uniforms.pointLightPosition, entity.game ? entity.game.camera.position : entity.parent.game.camera.position);
+    gl.uniform3fv(this.uniforms.pointLightPosition, [2, 2, 2]);
 
     gl.uniformMatrix4fv(
         this.uniforms.mWorld,

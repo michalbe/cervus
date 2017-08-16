@@ -1,5 +1,6 @@
 import { gl, canvas } from './context.js';
 import { vec3, mat4, glMatrix } from 'gl-matrix';
+import { hex_to_vec } from '../misc/utils.js';
 import { Camera } from './camera.js';
 
 const default_options = {
@@ -8,7 +9,8 @@ const default_options = {
   dom: document.body,
   fps: 60,
   autostart: true,
-  movable_camera: false
+  movable_camera: false,
+  clear_color: '#FFFFFF'
 };
 
 class Game {
@@ -41,6 +43,8 @@ class Game {
     });
 
     this.camera.moveable = this.options.movable_camera;
+    this.clear_color = this.options.clear_color;
+    this.clear_color_vec = hex_to_vec(this.clear_color);
 
     canvas.width = this.options.width;
     canvas.height = this.options.height;
@@ -60,7 +64,13 @@ class Game {
     gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
 
-    gl.clearColor(0, 0, 0, 1);
+    gl.clearColor(
+      this.clear_color_vec[0],
+      this.clear_color_vec[1],
+      this.clear_color_vec[2],
+      1
+    );
+
     gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
 
     // gl.enable(gl.CULL_FACE);
@@ -158,6 +168,13 @@ class Game {
   }
 
   draw(ticks_qty) {
+      this.clear_color_vec = hex_to_vec(this.clear_color);
+      gl.clearColor(
+        this.clear_color_vec[0],
+        this.clear_color_vec[1],
+        this.clear_color_vec[2],
+        1
+      );
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
       gl.viewport(0, 0, canvas.width, canvas.height);
       this.entities.forEach((entity) => entity.generate_shadow_map && entity.generate_shadow_map(ticks_qty));
