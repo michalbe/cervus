@@ -24,6 +24,8 @@ class Entity {
     this.material_desc = new materials[this.material];
     this.program = this.material_desc.program;
 
+    this.skip = false;
+
     this.create_buffers();
   }
 
@@ -37,6 +39,10 @@ class Entity {
   }
 
   update() {
+    if (this.skip) {
+      return;
+    }
+
     const model_view_matrix_from = (this.parent && this.parent.model_view_matrix) || mat4.create();
     const model_view_matrix = mat4.identity(mat4.create());
     mat4.translate(model_view_matrix, model_view_matrix_from, obj_to_vec(this.position));
@@ -52,7 +58,7 @@ class Entity {
   }
 
   render() {
-    this.material_desc.render(this);
+    !this.skip && this.material_desc.render(this);
   }
 
   generate_shadow_map() {
