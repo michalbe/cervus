@@ -30,7 +30,14 @@ class Phong {
   }
 
   render(entity) {
-    const game = entity.game || entity.parent.game;
+    let ent = entity;
+    let game = ent.game;
+    
+    while(ent.parent && !game) {
+      ent = ent.parent;
+      game = ent.game;
+    }
+
     gl.useProgram(this.program);
     gl.uniformMatrix4fv(this.uniforms.p, gl.FALSE, game.projMatrix);
     gl.uniformMatrix4fv(this.uniforms.v, gl.FALSE, game.viewMatrix);
