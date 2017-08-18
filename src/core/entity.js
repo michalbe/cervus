@@ -11,6 +11,7 @@ class Entity {
     this.position = options.position || zero_vector.slice();
     this.rotation = options.rotation || zero_vector.slice();
     this.scale = options.scale || unit_vector.slice();
+    this.origin = options.origin || zero_vector.slice();
 
     this.material = options.material;
 
@@ -20,6 +21,8 @@ class Entity {
     this.forward = [];
     this.up = [];
     this.right = [];
+
+    this.entities = [];
 
     this.keyboard_controlled = false;
 
@@ -70,6 +73,11 @@ class Entity {
       qty: this.indices.length,
       normals: create_float_buffer(this.normals)
     }
+  }
+
+  add(entity) {
+    entity.parent = this;
+    this.entities.push(entity);
   }
 
   get_matrix(out) {
@@ -171,14 +179,19 @@ class Entity {
       this.do_step(tick_length);
     }
 
-    if (!this.material) {
-      return;
-    }
+    // if (!this.material) {
+    //   return;
+    // }
 
     const model_view_matrix_from = (this.parent && this.parent.model_view_matrix)
       || math.mat4.create();
     const model_view_matrix = math.mat4.identity(math.mat4.create());
     math.mat4.translate(model_view_matrix, model_view_matrix_from, this.position);
+
+    const rev_origin = this.origin.map((e) => -e);
+
+    math.mat4.translate(model_view_matrix, model_view_matrix, rev_origin);
+
     math.mat4.rotate(
       model_view_matrix,
       model_view_matrix,
@@ -197,17 +210,28 @@ class Entity {
       math.vec3.angle([0, 0, 1], this.up),
       [1, 1, 1]
     );
+
     // math.mat4.rotate(model_view_matrix, model_view_matrix, this.rotation[0], [1, 0, 0]);
     // math.mat4.rotate(model_view_matrix, model_view_matrix, this.rotation[1], [0, 1, 0]);
     // math.mat4.rotate(model_view_matrix, model_view_matrix, this.rotation[2], [0, 0, 1]);
+
+    math.mat4.translate(model_view_matrix, model_view_matrix, this.origin);
     math.mat4.scale(model_view_matrix, model_view_matrix, this.scale);
 
     this.model_view_matrix = model_view_matrix;
     this.color_vec = [...this.color, this.color_opacity];
+
+    this.entities.forEach((entity) => {
+      entity.update();
+    });
+
   }
 
-  render() {
+  render(ticks) {
     !this.skip && this.material && this.material_desc.render(this);
+    !this.skip && this.entities.forEach((entity) => {
+      entity.render(ticks);
+    });
   }
 
   // generate_shadow_map() {
