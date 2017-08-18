@@ -1,6 +1,5 @@
 import { create_float_buffer, create_index_buffer } from './context.js';
 import { math } from './math.js';
-import { obj_to_vec, hex_to_vec } from '../misc/utils.js';
 import { zero_vector, unit_vector } from '../misc/defaults.js';
 import { materials } from '../materials/materials.js';
 
@@ -12,10 +11,8 @@ class Entity {
 
     this.material = options.material || 'basic';
 
-    this.color = options.color || '#FF00FF';
+    this.color = options.color || [1.0, 1.0, 1.0];
     this.color_opacity = 1.0;
-
-    this.color_vec = [...hex_to_vec(this.color), this.color_opacity];
 
     this.indices = this.indices || options.indices;
     this.vertices = this.vertices || options.vertices;
@@ -57,7 +54,7 @@ class Entity {
     math.mat4.scale(model_view_matrix, model_view_matrix, this.scale);
 
     this.model_view_matrix = model_view_matrix;
-    this.color_vec = [...hex_to_vec(this.color), this.color_opacity];
+    this.color_vec = [...this.color, this.color_opacity];
   }
 
   render() {

@@ -1,6 +1,6 @@
 import { gl, canvas } from './context.js';
 import { hex_to_vec } from '../misc/utils.js';
-import { zero_vector, unit_vector } from '../misc/defaults.js';
+import { zero_vector } from '../misc/defaults.js';
 import { math } from './math.js';
 import { Camera } from './camera.js';
 
