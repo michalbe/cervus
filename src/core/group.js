@@ -1,5 +1,4 @@
 import { math } from './math.js';
-import { obj_to_vec } from '../misc/utils.js';
 import { zero_vector, unit_vector } from '../misc/defaults.js';
 
 class Group {
