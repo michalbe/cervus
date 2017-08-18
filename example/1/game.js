@@ -86,13 +86,15 @@ plane2.position = [ -3, -13, 1];
 plane2.scale = [ 2, 1, 2 ];
 game.add(plane2);
 
-const group = new Cervus.Group();
+const parent_group = new Cervus.Entity({});
+const group = new Cervus.Entity({});
 const vox1 = new Cervus.shapes.Box({
   scale: [0.5, 0.5, 0.5],
   color: Cervus.math.hex_to_vec('#0000ff'),
   material: 'phong',
   position: [-1, -1, 1]
 });
+
 const vox2 = new Cervus.shapes.Box({
   color: Cervus.math.hex_to_vec('#00ff00'),
   material: 'phong',
@@ -102,12 +104,13 @@ const vox2 = new Cervus.shapes.Box({
 group.origin = [ 1, 2, 2 ];
 // group.position[2] = -15;
 // group.position[1] = -10;
-game.add(group);
+// game.add(group);
 // game.add(vox1);
 // game.add(vox2);
 group.add(vox1);
 group.add(vox2);
-
+parent_group.add(group);
+game.add(parent_group);
 
 game.add_frame_listener('cube_rotation', (delta) => {
   // cube.rotation[0] = sphere.rotation[0] = group.rotation[2] = delta / 1000;
@@ -120,4 +123,6 @@ game.add_frame_listener('cube_rotation', (delta) => {
 
   sphere.position[0] += 0.06 * dir * -1;
   cube2.position[0] += 0.06 * dir;
+  group.position[1] -= 0.06 * dir;
+  parent_group.position[0] -= 0.06 * dir;
 });
