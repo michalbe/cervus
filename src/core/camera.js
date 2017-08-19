@@ -23,19 +23,7 @@ export class Camera {
     // r_r: rotate right
     // r_u: rotate up
     // r_d: rotate down
-    this.dir = {
-      // u: false,
-      // r: false,
-      // d: false,
-      // l: false,
-      // f: false,
-      // b: false,
-      //
-      // r_l: false,
-      // r_r: false,
-      // r_u: false,
-      // r_d: false
-    };
+    this.dir = {};
 
     this.dir_desc = {
       87: 'f',
@@ -155,11 +143,11 @@ export class Camera {
       this.rotate_rl(tick_length / 1000 * this.rotate_speed);
     }
 
-    if (this.dir.RotUp && !this.dir.RotDown) {
+    if (this.dir.r_u && !this.dir.r_d) {
       this.rotate_ud(-tick_length / 1000 * this.rotate_speed);
     }
 
-    if (this.dir.RotDown && !this.dir.RotUp) {
+    if (this.dir.r_d && !this.dir.r_u) {
       this.rotate_ud(tick_length / 1000 * this.rotate_speed);
     }
   }
