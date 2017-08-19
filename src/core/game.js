@@ -1,5 +1,6 @@
 import { gl, canvas } from './context.js';
 import { hex_to_vec } from '../misc/utils.js';
+import { zero_vector, unit_vector } from '../misc/defaults.js';
 import { math } from './math.js';
 import { Camera } from './camera.js';
 
@@ -11,7 +12,7 @@ const default_options = {
   autostart: true,
   movable_camera: false,
   clear_color: '#FFFFFF',
-  light_position: { x: 0, y: 0, z: 0 },
+  light_position: zero_vector.slice(),
   light_intensity: 0.4
 };
 
