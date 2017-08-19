@@ -108,37 +108,8 @@ export class Camera {
     if (!this.moveable) {
       return;
     }
-    switch(e.keyCode) {
-      case 87:
-        this.dir.f = true;
-        break;
-      case 65:
-        this.dir.l = true;
-        break;
-      case 68:
-        this.dir.r = true;
-        break;
-      case 83:
-        this.dir.b = true;
-        break;
-      case 81:
-        this.dir.u = true;
-        break;
-      case 69:
-        this.dir.d = true;
-        break;
-      case 38:
-        this.dir.r_u = true;
-        break;
-      case 40:
-        this.dir.r_d = true;
-        break;
-      case 39:
-        this.dir.r_r = true;
-        break;
-      case 37:
-        this.dir.r_l = true;
-        break;
+    if (this.dir_desc[e.keyCode]) {
+      this.dir[this.dir_desc[e.keyCode]] = true;
     }
   }
 
@@ -146,37 +117,8 @@ export class Camera {
     if (!this.moveable) {
       return;
     }
-    switch(e.keyCode) {
-      case 87:
-        this.dir.f = false;
-        break;
-      case 65:
-        this.dir.l = false;
-        break;
-      case 68:
-        this.dir.r = false;
-        break;
-      case 83:
-        this.dir.b = false;
-        break;
-      case 81:
-        this.dir.u = false;
-        break;
-      case 69:
-        this.dir.d = false;
-        break;
-      case 38:
-        this.dir.r_u = false;
-        break;
-      case 40:
-        this.dir.r_d = false;
-        break;
-      case 39:
-        this.dir.r_r = false;
-        break;
-      case 37:
-        this.dir.r_l = false;
-        break;
+    if (this.dir_desc[e.keyCode]) {
+      this.dir[this.dir_desc[e.keyCode]] = false;
     }
   }
 
