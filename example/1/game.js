@@ -5,7 +5,8 @@ const material = 'phong';
 const game = new Cervus.Game({
   width: window.innerWidth,
   height: window.innerHeight,
-  movable_camera: true
+  movable_camera: true,
+  // fps: 1
 });
 
 const cube2 = new Cervus.shapes.Box({
