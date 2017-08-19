@@ -21,6 +21,7 @@ class Phong {
 
       lp: gl.getUniformLocation(this.program, 'lp'),
       c: gl.getUniformLocation(this.program, 'c'),
+      li: gl.getUniformLocation(this.program, 'li'),
     };
 
     this.attribs = {
@@ -35,6 +36,7 @@ class Phong {
     gl.uniformMatrix4fv(this.uniforms.v, gl.FALSE, entity.game ? entity.game.viewMatrix : entity.parent.game.viewMatrix);
     // gl.uniform3fv(this.uniforms.lp, entity.game ? entity.game.camera.position : entity.parent.game.camera.position);
     gl.uniform3fv(this.uniforms.lp, obj_to_vec(entity.game.light_position));
+    gl.uniform2fv(this.uniforms.li, [1 - entity.game.light_intensity, entity.game.light_intensity]);
 
     gl.uniformMatrix4fv(
         this.uniforms.w,
