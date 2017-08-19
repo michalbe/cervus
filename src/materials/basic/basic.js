@@ -15,42 +15,42 @@ class Basic {
     }
 
     this.uniforms = {
-      mProj: gl.getUniformLocation(this.program, 'mProj'),
-      mView: gl.getUniformLocation(this.program, 'mView'),
-      mWorld: gl.getUniformLocation(this.program, 'mWorld'),
+      p: gl.getUniformLocation(this.program, 'p'),
+      v: gl.getUniformLocation(this.program, 'v'),
+      w: gl.getUniformLocation(this.program, 'w'),
 
-      meshColor: gl.getUniformLocation(this.program, 'meshColor'),
+      m: gl.getUniformLocation(this.program, 'm'),
     };
 
     this.attribs = {
-      vPos: gl.getAttribLocation(this.program, 'vPos')
+      V: gl.getAttribLocation(this.program, 'V')
     };
   }
 
   render(entity) {
     gl.useProgram(this.program);
-    gl.uniformMatrix4fv(this.uniforms.mProj, gl.FALSE, entity.game ? entity.game.projMatrix : entity.parent.game.projMatrix);
-    gl.uniformMatrix4fv(this.uniforms.mView, gl.FALSE, entity.game ? entity.game.viewMatrix : entity.parent.game.viewMatrix);
+    gl.uniformMatrix4fv(this.uniforms.p, gl.FALSE, entity.game ? entity.game.projMatrix : entity.parent.game.projMatrix);
+    gl.uniformMatrix4fv(this.uniforms.v, gl.FALSE, entity.game ? entity.game.viewMatrix : entity.parent.game.viewMatrix);
 
     gl.uniformMatrix4fv(
-        this.uniforms.mWorld,
+        this.uniforms.w,
         gl.FALSE,
         entity.model_view_matrix
       );
 
       gl.uniform4fv(
-        this.uniforms.meshColor,
+        this.uniforms.m,
         entity.color_vec
       );
 
       // debugger;
       gl.bindBuffer(gl.ARRAY_BUFFER, entity.buffers.vertices);
       gl.vertexAttribPointer(
-        this.attribs.vPos,
+        this.attribs.V,
         3, gl.FLOAT, gl.FALSE,
         0, 0
       );
-      gl.enableVertexAttribArray(this.attribs.vPos);
+      gl.enableVertexAttribArray(this.attribs.V);
 
       // gl.bindBuffer(gl.ARRAY_BUFFER, entity.buffers.normals);
       // gl.vertexAttribPointer(
