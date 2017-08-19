@@ -15,29 +15,29 @@ class Phong {
     }
 
     this.uniforms = {
-      mProj: gl.getUniformLocation(this.program, 'mProj'),
-      mView: gl.getUniformLocation(this.program, 'mView'),
-      mWorld: gl.getUniformLocation(this.program, 'mWorld'),
+      p: gl.getUniformLocation(this.program, 'p'),
+      v: gl.getUniformLocation(this.program, 'v'),
+      w: gl.getUniformLocation(this.program, 'w'),
 
-      pointLightPosition: gl.getUniformLocation(this.program, 'pointLightPosition'),
-      meshColor: gl.getUniformLocation(this.program, 'meshColor'),
+      lp: gl.getUniformLocation(this.program, 'lp'),
+      c: gl.getUniformLocation(this.program, 'c'),
     };
 
     this.attribs = {
-      vPos: gl.getAttribLocation(this.program, 'vPos'),
-      vNorm: gl.getAttribLocation(this.program, 'vNorm'),
+      P: gl.getAttribLocation(this.program, 'P'),
+      N: gl.getAttribLocation(this.program, 'N'),
     };
   }
 
   render(entity) {
     gl.useProgram(this.program);
-    gl.uniformMatrix4fv(this.uniforms.mProj, gl.FALSE, entity.game ? entity.game.projMatrix : entity.parent.game.projMatrix);
-    gl.uniformMatrix4fv(this.uniforms.mView, gl.FALSE, entity.game ? entity.game.viewMatrix : entity.parent.game.viewMatrix);
-    // gl.uniform3fv(this.uniforms.pointLightPosition, entity.game ? entity.game.camera.position : entity.parent.game.camera.position);
-    gl.uniform3fv(this.uniforms.pointLightPosition, [2, 2, 2]);
+    gl.uniformMatrix4fv(this.uniforms.p, gl.FALSE, entity.game ? entity.game.projMatrix : entity.parent.game.projMatrix);
+    gl.uniformMatrix4fv(this.uniforms.v, gl.FALSE, entity.game ? entity.game.viewMatrix : entity.parent.game.viewMatrix);
+    // gl.uniform3fv(this.uniforms.lp, entity.game ? entity.game.camera.position : entity.parent.game.camera.position);
+    gl.uniform3fv(this.uniforms.lp, [2, 2, 2]);
 
     gl.uniformMatrix4fv(
-        this.uniforms.mWorld,
+        this.uniforms.w,
         gl.FALSE,
         entity.model_view_matrix
       );
@@ -45,28 +45,28 @@ class Phong {
       // console.log(entity.color_vec.length, entity.color_vec);
       // debugger;
       gl.uniform4fv(
-        this.uniforms.meshColor,
+        this.uniforms.c,
         entity.color_vec
       );
 
       // debugger;
       gl.bindBuffer(gl.ARRAY_BUFFER, entity.buffers.vertices);
       gl.vertexAttribPointer(
-        this.attribs.vPos,
+        this.attribs.P,
         3, gl.FLOAT, gl.FALSE,
         0, 0
       );
-      gl.enableVertexAttribArray(this.attribs.vPos);
+      gl.enableVertexAttribArray(this.attribs.P);
 
       gl.bindBuffer(gl.ARRAY_BUFFER, entity.buffers.normals);
       gl.vertexAttribPointer(
 
-        this.attribs.vNorm,
+        this.attribs.N,
         3, gl.FLOAT, gl.FALSE,
         0, 0
       );
 
-      gl.enableVertexAttribArray(this.attribs.vNorm);
+      gl.enableVertexAttribArray(this.attribs.N);
 
       gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
