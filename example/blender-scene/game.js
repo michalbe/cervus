@@ -7,7 +7,7 @@ const colors = ['#00ff00', '#A52A2A', '#006400'];
 const game = new Cervus.Game({
   width: window.innerWidth,
   height: window.innerHeight,
-  movable_camera: true,
+  keyboard_controlled_camera: true,
   light_intensity: 0.4
   // dom: document.body,
   // fps: 1

@@ -10,7 +10,7 @@ const default_options = {
   dom: document.body,
   fps: 60,
   autostart: true,
-  movable_camera: false,
+  keyboard_controlled_camera: false,
   clear_color: '#FFFFFF',
   light_position: zero_vector.slice(),
   light_intensity: 0.4
@@ -26,6 +26,8 @@ class Game {
     this.camera = new Entity({
       position: [ 0, 0, 1.85 ]
     });
+
+    this.camera.game = this;
 
     this.projMatrix = math.mat4.create();
     this.viewMatrix = math.mat4.create();
@@ -45,7 +47,7 @@ class Game {
 
     this.light_position = this.options.light_position;
     this.light_intensity = this.options.light_intensity;
-    this.camera.moveable = this.options.movable_camera;
+    this.camera.keyboard_controlled = this.options.keyboard_controlled_camera;
     this.clear_color = this.options.clear_color;
     this.clear_color_vec = hex_to_vec(this.clear_color);
 
