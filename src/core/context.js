@@ -1,5 +1,3 @@
-import { mat4, mat3 } from 'gl-matrix';
-
 const canvas = document.createElement('canvas');
 const gl = canvas.getContext('webgl');
 
@@ -23,7 +21,6 @@ function create_shader_object(shader_type, source) {
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    console.log(shader_type, gl.VERTEX_SHADER, gl.FRAGMENT_SHADER);
     throw gl.getShaderInfoLog(shader);
   }
 
@@ -42,44 +39,11 @@ function create_program_object(vs, fs) {
   return program;
 }
 
-function set_projection(program, fov, aspect, near, far) {
-  const projection_matrix = mat4.create();
-  mat4.perspective(
-    projection_matrix,
-    fov,
-    aspect,
-    near,
-    far
-  );
-
-  gl.uniformMatrix4fv(
-    gl.getUniformLocation(program, "uProjection"),
-    false,
-    projection_matrix
-  );
-
-  return projection_matrix;
-}
-
-function set_normal_matrix(program, mv) {
-  const normal_matrix = mat3.normalFromMat4([], mv);
-
-  gl.uniformMatrix3fv(
-    gl.getUniformLocation(program, "uNormalMatrix"),
-    false,
-    normal_matrix
-  );
-
-  return normal_matrix;
-}
-
 export {
   gl,
   canvas,
   create_float_buffer,
   create_index_buffer,
   create_shader_object,
-  create_program_object,
-  set_projection,
-  set_normal_matrix
+  create_program_object
 };

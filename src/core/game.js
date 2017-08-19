@@ -11,7 +11,8 @@ const default_options = {
   autostart: true,
   movable_camera: false,
   clear_color: '#FFFFFF',
-  light_position: { x: 0, y: 0, z: 0 }
+  light_position: { x: 0, y: 0, z: 0 },
+  light_intensity: 0.4
 };
 
 class Game {
@@ -45,6 +46,7 @@ class Game {
     });
 
     this.light_position = this.options.light_position;
+    this.light_intensity = this.options.light_intensity;
     this.camera.moveable = this.options.movable_camera;
     this.clear_color = this.options.clear_color;
     this.clear_color_vec = hex_to_vec(this.clear_color);
