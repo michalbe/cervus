@@ -64,15 +64,14 @@ fetch('models/scene.json')
         vertices: json.meshes[mesh_i].vertices,
         indices: [].concat.apply([], json.meshes[mesh_i].faces),
         normals: json.meshes[mesh_i].normals,
-        material: 'basic',
-        color:  '#' + col + col + col//'#FFFFFF' //+ col + 'ff' +  col//colors[i]
+        material: 'phong', //'basic',
+        color:  '#000000', //'#' + col + col + col//'#FFFFFF' //+ col + 'ff' +  col//colors[i]
       });
 
       let transform = Cervus.math.mat4.getTranslation([], child.transformation);
       let scale = Cervus.math.mat4.getScaling([], child.transformation);
       let rotation = Cervus.math.mat4.getRotation([], child.transformation);
 
-      console.log(rotation);
       mesh_in.position = {
         x: child.transformation[3],
         y: child.transformation[7],
@@ -109,9 +108,11 @@ fetch('models/scene.json')
   // });
 });
 
-// game.add_frame_listener('elo', (delta) => {
-//   meshes.forEach((mesh, i) => {
-//     // if (i=== 2) return;
-//     // console.log(mesh.color);
-//   });
-// });
+game.add_frame_listener('elo', () => {
+  game.light_position = { x: game.camera.position[0], y: game.camera.position[1], z: game.camera.position[2] };
+
+  // meshes.forEach((mesh, i) => {
+  //   // if (i=== 2) return;
+  //   // console.log(mesh.color);
+  // });
+});
