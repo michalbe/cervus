@@ -34,7 +34,7 @@ class Phong {
     gl.uniformMatrix4fv(this.uniforms.p, gl.FALSE, entity.game ? entity.game.projMatrix : entity.parent.game.projMatrix);
     gl.uniformMatrix4fv(this.uniforms.v, gl.FALSE, entity.game ? entity.game.viewMatrix : entity.parent.game.viewMatrix);
     // gl.uniform3fv(this.uniforms.lp, entity.game ? entity.game.camera.position : entity.parent.game.camera.position);
-    gl.uniform3fv(this.uniforms.lp, [2, 2, 2]);
+    gl.uniform3fv(this.uniforms.lp, obj_to_vec(entity.game.light_position));
 
     gl.uniformMatrix4fv(
         this.uniforms.w,

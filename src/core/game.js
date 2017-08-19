@@ -10,7 +10,8 @@ const default_options = {
   fps: 60,
   autostart: true,
   movable_camera: false,
-  clear_color: '#FFFFFF'
+  clear_color: '#FFFFFF',
+  light_position: { x: 0, y: 0, z: 0 }
 };
 
 class Game {
@@ -36,13 +37,14 @@ class Game {
       canvas.width / canvas.height,
       0.35,
       85.0
-    );
+    )
 
     options = options || {};
     Object.keys(options).forEach(key => {
       this.options[key] = options[key];
     });
 
+    this.light_position = this.options.light_position;
     this.camera.moveable = this.options.movable_camera;
     this.clear_color = this.options.clear_color;
     this.clear_color_vec = hex_to_vec(this.clear_color);
@@ -127,43 +129,43 @@ class Game {
     // this probably should be moved to the camera itself
     if (this.options.movable_camera) {
       if (this.camera.directions.Forward && !this.camera.directions.Back) {
-        this.camera.moveForward(this.tick_length / 1000 * this.camera.MoveForwardSpeed);
+        this.camera.moveForward(this.tick_length / 1000 * this.camera.move_speed);
       }
 
       if (this.camera.directions.Back && !this.camera.directions.Forward) {
-        this.camera.moveForward(-this.tick_length / 1000 * this.camera.MoveForwardSpeed);
+        this.camera.moveForward(-this.tick_length / 1000 * this.camera.move_speed);
       }
 
       if (this.camera.directions.Right && !this.camera.directions.Left) {
-        this.camera.moveRight(this.tick_length / 1000 * this.camera.MoveForwardSpeed);
+        this.camera.moveRight(this.tick_length / 1000 * this.camera.move_speed);
       }
 
       if (this.camera.directions.Left && !this.camera.directions.Right) {
-        this.camera.moveRight(-this.tick_length / 1000 * this.camera.MoveForwardSpeed);
+        this.camera.moveRight(-this.tick_length / 1000 * this.camera.move_speed);
       }
 
       // if (this.camera.directions.Up && !this.camera.directions.Down) {
-      //   this.camera.moveUp(this.tick_length / 1000 * this.camera.MoveForwardSpeed);
+      //   this.camera.moveUp(this.tick_length / 1000 * this.camera.move_speed);
       // }
       //
       // if (this.camera.directions.Down && !this.camera.directions.Up) {
-      //   this.camera.moveUp(-this.tick_length / 1000 * this.camera.MoveForwardSpeed);
+      //   this.camera.moveUp(-this.tick_length / 1000 * this.camera.move_speed);
       // }
 
       if (this.camera.directions.RotRight && !this.camera.directions.RotLeft) {
-        this.camera.rotateRight(-this.tick_length / 1000 * this.camera.RotateSpeed);
+        this.camera.rotateRight(-this.tick_length / 1000 * this.camera.rotate_speed);
       }
 
       if (this.camera.directions.RotLeft && !this.camera.directions.RotRight) {
-        this.camera.rotateRight(this.tick_length / 1000 * this.camera.RotateSpeed);
+        this.camera.rotateRight(this.tick_length / 1000 * this.camera.rotate_speed);
       }
 
       // if (this.camera.directions.RotUp && !this.camera.directions.RotDown) {
-      //   this.camera.rotateUp(-this.tick_length / 1000 * this.camera.RotateSpeed);
+      //   this.camera.rotateUp(-this.tick_length / 1000 * this.camera.rotate_speed);
       // }
       //
       // if (this.camera.directions.RotDown && !this.camera.directions.RotUp) {
-      //   this.camera.rotateUp(this.tick_length / 1000 * this.camera.RotateSpeed);
+      //   this.camera.rotateUp(this.tick_length / 1000 * this.camera.rotate_speed);
       // }
 
       this.camera.getViewMatrix(this.viewMatrix);
