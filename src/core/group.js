@@ -4,10 +4,10 @@ import { zero_vector, unit_vector } from '../misc/defaults.js';
 
 class Group {
   constructor(options = {}) {
-    this.position = options.position || Object.assign({}, zero_vector);
-    this.rotation = options.rotation || Object.assign({}, zero_vector);
-    this.scale = options.scale || Object.assign({}, unit_vector);
-    this.origin = options.origin || Object.assign({}, zero_vector);
+    this.position = options.position || zero_vector.slice();
+    this.rotation = options.rotation || zero_vector.slice();
+    this.scale = options.scale || unit_vector.slice();
+    this.origin = options.origin || zero_vector.slice();
     this.entities = [];
 
     this.skip = false;
@@ -23,21 +23,17 @@ class Group {
       return;
     }
     const model_view_matrix = math.mat4.identity(math.mat4.create());
-    math.mat4.translate(model_view_matrix, model_view_matrix, obj_to_vec(this.position));
+    math.mat4.translate(model_view_matrix, model_view_matrix, this.position);
 
-    const origin = obj_to_vec(this.origin);
-    const rev_origin = obj_to_vec({
-      x: -this.origin.x,
-      y: -this.origin.y,
-      z: -this.origin.z
-    });
+    const origin = this.origin;
+    const rev_origin = this.origin.map((e) => -e);
 
     math.mat4.translate(model_view_matrix, model_view_matrix, rev_origin);
-    math.mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.x, [1, 0, 0]);
-    math.mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.y, [0, 1, 0]);
-    math.mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.z, [0, 0, 1]);
+    math.mat4.rotate(model_view_matrix, model_view_matrix, this.rotation[0], [1, 0, 0]);
+    math.mat4.rotate(model_view_matrix, model_view_matrix, this.rotation[1], [0, 1, 0]);
+    math.mat4.rotate(model_view_matrix, model_view_matrix, this.rotation[2], [0, 0, 1]);
     math.mat4.translate(model_view_matrix, model_view_matrix, origin);
-    math.mat4.scale(model_view_matrix, model_view_matrix, obj_to_vec(this.scale));
+    math.mat4.scale(model_view_matrix, model_view_matrix, this.scale);
 
     this.model_view_matrix = model_view_matrix;
 

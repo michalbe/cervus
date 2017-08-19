@@ -1,13 +1,4 @@
-const zero_vector = {
-  x: 0,
-  y: 0,
-  z: 0
-};
-
-const unit_vector = {
-  x: 1,
-  y: 1,
-  z: 1
-};
+const zero_vector = [ 0, 0, 0 ];
+const unit_vector = [ 1, 1, 1 ]
 
 export { zero_vector, unit_vector }
