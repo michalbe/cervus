@@ -7,6 +7,7 @@ const vertex_code =`
   attribute vec3 N;
   varying vec3 fp;
   varying vec3 fn;
+
   void main()
   {
     fp = (w * vec4(P, 1.0)).xyz;
@@ -19,11 +20,13 @@ const fragment_code =`
   precision mediump float;
   uniform vec3 lp;
   uniform vec4 c;
+  uniform vec2 li;
   varying vec3 fp;
   varying vec3 fn;
+
   void main()
   {
-    gl_FragColor = vec4(c.rgb * 0.8 + 0.2 * max(dot(fn, normalize(lp - fp)), 0.0), c.a);
+    gl_FragColor = vec4(c.rgb * li.x + li.y * max(dot(fn, normalize(lp - fp)), 0.0), c.a);
   }
 `;
 
