@@ -12,18 +12,42 @@ export class Camera {
     this.move_speed = 3.5;
     this.rotate_speed = 1.5;
 
+    // Movement:
+    // u: up
+    // r: right
+    // d: down
+    // l: left
+    // f: forward
+    // b: backward
+    // r_l: rotate left
+    // r_r: rotate right
+    // r_u: rotate up
+    // r_d: rotate down
     this.dir = {
-      u: false,
-      Right: false,
-      Down: false,
-      Left: false,
-      Forward: false,
-      Back: false,
+      // u: false,
+      // r: false,
+      // d: false,
+      // l: false,
+      // f: false,
+      // b: false,
+      //
+      // r_l: false,
+      // r_r: false,
+      // r_u: false,
+      // r_d: false
+    };
 
-      r_l: false,
-      r_r: false,
-      r_u: false,
-      r_d: false
+    this.dir_desc = {
+      87: 'f',
+      65: 'l',
+      68: 'r',
+      83: 'b',
+      81: 'u',
+      69: 'd',
+      38: 'r_u',
+      40: 'r_d',
+      39: 'r_r',
+      37: 'r_l'
     };
 
     vec3.subtract(this.forward, lookAt, this.position);
@@ -34,25 +58,25 @@ export class Camera {
     vec3.normalize(this.right, this.right);
     vec3.normalize(this.up, this.up);
 
-    window.addEventListener('keydown', this.keyDownWindowListener.bind(this));
-    window.addEventListener('keyup', this.keyUpWindowListener.bind(this));
+    window.addEventListener('keydown', this.key_down.bind(this));
+    window.addEventListener('keyup', this.key_up.bind(this));
   }
 
-  getViewMatrix (out) {
+  get_matrix(out) {
     const lookAtVect = [];
     vec3.add(lookAtVect, this.position, this.forward);
     mat4.lookAt(out, this.position, lookAtVect, this.up);
     return out;
   }
 
-  rotateRight(rad) {
+  rotate_rl(rad) {
     const rightMatrix = mat4.create();
     mat4.rotate(rightMatrix, rightMatrix, rad, vec3.fromValues(0, 0, 1));
     vec3.transformMat4(this.forward, this.forward, rightMatrix);
     this.realign();
   }
 
-  rotateUp(rad) {
+  rotate_ud(rad) {
     const rightMatrix = mat4.create();
     mat4.rotate(rightMatrix, rightMatrix, rad, vec3.fromValues(1, 0, 0));
     vec3.transformMat4(this.forward, this.forward, rightMatrix);
@@ -68,133 +92,133 @@ export class Camera {
     vec3.normalize(this.up, this.up);
   }
 
-  moveForward(dist) {
+  move_f(dist) {
     vec3.scaleAndAdd(this.position, this.position, this.forward, dist);
   }
 
-  moveRight(dist) {
+  move_r(dist) {
     vec3.scaleAndAdd(this.position, this.position, this.right, dist);
   }
 
-  moveUp(dist) {
+  move_u(dist) {
     vec3.scaleAndAdd(this.position, this.position, this.up, dist);
   }
 
-  keyDownWindowListener(e) {
+  key_down(e) {
     if (!this.moveable) {
       return;
     }
-    switch(e.code) {
-      case 'KeyW':
-        this.dir.Forward = true;
+    switch(e.keyCode) {
+      case 87:
+        this.dir.f = true;
         break;
-      case 'KeyA':
-        this.dir.Left = true;
+      case 65:
+        this.dir.l = true;
         break;
-      case 'KeyD':
-        this.dir.Right = true;
+      case 68:
+        this.dir.r = true;
         break;
-      case 'KeyS':
-        this.dir.Back = true;
+      case 83:
+        this.dir.b = true;
         break;
-      case 'KeyQ':
+      case 81:
         this.dir.u = true;
         break;
-      case 'KeyE':
-        this.dir.Down = true;
+      case 69:
+        this.dir.d = true;
         break;
-      case 'ArrowUp':
+      case 38:
         this.dir.r_u = true;
         break;
-      case 'ArrowDown':
+      case 40:
         this.dir.r_d = true;
         break;
-      case 'ArrowRight':
+      case 39:
         this.dir.r_r = true;
         break;
-      case 'ArrowLeft':
+      case 37:
         this.dir.r_l = true;
         break;
     }
   }
 
-  keyUpWindowListener(e) {
+  key_up(e) {
     if (!this.moveable) {
       return;
     }
-    switch(e.code) {
-      case 'KeyW':
-        this.dir.Forward = false;
+    switch(e.keyCode) {
+      case 87:
+        this.dir.f = false;
         break;
-      case 'KeyA':
-        this.dir.Left = false;
+      case 65:
+        this.dir.l = false;
         break;
-      case 'KeyD':
-        this.dir.Right = false;
+      case 68:
+        this.dir.r = false;
         break;
-      case 'KeyS':
-        this.dir.Back = false;
+      case 83:
+        this.dir.b = false;
         break;
-      case 'KeyQ':
+      case 81:
         this.dir.u = false;
         break;
-      case 'KeyE':
-        this.dir.Down = false;
+      case 69:
+        this.dir.d = false;
         break;
-      case 'ArrowUp':
+      case 38:
         this.dir.r_u = false;
         break;
-      case 'ArrowDown':
+      case 40:
         this.dir.r_d = false;
         break;
-      case 'ArrowRight':
+      case 39:
         this.dir.r_r = false;
         break;
-      case 'ArrowLeft':
+      case 37:
         this.dir.r_l = false;
         break;
     }
   }
 
   update(tick_length) {
-    if (this.dir.Forward && !this.dir.Back) {
-      this.moveForward(tick_length / 1000 * this.move_speed);
+    if (this.dir.f && !this.dir.b) {
+      this.move_f(tick_length / 1000 * this.move_speed);
     }
 
-    if (this.dir.Back && !this.dir.Forward) {
-      this.moveForward(-tick_length / 1000 * this.move_speed);
+    if (this.dir.b && !this.dir.f) {
+      this.move_f(-tick_length / 1000 * this.move_speed);
     }
 
-    if (this.dir.Right && !this.dir.Left) {
-      this.moveRight(tick_length / 1000 * this.move_speed);
+    if (this.dir.r && !this.dir.l) {
+      this.move_r(tick_length / 1000 * this.move_speed);
     }
 
-    if (this.dir.Left && !this.dir.Right) {
-      this.moveRight(-tick_length / 1000 * this.move_speed);
+    if (this.dir.l && !this.dir.r) {
+      this.move_r(-tick_length / 1000 * this.move_speed);
     }
 
-    if (this.dir.u && !this.dir.Down) {
-      this.moveUp(tick_length / 1000 * this.move_speed);
+    if (this.dir.u && !this.dir.d) {
+      this.move_u(tick_length / 1000 * this.move_speed);
     }
 
-    if (this.dir.Down && !this.dir.u) {
-      this.moveUp(-tick_length / 1000 * this.move_speed);
+    if (this.dir.d && !this.dir.u) {
+      this.move_u(-tick_length / 1000 * this.move_speed);
     }
 
     if (this.dir.r_r && !this.dir.r_l) {
-      this.rotateRight(-tick_length / 1000 * this.rotate_speed);
+      this.rotate_rl(-tick_length / 1000 * this.rotate_speed);
     }
 
     if (this.dir.r_l && !this.dir.r_r) {
-      this.rotateRight(tick_length / 1000 * this.rotate_speed);
+      this.rotate_rl(tick_length / 1000 * this.rotate_speed);
     }
 
     if (this.dir.RotUp && !this.dir.RotDown) {
-      this.rotateUp(-tick_length / 1000 * this.rotate_speed);
+      this.rotate_ud(-tick_length / 1000 * this.rotate_speed);
     }
 
     if (this.dir.RotDown && !this.dir.RotUp) {
-      this.rotateUp(tick_length / 1000 * this.rotate_speed);
+      this.rotate_ud(tick_length / 1000 * this.rotate_speed);
     }
   }
 }
