@@ -68,9 +68,9 @@ fetch('models/scene.json')
         color:  '#' + col + col + col//'#FFFFFF' //+ col + 'ff' +  col//colors[i]
       });
 
-      let transform = mat4.getTranslation([], child.transformation);
-      let scale = mat4.getScaling([], child.transformation);
-      let rotation = mat4.getRotation([], child.transformation);
+      let transform = Cervus.math.mat4.getTranslation([], child.transformation);
+      let scale = Cervus.math.mat4.getScaling([], child.transformation);
+      let rotation = Cervus.math.mat4.getRotation([], child.transformation);
 
       console.log(rotation);
       mesh_in.position = {
