@@ -149,7 +149,7 @@ class ShadowPhong {
   generate_shadow_map(entity) {
     // for (var i = 0; i < this.shadowMapCameras.length; i++) {
     //   mat4.getTranslation(this.shadowMapCameras[i].position, this.lightPosition);
-    //   this.shadowMapCameras[i].getViewMatrix(this.shadowMapViewMatrices[i]);
+    //   this.shadowMapCameras[i].get_matrix(this.shadowMapViewMatrices[i]);
     // }
     this.lightPosition = window.lightPosition;
 
@@ -222,7 +222,7 @@ class ShadowPhong {
       gl.uniformMatrix4fv(
         this.map_uniforms.mView,
         gl.FALSE,
-        this.shadowMapCameras[i].getViewMatrix(this.shadowMapViewMatrices[i])
+        this.shadowMapCameras[i].get_matrix(this.shadowMapViewMatrices[i])
       );
 
       // Set framebuffer destination

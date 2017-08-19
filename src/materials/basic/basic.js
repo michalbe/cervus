@@ -1,6 +1,5 @@
 import { vertex_code, fragment_code } from './shader.js';
 import { create_program_object, create_shader_object, gl } from '../../core/context.js';
-import { obj_to_vec } from '../../misc/utils.js';
 
 class Basic {
 

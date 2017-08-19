@@ -126,49 +126,9 @@ class Game {
 
 
     this.entities.forEach((entity) => entity.update());
-    // this probably should be moved to the camera itself
     if (this.options.movable_camera) {
-      if (this.camera.directions.Forward && !this.camera.directions.Back) {
-        this.camera.moveForward(this.tick_length / 1000 * this.camera.move_speed);
-      }
-
-      if (this.camera.directions.Back && !this.camera.directions.Forward) {
-        this.camera.moveForward(-this.tick_length / 1000 * this.camera.move_speed);
-      }
-
-      if (this.camera.directions.Right && !this.camera.directions.Left) {
-        this.camera.moveRight(this.tick_length / 1000 * this.camera.move_speed);
-      }
-
-      if (this.camera.directions.Left && !this.camera.directions.Right) {
-        this.camera.moveRight(-this.tick_length / 1000 * this.camera.move_speed);
-      }
-
-      // if (this.camera.directions.Up && !this.camera.directions.Down) {
-      //   this.camera.moveUp(this.tick_length / 1000 * this.camera.move_speed);
-      // }
-      //
-      // if (this.camera.directions.Down && !this.camera.directions.Up) {
-      //   this.camera.moveUp(-this.tick_length / 1000 * this.camera.move_speed);
-      // }
-
-      if (this.camera.directions.RotRight && !this.camera.directions.RotLeft) {
-        this.camera.rotateRight(-this.tick_length / 1000 * this.camera.rotate_speed);
-      }
-
-      if (this.camera.directions.RotLeft && !this.camera.directions.RotRight) {
-        this.camera.rotateRight(this.tick_length / 1000 * this.camera.rotate_speed);
-      }
-
-      // if (this.camera.directions.RotUp && !this.camera.directions.RotDown) {
-      //   this.camera.rotateUp(-this.tick_length / 1000 * this.camera.rotate_speed);
-      // }
-      //
-      // if (this.camera.directions.RotDown && !this.camera.directions.RotUp) {
-      //   this.camera.rotateUp(this.tick_length / 1000 * this.camera.rotate_speed);
-      // }
-
-      this.camera.getViewMatrix(this.viewMatrix);
+      this.camera.update(this.tick_length);
+      this.camera.get_matrix(this.viewMatrix);
     }
   }
 
@@ -184,7 +144,6 @@ class Game {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         gl.viewport(0, 0, canvas.width, canvas.height);
         // this.entities.forEach((entity) => entity.generate_shadow_map && entity.generate_shadow_map(ticks_qty));
-
         // gl.viewport(0, 0, canvas.width, canvas.height);
         this.entities.forEach((entity) => entity.render(ticks_qty));
       }
