@@ -39,9 +39,9 @@ export class Camera {
   }
 
   getViewMatrix (out) {
-    const lookAt = vec3.create();
-    vec3.add(lookAt, this.position, this.forward);
-    mat4.lookAt(out, this.position, lookAt, this.up);
+    const lookAtVect = vec3.create();
+    vec3.add(lookAtVect, this.position, this.forward);
+    mat4.lookAt(out, this.position, lookAtVect, this.up);
     return out;
   }
 

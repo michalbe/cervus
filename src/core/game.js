@@ -17,6 +17,7 @@ class Game {
 
   constructor(options) {
     this.entities = [];
+    this.run = true;
 
     this.options = default_options;
 
@@ -106,9 +107,11 @@ class Game {
   }
 
   perform_ticks(ticks_qty) {
-    for(var i=0; i < ticks_qty; i++) {
-      this.last_tick = this.last_tick + this.tick_length;
-      this.update( this.last_tick );
+    if (this.run) {
+      for(var i=0; i < ticks_qty; i++) {
+        this.last_tick = this.last_tick + this.tick_length;
+        this.update( this.last_tick );
+      }
     }
   }
 
@@ -139,13 +142,13 @@ class Game {
         this.camera.moveRight(-this.tick_length / 1000 * this.camera.MoveForwardSpeed);
       }
 
-      if (this.camera.directions.Up && !this.camera.directions.Down) {
-        this.camera.moveUp(this.tick_length / 1000 * this.camera.MoveForwardSpeed);
-      }
-
-      if (this.camera.directions.Down && !this.camera.directions.Up) {
-        this.camera.moveUp(-this.tick_length / 1000 * this.camera.MoveForwardSpeed);
-      }
+      // if (this.camera.directions.Up && !this.camera.directions.Down) {
+      //   this.camera.moveUp(this.tick_length / 1000 * this.camera.MoveForwardSpeed);
+      // }
+      //
+      // if (this.camera.directions.Down && !this.camera.directions.Up) {
+      //   this.camera.moveUp(-this.tick_length / 1000 * this.camera.MoveForwardSpeed);
+      // }
 
       if (this.camera.directions.RotRight && !this.camera.directions.RotLeft) {
         this.camera.rotateRight(-this.tick_length / 1000 * this.camera.RotateSpeed);
@@ -155,32 +158,34 @@ class Game {
         this.camera.rotateRight(this.tick_length / 1000 * this.camera.RotateSpeed);
       }
 
-      if (this.camera.directions.RotUp && !this.camera.directions.RotDown) {
-        this.camera.rotateUp(-this.tick_length / 1000 * this.camera.RotateSpeed);
-      }
-
-      if (this.camera.directions.RotDown && !this.camera.directions.RotUp) {
-        this.camera.rotateUp(this.tick_length / 1000 * this.camera.RotateSpeed);
-      }
+      // if (this.camera.directions.RotUp && !this.camera.directions.RotDown) {
+      //   this.camera.rotateUp(-this.tick_length / 1000 * this.camera.RotateSpeed);
+      // }
+      //
+      // if (this.camera.directions.RotDown && !this.camera.directions.RotUp) {
+      //   this.camera.rotateUp(this.tick_length / 1000 * this.camera.RotateSpeed);
+      // }
 
       this.camera.getViewMatrix(this.viewMatrix);
     }
   }
 
   draw(ticks_qty) {
-      this.clear_color_vec = hex_to_vec(this.clear_color);
-      gl.clearColor(
-        this.clear_color_vec[0],
-        this.clear_color_vec[1],
-        this.clear_color_vec[2],
-        1
-      );
-      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-      gl.viewport(0, 0, canvas.width, canvas.height);
-      this.entities.forEach((entity) => entity.generate_shadow_map && entity.generate_shadow_map(ticks_qty));
+      if (this.run) {
+        this.clear_color_vec = hex_to_vec(this.clear_color);
+        gl.clearColor(
+          this.clear_color_vec[0],
+          this.clear_color_vec[1],
+          this.clear_color_vec[2],
+          1
+        );
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        gl.viewport(0, 0, canvas.width, canvas.height);
+        // this.entities.forEach((entity) => entity.generate_shadow_map && entity.generate_shadow_map(ticks_qty));
 
-      gl.viewport(0, 0, canvas.width, canvas.height);
-      this.entities.forEach((entity) => entity.render(ticks_qty));
+        // gl.viewport(0, 0, canvas.width, canvas.height);
+        this.entities.forEach((entity) => entity.render(ticks_qty));
+      }
   }
 
   add(entity) {
