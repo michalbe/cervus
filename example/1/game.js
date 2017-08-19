@@ -1,7 +1,7 @@
 /* global Cervus */
 
-const material = 'shadow_phong';
 // const material = 'shadow_phong';
+const material = 'phong';
 
 const game = new Cervus.Game({
   width: window.innerWidth,
@@ -96,19 +96,19 @@ plane2.rotation.x = -Math.PI/2;
 plane2.scale = {x: 2, z:2, y:1 };
 game.add(plane2);
 
-
-const light = new Cervus.shapes.Sphere({
-  material: 'phong',
-  color: '#32cd32'
-});
-light.position.x = window.lightPosition[0];
-light.position.z = window.lightPosition[1];
-light.position.y = window.lightPosition[2];
-light.scale = {x: 0.1, z: 0.1, y: 0.1};
-game.add(light);
+//
+// const light = new Cervus.shapes.Sphere({
+//   material: 'phong',
+//   color: '#32cd32'
+// });
+// light.position.x = window.lightPosition[0];
+// light.position.z = window.lightPosition[1];
+// light.position.y = window.lightPosition[2];
+// light.scale = {x: 0.1, z: 0.1, y: 0.1};
+// game.add(light);
 
 game.add_frame_listener('cube_rotation', (delta) => {
-  cube.rotation.z = sphere.rotation.x = light.rotation.x = delta / 1000;
+  cube.rotation.z = sphere.rotation.x = delta / 1000;
   if (cube2.position.x > 5) {
     dir = -1;
   } else if (cube2.position.x < -5) {
@@ -117,19 +117,19 @@ game.add_frame_listener('cube_rotation', (delta) => {
 
   sphere.position.x += 0.06 * dir * -1;
   cube2.position.x += 0.06 * dir;
-
-  var lightDisplacementInputAngle = 0;
-  lightDisplacementInputAngle += delta / 2337;
-
-  var xDisplacement  = Math.sin(lightDisplacementInputAngle) * 10;
-  window.lightPosition = [
-    xDisplacement,//window.lightPosition[0],
-    window.lightPosition[1],
-    window.lightPosition[2],
-  ];
-
-  light.position.x = window.lightPosition[0];
-  light.position.z = window.lightPosition[1];
-  light.position.y = window.lightPosition[2];
+  //
+  // var lightDisplacementInputAngle = 0;
+  // lightDisplacementInputAngle += delta / 2337;
+  //
+  // var xDisplacement  = Math.sin(lightDisplacementInputAngle) * 10;
+  // window.lightPosition = [
+  //   xDisplacement,//window.lightPosition[0],
+  //   window.lightPosition[1],
+  //   window.lightPosition[2],
+  // ];
+  //
+  // light.position.x = window.lightPosition[0];
+  // light.position.z = window.lightPosition[1];
+  // light.position.y = window.lightPosition[2];
 
 });
