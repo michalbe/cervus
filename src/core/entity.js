@@ -38,6 +38,10 @@ class Entity {
     }
   }
 
+  update_material() {
+    this.material_desc = new materials[this.material];
+  }
+
   update() {
     if (this.skip) {
       return;
@@ -53,17 +57,15 @@ class Entity {
 
     this.model_view_matrix = model_view_matrix;
     this.color_vec = [...hex_to_vec(this.color), this.color_opacity];
-
-    // this.material_desc = new materials[this.material];
   }
 
   render() {
     !this.skip && this.material_desc.render(this);
   }
 
-  generate_shadow_map() {
-    this.material_desc.generate_shadow_map && this.material_desc.generate_shadow_map(this);
-  }
+  // generate_shadow_map() {
+  //   this.material_desc.generate_shadow_map && this.material_desc.generate_shadow_map(this);
+  // }
 }
 
 export { Entity }
