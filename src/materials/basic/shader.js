@@ -1,29 +1,20 @@
 const vertex_code =`
   precision mediump float;
-
-  uniform mat4 mProj;
-  uniform mat4 mView;
-  uniform mat4 mWorld;
-
-  attribute vec3 vPos;
-
-  varying vec3 fPos;
-
+  uniform mat4 p;
+  uniform mat4 v;
+  uniform mat4 w;
+  attribute vec3 V;
   void main()
   {
-    fPos = (mWorld * vec4(vPos, 1.0)).xyz;
-
-    gl_Position = mProj * mView * vec4(fPos, 1.0);
+    gl_Position = p * v * vec4((w * vec4(V, 1.0)).xyz, 1.0);
   }
 `;
 
 const fragment_code =`
   precision mediump float;
-  uniform vec4 meshColor;
-
-  void main()
-  {
-    gl_FragColor = meshColor;
+  uniform vec4 m;
+  void main() {
+    gl_FragColor = m;
   }
 `;
 
