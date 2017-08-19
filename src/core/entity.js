@@ -21,7 +21,7 @@ class Entity {
     this.up = [];
     this.right = [];
 
-    this.moveable = false;
+    this.keyboard_controlled = false;
 
     this.move_speed = 3.5;
     this.rotate_speed = 1.5;
@@ -82,7 +82,7 @@ class Entity {
   rotate_rl(rad) {
     this.rotation[2] += rad;
     const rightMatrix = math.mat4.create();
-    math.mat4.rotate(rightMatrix, rightMatrix, rad, this.right);
+    math.mat4.rotate(rightMatrix, rightMatrix, rad, this.up);
     math.vec3.transform_mat4(this.forward, this.forward, rightMatrix);
     this.realign();
   }
@@ -90,7 +90,7 @@ class Entity {
   rotate_ud(rad) {
     // this.rotation[2] += rad;
     const rightMatrix = math.mat4.create();
-    math.mat4.rotate(rightMatrix, rightMatrix, rad, this.up);
+    math.mat4.rotate(rightMatrix, rightMatrix, rad, this.right);
     math.vec3.transform_mat4(this.forward, this.forward, rightMatrix);
     this.realign();
   }
@@ -150,21 +150,25 @@ class Entity {
     }
 
     if (this.dir.r_u && !this.dir.r_d) {
-      this.rotate_ud(-tick_length / 1000 * this.rotate_speed);
+      this.rotate_ud(tick_length / 1000 * this.rotate_speed);
     }
 
     if (this.dir.r_d && !this.dir.r_u) {
-      this.rotate_ud(tick_length / 1000 * this.rotate_speed);
+      this.rotate_ud(-tick_length / 1000 * this.rotate_speed);
     }
   }
 
-  update(tick_length, game) {
+  update(tick_length) {
     if (this.skip) {
       return;
     }
 
-    if (this.movable) {
-
+    if (this.keyboard_controlled && this.game) {
+      Object.keys(this.dir_desc).forEach((key) => {
+        if (this.dir_desc[key]) {
+          this.dir[this.dir_desc[key]] = this.game.keys[key] || false;
+        }
+      });
       this.do_step(tick_length);
     }
 

@@ -5,7 +5,7 @@ const material = 'phong';
 const game = new Cervus.Game({
   width: window.innerWidth,
   height: window.innerHeight,
-  movable_camera: true,
+  keyboard_controlled_camera: true,
   // fps: 1
 });
 
