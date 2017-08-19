@@ -35,7 +35,7 @@ game.add(cube);
 const sphere = new Cervus.shapes.Sphere({
   material: material,
   color: Cervus.math.hex_to_vec('#ff0000'),
-  rotation: [ Math.PI/4, 0, Math.PI/4 ]
+  // rotation: [ Math.PI/4, 0, Math.PI/4 ]
 });
 sphere.position[1] = -10;
 sphere.position[0] = 3;
@@ -44,17 +44,17 @@ sphere.scale = [ 0.5, 0.5, 0.5 ];
 game.add(sphere);
 
 let dir = 1;
-
-const plane = new Cervus.shapes.Plane({
-  material: material,
-  color: Cervus.math.hex_to_vec('#CCCCCC')
-});
-
-plane.position[2] = -50;
-plane.position[1] = -2;
-plane.rotation[0] = -Math.PI/2 + 0.03;
-plane.scale = [ 100, 1, 100 ];
-game.add(plane);
+//
+// const plane = new Cervus.shapes.Plane({
+//   material: material,
+//   color: Cervus.math.hex_to_vec('#CCCCCC')
+// });
+//
+// plane.position[2] = -50;
+// plane.position[1] = -2;
+// // plane.rotation[0] = -Math.PI/2 + 0.03;
+// plane.scale = [ 100, 1, 100 ];
+// game.add(plane);
 
 const plane3 = new Cervus.shapes.Plane({
   material: material,
@@ -65,24 +65,24 @@ plane3.position[1] = -15;
 plane3.position[2] = -1.5;
 plane3.scale = [ 150, 150,  1 ];
 game.add(plane3);
-
-const plane4 = new Cervus.shapes.Plane({
-  material: material,
-  color: Cervus.math.hex_to_vec('#00FF00')
-});
-
-plane4.position[1] = -15;
-plane4.position[2] = 0;
-plane4.rotation[0] = Math.PI/2;
-plane4.scale = [ 10, 10, 1 ];
-game.add(plane4);
+//
+// const plane4 = new Cervus.shapes.Plane({
+//   material: material,
+//   color: Cervus.math.hex_to_vec('#00FF00')
+// });
+//
+// plane4.position[1] = -15;
+// plane4.position[2] = 0;
+// // plane4.rotation[0] = Math.PI/2;
+// plane4.scale = [ 10, 10, 1 ];
+// game.add(plane4);
 
 const plane2 = new Cervus.shapes.Plane({
   material: material,
   color: Cervus.math.hex_to_vec('#cc00cc'),
 });
 plane2.position = [ -3, -13, 1];
-plane2.rotation[0] = -Math.PI/2;
+// plane2.rotation[0] = -Math.PI/2;
 plane2.scale = [ 2, 1, 2 ];
 game.add(plane2);
 
@@ -110,7 +110,8 @@ group.add(vox2);
 
 
 game.add_frame_listener('cube_rotation', (delta) => {
-  cube.rotation[0] = sphere.rotation[0] = group.rotation[2] = delta / 1000;
+  // cube.rotation[0] = sphere.rotation[0] = group.rotation[2] = delta / 1000;
+  cube.rotate_ud(16/1000);
   if (cube2.position[0] > 5) {
     dir = -1;
   } else if (cube2.position[0] < -5) {
