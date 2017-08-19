@@ -2,15 +2,15 @@ import { vec3, mat4 } from 'gl-matrix';
 
 export class Camera {
   constructor(position, lookAt, up) {
-    this.forward = vec3.create();
-    this.up = vec3.create();
-    this.right = vec3.create();
+    this.forward = [];
+    this.up = [];
+    this.right = [];
 
     this.position = position;
     this.moveable = false;
 
-    this.MoveForwardSpeed = 3.5;
-    this.RotateSpeed = 1.5;
+    this.move_speed = 3.5;
+    this.rotate_speed = 1.5;
 
     this.directions = {
       Up: false,
@@ -39,7 +39,7 @@ export class Camera {
   }
 
   getViewMatrix (out) {
-    const lookAtVect = vec3.create();
+    const lookAtVect = [];
     vec3.add(lookAtVect, this.position, this.forward);
     mat4.lookAt(out, this.position, lookAtVect, this.up);
     return out;
