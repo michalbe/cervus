@@ -12,18 +12,18 @@ export class Camera {
     this.move_speed = 3.5;
     this.rotate_speed = 1.5;
 
-    this.directions = {
-      Up: false,
+    this.dir = {
+      u: false,
       Right: false,
       Down: false,
       Left: false,
       Forward: false,
       Back: false,
 
-      RotLeft: false,
-      RotRight: false,
-      RotUp: false,
-      RotDown: false
+      r_l: false,
+      r_r: false,
+      r_u: false,
+      r_d: false
     };
 
     vec3.subtract(this.forward, lookAt, this.position);
@@ -86,34 +86,34 @@ export class Camera {
     }
     switch(e.code) {
       case 'KeyW':
-        this.directions.Forward = true;
+        this.dir.Forward = true;
         break;
       case 'KeyA':
-        this.directions.Left = true;
+        this.dir.Left = true;
         break;
       case 'KeyD':
-        this.directions.Right = true;
+        this.dir.Right = true;
         break;
       case 'KeyS':
-        this.directions.Back = true;
+        this.dir.Back = true;
         break;
       case 'KeyQ':
-        this.directions.Up = true;
+        this.dir.u = true;
         break;
       case 'KeyE':
-        this.directions.Down = true;
+        this.dir.Down = true;
         break;
       case 'ArrowUp':
-        this.directions.RotUp = true;
+        this.dir.r_u = true;
         break;
       case 'ArrowDown':
-        this.directions.RotDown = true;
+        this.dir.r_d = true;
         break;
       case 'ArrowRight':
-        this.directions.RotRight = true;
+        this.dir.r_r = true;
         break;
       case 'ArrowLeft':
-        this.directions.RotLeft = true;
+        this.dir.r_l = true;
         break;
     }
   }
@@ -124,35 +124,77 @@ export class Camera {
     }
     switch(e.code) {
       case 'KeyW':
-        this.directions.Forward = false;
+        this.dir.Forward = false;
         break;
       case 'KeyA':
-        this.directions.Left = false;
+        this.dir.Left = false;
         break;
       case 'KeyD':
-        this.directions.Right = false;
+        this.dir.Right = false;
         break;
       case 'KeyS':
-        this.directions.Back = false;
+        this.dir.Back = false;
         break;
       case 'KeyQ':
-        this.directions.Up = false;
+        this.dir.u = false;
         break;
       case 'KeyE':
-        this.directions.Down = false;
+        this.dir.Down = false;
         break;
       case 'ArrowUp':
-        this.directions.RotUp = false;
+        this.dir.r_u = false;
         break;
       case 'ArrowDown':
-        this.directions.RotDown = false;
+        this.dir.r_d = false;
         break;
       case 'ArrowRight':
-        this.directions.RotRight = false;
+        this.dir.r_r = false;
         break;
       case 'ArrowLeft':
-        this.directions.RotLeft = false;
+        this.dir.r_l = false;
         break;
+    }
+  }
+
+  update(tick_length) {
+    if (this.dir.Forward && !this.dir.Back) {
+      this.moveForward(tick_length / 1000 * this.move_speed);
+    }
+
+    if (this.dir.Back && !this.dir.Forward) {
+      this.moveForward(-tick_length / 1000 * this.move_speed);
+    }
+
+    if (this.dir.Right && !this.dir.Left) {
+      this.moveRight(tick_length / 1000 * this.move_speed);
+    }
+
+    if (this.dir.Left && !this.dir.Right) {
+      this.moveRight(-tick_length / 1000 * this.move_speed);
+    }
+
+    if (this.dir.u && !this.dir.Down) {
+      this.moveUp(tick_length / 1000 * this.move_speed);
+    }
+
+    if (this.dir.Down && !this.dir.u) {
+      this.moveUp(-tick_length / 1000 * this.move_speed);
+    }
+
+    if (this.dir.r_r && !this.dir.r_l) {
+      this.rotateRight(-tick_length / 1000 * this.rotate_speed);
+    }
+
+    if (this.dir.r_l && !this.dir.r_r) {
+      this.rotateRight(tick_length / 1000 * this.rotate_speed);
+    }
+
+    if (this.dir.RotUp && !this.dir.RotDown) {
+      this.rotateUp(-tick_length / 1000 * this.rotate_speed);
+    }
+
+    if (this.dir.RotDown && !this.dir.RotUp) {
+      this.rotateUp(tick_length / 1000 * this.rotate_speed);
     }
   }
 }
