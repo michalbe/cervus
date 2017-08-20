@@ -1,4 +1,5 @@
 import * as from_values from 'gl-vec3/fromValues';
+import * as normalize from 'gl-vec3/normalize';
 import * as subtract from 'gl-vec3/subtract';
 import * as cross from 'gl-vec3/cross';
 
@@ -8,6 +9,7 @@ import * as perspective from 'gl-mat4/perspective';
 const math = {
   vec3: {
     from_values: from_values.default,
+    normalize: normalize.default,
     subtract: subtract.default,
     cross: cross.default
   },
