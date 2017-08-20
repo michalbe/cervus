@@ -43,9 +43,9 @@ export class Camera {
     math.vec3.cross(this.right, this.forward, up);
     math.vec3.cross(this.up, this.right, this.forward);
 
-    vec3.normalize(this.forward, this.forward);
-    vec3.normalize(this.right, this.right);
-    vec3.normalize(this.up, this.up);
+    math.vec3.normalize(this.forward, this.forward);
+    math.vec3.normalize(this.right, this.right);
+    math.vec3.normalize(this.up, this.up);
 
     window.addEventListener('keydown', this.key_down.bind(this));
     window.addEventListener('keyup', this.key_up.bind(this));
