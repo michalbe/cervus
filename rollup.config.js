@@ -13,9 +13,6 @@ export default {
       // non-CommonJS modules will be ignored, but you can also
       // specifically include/exclude files
       include: 'node_modules/**',  // Default: undefined
-      // namedExports: {
-      //   'node_modules/gl-vec3/'
-      // }
     }),
     resolve({
       customResolveOptions: {
