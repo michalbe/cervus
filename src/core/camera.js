@@ -1,4 +1,5 @@
 import { vec3, mat4 } from 'gl-matrix';
+import { math } from './math.js';
 
 export class Camera {
   constructor(position, lookAt, up) {
@@ -38,9 +39,9 @@ export class Camera {
       37: 'r_l'
     };
 
-    vec3.subtract(this.forward, lookAt, this.position);
-    vec3.cross(this.right, this.forward, up);
-    vec3.cross(this.up, this.right, this.forward);
+    math.vec3.subtract(this.forward, lookAt, this.position);
+    math.vec3.cross(this.right, this.forward, up);
+    math.vec3.cross(this.up, this.right, this.forward);
 
     vec3.normalize(this.forward, this.forward);
     vec3.normalize(this.right, this.right);
