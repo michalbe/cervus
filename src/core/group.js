@@ -1,4 +1,4 @@
-import { mat4 } from 'gl-matrix';
+import { math } from './math.js';
 import { obj_to_vec } from '../misc/utils.js';
 import { zero_vector, unit_vector } from '../misc/defaults.js';
 
@@ -22,8 +22,8 @@ class Group {
     if (this.skip) {
       return;
     }
-    const model_view_matrix = mat4.identity(mat4.create());
-    mat4.translate(model_view_matrix, model_view_matrix, obj_to_vec(this.position));
+    const model_view_matrix = math.mat4.identity(math.mat4.create());
+    math.mat4.translate(model_view_matrix, model_view_matrix, obj_to_vec(this.position));
 
     const origin = obj_to_vec(this.origin);
     const rev_origin = obj_to_vec({
@@ -32,12 +32,12 @@ class Group {
       z: -this.origin.z
     });
 
-    mat4.translate(model_view_matrix, model_view_matrix, rev_origin);
-    mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.x, [1, 0, 0]);
-    mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.y, [0, 1, 0]);
-    mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.z, [0, 0, 1]);
-    mat4.translate(model_view_matrix, model_view_matrix, origin);
-    mat4.scale(model_view_matrix, model_view_matrix, obj_to_vec(this.scale));
+    math.mat4.translate(model_view_matrix, model_view_matrix, rev_origin);
+    math.mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.x, [1, 0, 0]);
+    math.mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.y, [0, 1, 0]);
+    math.mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.z, [0, 0, 1]);
+    math.mat4.translate(model_view_matrix, model_view_matrix, origin);
+    math.mat4.scale(model_view_matrix, model_view_matrix, obj_to_vec(this.scale));
 
     this.model_view_matrix = model_view_matrix;
 
