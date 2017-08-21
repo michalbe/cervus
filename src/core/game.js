@@ -1,6 +1,6 @@
 import { gl, canvas } from './context.js';
-import { vec3, mat4, glMatrix } from 'gl-matrix';
 import { hex_to_vec } from '../misc/utils.js';
+import { math } from './math.js';
 import { Camera } from './camera.js';
 
 const default_options = {
@@ -24,17 +24,17 @@ class Game {
     this.options = default_options;
 
     this.camera = new Camera(
-      vec3.fromValues(0, 0, 1.85),
-      vec3.fromValues(0, -1, 1.85),
-      vec3.fromValues(0, 0, 1)
+      math.vec3.from_values(0, 0, 1.85),
+      math.vec3.from_values(0, -1, 1.85),
+      math.vec3.from_values(0, 0, 1)
     );
 
-    this.projMatrix = mat4.create();
-    this.viewMatrix = mat4.create();
+    this.projMatrix = math.mat4.create();
+    this.viewMatrix = math.mat4.create();
 
-    mat4.perspective(
+    math.mat4.perspective(
       this.projMatrix,
-      glMatrix.toRadian(90),
+      math.to_radian(90),
       canvas.width / canvas.height,
       0.35,
       85.0
