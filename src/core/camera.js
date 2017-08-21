@@ -1,4 +1,4 @@
-import { vec3, mat4 } from 'gl-matrix';
+import { math } from './math.js';
 
 export class Camera {
   constructor(position, lookAt, up) {
@@ -38,13 +38,13 @@ export class Camera {
       37: 'r_l'
     };
 
-    vec3.subtract(this.forward, lookAt, this.position);
-    vec3.cross(this.right, this.forward, up);
-    vec3.cross(this.up, this.right, this.forward);
+    math.vec3.subtract(this.forward, lookAt, this.position);
+    math.vec3.cross(this.right, this.forward, up);
+    math.vec3.cross(this.up, this.right, this.forward);
 
-    vec3.normalize(this.forward, this.forward);
-    vec3.normalize(this.right, this.right);
-    vec3.normalize(this.up, this.up);
+    math.vec3.normalize(this.forward, this.forward);
+    math.vec3.normalize(this.right, this.right);
+    math.vec3.normalize(this.up, this.up);
 
     window.addEventListener('keydown', this.key_down.bind(this));
     window.addEventListener('keyup', this.key_up.bind(this));
@@ -52,44 +52,44 @@ export class Camera {
 
   get_matrix(out) {
     const lookAtVect = [];
-    vec3.add(lookAtVect, this.position, this.forward);
-    mat4.lookAt(out, this.position, lookAtVect, this.up);
+    math.vec3.add(lookAtVect, this.position, this.forward);
+    math.mat4.look_at(out, this.position, lookAtVect, this.up);
     return out;
   }
 
   rotate_rl(rad) {
-    const rightMatrix = mat4.create();
-    mat4.rotate(rightMatrix, rightMatrix, rad, vec3.fromValues(0, 0, 1));
-    vec3.transformMat4(this.forward, this.forward, rightMatrix);
+    const rightMatrix = math.mat4.create();
+    math.mat4.rotate(rightMatrix, rightMatrix, rad, math.vec3.from_values(0, 0, 1));
+    math.vec3.transform_mat4(this.forward, this.forward, rightMatrix);
     this.realign();
   }
 
   rotate_ud(rad) {
-    const rightMatrix = mat4.create();
-    mat4.rotate(rightMatrix, rightMatrix, rad, vec3.fromValues(1, 0, 0));
-    vec3.transformMat4(this.forward, this.forward, rightMatrix);
+    const rightMatrix = math.mat4.create();
+    math.mat4.rotate(rightMatrix, rightMatrix, rad, math.vec3.from_values(1, 0, 0));
+    math.vec3.transform_mat4(this.forward, this.forward, rightMatrix);
     this.realign();
   }
 
   realign() {
-    vec3.cross(this.right, this.forward, this.up);
-    vec3.cross(this.up, this.right, this.forward);
+    math.vec3.cross(this.right, this.forward, this.up);
+    math.vec3.cross(this.up, this.right, this.forward);
 
-    vec3.normalize(this.forward, this.forward);
-    vec3.normalize(this.right, this.right);
-    vec3.normalize(this.up, this.up);
+    math.vec3.normalize(this.forward, this.forward);
+    math.vec3.normalize(this.right, this.right);
+    math.vec3.normalize(this.up, this.up);
   }
 
   move_f(dist) {
-    vec3.scaleAndAdd(this.position, this.position, this.forward, dist);
+    math.vec3.scale_and_add(this.position, this.position, this.forward, dist);
   }
 
   move_r(dist) {
-    vec3.scaleAndAdd(this.position, this.position, this.right, dist);
+    math.vec3.scale_and_add(this.position, this.position, this.right, dist);
   }
 
   move_u(dist) {
-    vec3.scaleAndAdd(this.position, this.position, this.up, dist);
+    math.vec3.scale_and_add(this.position, this.position, this.up, dist);
   }
 
   key_down(e) {

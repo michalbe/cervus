@@ -1,5 +1,5 @@
 import { create_float_buffer, create_index_buffer } from './context.js';
-import { mat4 } from 'gl-matrix';
+import { math } from './math.js';
 import { obj_to_vec, hex_to_vec } from '../misc/utils.js';
 import { zero_vector, unit_vector } from '../misc/defaults.js';
 import { materials } from '../materials/materials.js';
@@ -47,13 +47,14 @@ class Entity {
       return;
     }
 
-    const model_view_matrix_from = (this.parent && this.parent.model_view_matrix) || mat4.create();
-    const model_view_matrix = mat4.identity(mat4.create());
-    mat4.translate(model_view_matrix, model_view_matrix_from, obj_to_vec(this.position));
-    mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.x, [1, 0, 0]);
-    mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.y, [0, 1, 0]);
-    mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.z, [0, 0, 1]);
-    mat4.scale(model_view_matrix, model_view_matrix, obj_to_vec(this.scale));
+    const model_view_matrix_from = (this.parent && this.parent.model_view_matrix)
+      || math.mat4.create();
+    const model_view_matrix = math.mat4.identity(math.mat4.create());
+    math.mat4.translate(model_view_matrix, model_view_matrix_from, obj_to_vec(this.position));
+    math.mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.x, [1, 0, 0]);
+    math.mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.y, [0, 1, 0]);
+    math.mat4.rotate(model_view_matrix, model_view_matrix, this.rotation.z, [0, 0, 1]);
+    math.mat4.scale(model_view_matrix, model_view_matrix, obj_to_vec(this.scale));
 
     this.model_view_matrix = model_view_matrix;
     this.color_vec = [...hex_to_vec(this.color), this.color_opacity];

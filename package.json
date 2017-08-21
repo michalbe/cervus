@@ -21,6 +21,8 @@
     "rollup-watch": "^3.2.2"
   },
   "dependencies": {
-    "gl-matrix": "^2.4.0"
+    "gl-mat4": "^1.1.4",
+    "gl-matrix": "^2.4.0",
+    "gl-vec3": "^1.0.3"
   }
 }
