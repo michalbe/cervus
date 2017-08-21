@@ -9,6 +9,9 @@ import * as cross from 'gl-vec3/cross';
 import * as create from 'gl-mat4/create';
 import * as perspective from 'gl-mat4/perspective';
 import * as rotate from 'gl-mat4/rotate';
+import * as translate from 'gl-mat4/translate';
+import * as scale from 'gl-mat4/scale';
+import * as identity from 'gl-mat4/identity';
 import * as look_at from 'gl-mat4/lookAt';
 
 const math = {
@@ -25,6 +28,9 @@ const math = {
     create: create.default,
     perspective: perspective.default,
     rotate: rotate.default,
+    translate: translate.default,
+    scale: scale.default,
+    identity: identity.default,
     look_at: look_at.default
   },
   to_radian: (a) => a * Math.PI / 180
