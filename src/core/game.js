@@ -128,10 +128,8 @@ class Game {
 
 
     this.entities.forEach((entity) => entity.update());
-    if (this.options.movable_camera) {
-      this.camera.update(this.tick_length);
-      this.camera.get_matrix(this.viewMatrix);
-    }
+    this.camera.update(this.tick_length);
+    this.camera.get_matrix(this.viewMatrix);
   }
 
   draw(ticks_qty) {

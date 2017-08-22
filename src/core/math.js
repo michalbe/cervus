@@ -1,5 +1,7 @@
 import * as from_values from 'gl-vec3/fromValues';
 import * as normalize from 'gl-vec3/normalize';
+import * as distance from 'gl-vec3/distance';
+import * as angle from 'gl-vec3/angle';
 import * as subtract from 'gl-vec3/subtract';
 import * as add from 'gl-vec3/add';
 import * as scale_and_add from 'gl-vec3/scaleAndAdd';
@@ -18,6 +20,8 @@ const math = {
   vec3: {
     from_values: from_values.default,
     normalize: normalize.default,
+    distance: distance.default,
+    angle: angle.default,
     subtract: subtract.default,
     add: add.default,
     scale_and_add: scale_and_add.default,
