@@ -48,7 +48,7 @@ class Entity {
 
     math.mat4.look_at(
       this.model_view_matrix,
-      this.model_view_matrix,
+      this.position,
       look_at,
       this.up
     );
