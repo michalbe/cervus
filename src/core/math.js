@@ -16,6 +16,8 @@ import * as scale from 'gl-mat4/scale';
 import * as identity from 'gl-mat4/identity';
 import * as look_at from 'gl-mat4/lookAt';
 
+import { hex_to_vec } from '../misc/utils.js';
+
 const math = {
   vec3: {
     from_values: from_values.default,
@@ -37,7 +39,8 @@ const math = {
     identity: identity.default,
     look_at: look_at.default
   },
-  to_radian: (a) => a * Math.PI / 180
+  to_radian: (a) => a * Math.PI / 180,
+  hex_to_vec
 };
 
 export { math };
