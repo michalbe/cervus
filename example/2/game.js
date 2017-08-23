@@ -5,7 +5,7 @@ const game = new Cervus.Game({
   height: window.innerHeight,
   keyboard_controlled_camera: true,
   light_position: [-1, 2, 5],
-  fps: 1
+  // fps: 10
 });
 
 const cube = new Cervus.shapes.Box({
@@ -14,3 +14,7 @@ const cube = new Cervus.shapes.Box({
 
 cube.color = Cervus.math.hex_to_vec("#BADA55");
 game.add(cube);
+
+game.add_frame_listener('yo', delta => {
+  //console.log(game.camera.position);
+});
