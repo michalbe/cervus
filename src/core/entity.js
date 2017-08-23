@@ -65,22 +65,22 @@ class Entity {
     }
   }
 
+  get_normal(vec) {
+    const out = zero_vector.slice();
+    math.vec3.transform_mat4(out, vec, this.model_view_matrix);
+    return math.vec3.normalize(out, out);
+  }
+
   get_right() {
-    return math.vec3.transform_mat4(
-      zero_vector.slice(), [1, 0, 0], this.model_view_matrix
-    );
+    return this.get_normal([1, 0, 0]);
   }
 
   get_forward() {
-    return math.vec3.transform_mat4(
-      zero_vector.slice(), [0, 1, 0], this.model_view_matrix
-    );
+    return this.get_normal([0, 1, 0]);
   }
 
   get_up() {
-    return math.vec3.transform_mat4(
-      zero_vector.slice(), [0, 0, 1], this.model_view_matrix
-    );
+    return this.get_normal([0, 0, 1]);
   }
 
   create_buffers() {
