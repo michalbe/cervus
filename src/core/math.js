@@ -4,10 +4,12 @@ import * as distance from 'gl-vec3/distance';
 import * as angle from 'gl-vec3/angle';
 import * as subtract from 'gl-vec3/subtract';
 import * as add from 'gl-vec3/add';
+import * as vec3_scale from 'gl-vec3/scale';
 import * as scale_and_add from 'gl-vec3/scaleAndAdd';
 import * as transform_mat4 from 'gl-vec3/transformMat4';
 import * as cross from 'gl-vec3/cross';
 
+import * as multiply from 'gl-mat4/multiply';
 import * as create from 'gl-mat4/create';
 import * as perspective from 'gl-mat4/perspective';
 import * as rotate from 'gl-mat4/rotate';
@@ -26,11 +28,13 @@ const math = {
     angle: angle.default,
     subtract: subtract.default,
     add: add.default,
+    scale: vec3_scale.default,
     scale_and_add: scale_and_add.default,
     transform_mat4: transform_mat4.default,
     cross: cross.default
   },
   mat4: {
+    multiply: multiply.default,
     create: create.default,
     perspective: perspective.default,
     rotate: rotate.default,

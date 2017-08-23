@@ -24,7 +24,7 @@ class Game {
     this.options = default_options;
 
     this.camera = new Entity({
-      position: [ 0, 0, 1.85 ]
+      position: [ 3, 5, 1 ]
     });
 
     this.camera.game = this;
