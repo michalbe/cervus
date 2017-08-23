@@ -5,15 +5,23 @@ import { materials } from '../materials/materials.js';
 
 class Entity {
   constructor(options = {}) {
-    this.model_view_matrix = math.mat4.create();
+    this.model_view_matrix = math.mat4.identity(math.mat4.create());
+
+    const look_at = math.vec3.from_values(0, -1, 1.85);
+    const up = math.vec3.from_values(0, 0, 1);
 
     this.position = options.position || zero_vector.slice();
+    this.rotation = options.rotation || zero_vector.slice();
     this.scale = options.scale || unit_vector.slice();
 
     this.material = options.material;
 
     this.color = options.color || [1.0, 1.0, 1.0];
     this.color_opacity = 1.0;
+
+    this.forward = [];
+    this.up = [];
+    this.right = [];
 
     this.keyboard_controlled = false;
 
@@ -44,49 +52,35 @@ class Entity {
       37: 'r_l'
     };
 
-    const look_at = math.vec3.from_values(0, -1, 1.85);
+    math.vec3.subtract(this.forward, look_at, this.position);
+    math.vec3.cross(this.right, this.forward, up);
+    math.vec3.cross(this.up, this.right, this.forward);
 
-    math.mat4.look_at(
-      this.model_view_matrix,
-      this.position,
-      look_at,
-      this.up
-    );
+    math.vec3.normalize(this.forward, this.forward);
+    math.vec3.normalize(this.right, this.right);
+    math.vec3.normalize(this.up, this.up);
 
     if (this.vertices && this.indices && this.normals) {
       this.create_buffers();
     }
-
   }
 
-  get position() {
-    return [
-      this.model_view_matrix[12],
-      this.model_view_matrix[13],
-      this.model_view_matrix[14]
-    ];
+  get_right() {
+    return math.vec3.transform_mat4(
+      zero_vector.slice(), [1, 0, 0], this.model_view_matrix
+    );
   }
 
-  set position(vec) {
-    math.mat4.translate(this.model_view_matrix, this.model_view_matrix, vec);
+  get_forward() {
+    return math.vec3.transform_mat4(
+      zero_vector.slice(), [0, 1, 0], this.model_view_matrix
+    );
   }
 
-  get right() {
-    const out = zero_vector.slice();
-    math.vec3.transform_mat4(out, [1, 0, 0], this.model_view_matrix);
-    return math.vec3.normalize(out, out);
-  }
-
-  get forward() {
-    const out = zero_vector.slice();
-    math.vec3.transform_mat4(out, [0, 1, 0], this.model_view_matrix);
-    return math.vec3.normalize(out, out);
-  }
-
-  get up() {
-    const out = zero_vector.slice();
-    math.vec3.transform_mat4(out, [0, 0, 1], this.model_view_matrix);
-    return math.vec3.normalize(out, out);
+  get_up() {
+    return math.vec3.transform_mat4(
+      zero_vector.slice(), [0, 0, 1], this.model_view_matrix
+    );
   }
 
   create_buffers() {
@@ -105,38 +99,28 @@ class Entity {
     return out;
   }
 
-  set scale(vec) {
-    math.mat4.scale(this.model_view_matrix, this.model_view_matrix, vec);
-  }
-
-  rotate_around(vec, rad) {
+  rotate_along(vec, rad) {
     math.mat4.rotate(this.model_view_matrix, this.model_view_matrix, rad, vec);
   }
 
   rotate_rl(rad) {
-    this.rotate_around(this.up, rad);
+    rotate_along(this.up, rad);
   }
 
   rotate_ud(rad) {
-    this.rotate_around(this.right, rad);
-  }
-
-  move_along(vec, dist) {
-    const dir = zero_vector.slice();
-    math.vec3.scale(dir, vec, dist);
-    math.mat4.translate(this.model_view_matrix, this.model_view_matrix, dir);
+    rotate_along(this.right, rad);
   }
 
   move_f(dist) {
-    this.move_along(this.forward, dist);
+    math.vec3.scale_and_add(this.position, this.position, this.forward, dist);
   }
 
   move_r(dist) {
-    this.move_along(this.right, dist);
+    math.vec3.scale_and_add(this.position, this.position, this.right, dist);
   }
 
   move_u(dist) {
-    this.move_along(this.up, dist);
+    math.vec3.scale_and_add(this.position, this.position, this.up, dist);
   }
 
   do_step(tick_length) {
@@ -201,7 +185,10 @@ class Entity {
 
     const model_view_matrix_from = (this.parent && this.parent.model_view_matrix)
       || math.mat4.create();
+
     math.mat4.multiply(this.model_view_matrix, this.model_view_matrix, model_view_matrix_from);
+    math.mat4.translate(this.model_view_matrix, this.model_view_matrix, this.position);
+    math.mat4.scale(this.model_view_matrix, this.model_view_matrix, this.scale);
 
     this.color_vec = [...this.color, this.color_opacity];
   }
