@@ -1,5 +1,3 @@
-const obj_to_vec = (obj) => [obj.x, obj.y, obj.z];
-
 const hex_to_vec = (hex) => {
   if (hex.charAt(0) === '#') {
     hex = hex.substr(1);
@@ -16,4 +14,4 @@ const hex_to_vec = (hex) => {
   });
 };
 
-export { obj_to_vec, hex_to_vec }
+export { hex_to_vec }
