@@ -5,10 +5,7 @@ import { materials } from '../materials/materials.js';
 
 class Entity {
   constructor(options = {}) {
-    this.model_view_matrix = math.mat4.identity(math.mat4.create());
-
-    const look_at = math.vec3.from_values(0, -1, 1.85);
-    const up = math.vec3.from_values(0, 0, 1);
+    this.model_view_matrix = math.mat4.create();
 
     this.position = options.position || zero_vector.slice();
     this.scale = options.scale || unit_vector.slice();
@@ -47,9 +44,14 @@ class Entity {
       37: 'r_l'
     };
 
-    // math.vec3.subtract(this.forward, look_at, this.position);
-    // math.vec3.cross(this.right, this.forward, up);
-    // math.vec3.cross(this.up, this.right, this.forward);
+    const look_at = math.vec3.from_values(0, -1, 1.85);
+
+    math.mat4.look_at(
+      this.model_view_matrix,
+      this.model_view_matrix,
+      look_at,
+      this.up
+    );
 
     if (this.vertices && this.indices && this.normals) {
       this.create_buffers();
@@ -59,9 +61,9 @@ class Entity {
 
   get position() {
     return [
-      this.model_view_matrix[3],
-      this.model_view_matrix[7],
-      this.model_view_matrix[11]
+      this.model_view_matrix[12],
+      this.model_view_matrix[13],
+      this.model_view_matrix[14]
     ];
   }
 
@@ -107,16 +109,16 @@ class Entity {
     math.mat4.scale(this.model_view_matrix, this.model_view_matrix, vec);
   }
 
-  rotate_along(vec, rad) {
+  rotate_around(vec, rad) {
     math.mat4.rotate(this.model_view_matrix, this.model_view_matrix, rad, vec);
   }
 
   rotate_rl(rad) {
-    this.rotate_along(this.up, rad);
+    this.rotate_around(this.up, rad);
   }
 
   rotate_ud(rad) {
-    this.rotate_along(this.right, rad);
+    this.rotate_around(this.right, rad);
   }
 
   move_along(vec, dist) {
