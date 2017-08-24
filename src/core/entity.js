@@ -124,7 +124,8 @@ class Entity {
     const rotation_matrix = math.mat4.create();
     math.mat4.fromRotation(rotation_matrix, rad, vec);
     math.mat4.multiply(
-      this.model_view_matrix, this.model_view_matrix, rotation_matrix);
+      this.model_view_matrix, this.model_view_matrix, rotation_matrix
+    );
   }
 
   rotate_rl(rad) {
@@ -141,16 +142,16 @@ class Entity {
     math.mat4.translate(this.model_view_matrix, this.model_view_matrix, move);
   }
 
-  move_f(dist) {
-    this.move_along(this.forward, dist);
+  move_r(dist) {
+    this.move_along(math.vec3.from_values(1, 0, 0), dist);
   }
 
-  move_r(dist) {
-    this.move_along(this.right, dist);
+  move_f(dist) {
+    this.move_along(math.vec3.from_values(0, 1, 0), dist);
   }
 
   move_u(dist) {
-    this.move_along(this.up, dist);
+    this.move_along(math.vec3.from_values(0, 0, 1), dist);
   }
 
   do_step(tick_length) {
