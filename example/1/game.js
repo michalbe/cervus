@@ -121,6 +121,10 @@ game.add_frame_listener('cube_rotation', (delta) => {
     dir = 1;
   }
 
+  // if (~~delta%30 === 0) {
+  //   game.light_intensity = Math.random();
+  // }
+
   game.light_position = game.camera.position;
   sphere.position[0] += 0.06 * dir * -1;
   cube2.position[0] += 0.06 * dir;
