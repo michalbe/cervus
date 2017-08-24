@@ -71,8 +71,12 @@ class Entity {
   }
 
   set color(hex) {
-    hex = hex || '#ffffff';
-    this.color_vec = [...hex_to_vec(hex), this.color_opacity];
+    this._color = hex || '#ffffff';
+    this.color_vec = [...hex_to_vec(this._color), this.color_opacity];
+  }
+
+  get color() {
+    return this._color;
   }
 
   create_buffers() {
