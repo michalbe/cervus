@@ -24,10 +24,10 @@ class Game {
     this.options = default_options;
 
     this.camera = new Entity({
-      position: [ 1, -4, 1 ]
+      position: [ 0, -4, 1 ]
     });
 
-    // this.camera.look_at([0, 0, 0]);
+    this.camera.look_at([0, 0, 0]);
 
     this.camera.game = this;
 
@@ -144,7 +144,7 @@ class Game {
     this.entities.forEach((entity) => entity.update());
 
     this.camera.update(this.tick_length, this);
-    this.camera.get_matrix(this.viewMatrix);
+    this.viewMatrix = this.camera.get_view_matrix();
   }
 
   draw(ticks_qty) {
