@@ -2,6 +2,7 @@ import { create_float_buffer, create_index_buffer } from './context.js';
 import { math } from './math.js';
 import { zero_vector, unit_vector } from '../misc/defaults.js';
 import { materials } from '../materials/materials.js';
+import { hex_to_vec } from '../misc/utils.js';
 
 class Entity {
   constructor(options = {}) {
@@ -15,8 +16,11 @@ class Entity {
 
     this.material = options.material;
 
-    this.color = options.color || [1.0, 1.0, 1.0];
-    this.color_opacity = 1.0;
+    if (this.material) {
+      this.color_vec = [];
+      this.color_opacity = 1.0;
+      this.color = options.color || '#ffffff';
+    }
 
     this.forward = [];
     this.up = [];
@@ -66,6 +70,11 @@ class Entity {
     }
   }
 
+  set color(hex) {
+    hex = hex || '#ffffff';
+    this.color_vec = [...hex_to_vec(hex), this.color_opacity];
+  }
+
   create_buffers() {
     this.buffers = {
       vertices: create_float_buffer(this.vertices),
@@ -95,7 +104,6 @@ class Entity {
   }
 
   rotate_ud(rad) {
-    // this.rotation[2] += rad;
     const rightMatrix = math.mat4.create();
     math.mat4.rotate(rightMatrix, rightMatrix, rad, this.right);
     math.vec3.transform_mat4(this.forward, this.forward, rightMatrix);
@@ -179,9 +187,9 @@ class Entity {
       this.do_step(tick_length);
     }
 
-    // if (!this.material) {
-    //   return;
-    // }
+    if (!this.material && !this.entities.length) {
+      return;
+    }
 
     const model_view_matrix_from = (this.parent && this.parent.model_view_matrix)
       || math.mat4.create();
@@ -219,7 +227,6 @@ class Entity {
     math.mat4.scale(model_view_matrix, model_view_matrix, this.scale);
 
     this.model_view_matrix = model_view_matrix;
-    this.color_vec = [...this.color, this.color_opacity];
 
     this.entities.forEach((entity) => {
       entity.update();
