@@ -27,7 +27,7 @@ class Game {
       position: [ 0, -4, 1 ]
     });
 
-    this.camera.look_at([0, 0, 0]);
+    // this.camera.look_at([0, 0, 0]);
 
     this.camera.game = this;
 
