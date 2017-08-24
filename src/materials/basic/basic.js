@@ -27,9 +27,17 @@ class Basic {
   }
 
   render(entity) {
+    let ent = entity;
+    let game = ent.game;
+
+    while(ent.parent && !game) {
+      ent = ent.parent;
+      game = ent.game;
+    }
+
     gl.useProgram(this.program);
-    gl.uniformMatrix4fv(this.uniforms.p, gl.FALSE, entity.game ? entity.game.projMatrix : entity.parent.game.projMatrix);
-    gl.uniformMatrix4fv(this.uniforms.v, gl.FALSE, entity.game ? entity.game.viewMatrix : entity.parent.game.viewMatrix);
+    gl.uniformMatrix4fv(this.uniforms.p, gl.FALSE, game.projMatrix);
+    gl.uniformMatrix4fv(this.uniforms.v, gl.FALSE, game.viewMatrix);
 
     gl.uniformMatrix4fv(
         this.uniforms.w,
