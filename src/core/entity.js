@@ -16,10 +16,6 @@ class Entity {
     this.color = options.color || [1.0, 1.0, 1.0];
     this.color_opacity = 1.0;
 
-    this.forward = [];
-    this.up = [];
-    this.right = [];
-
     this.keyboard_controlled = false;
 
     this.move_speed = 3.5;
@@ -54,7 +50,7 @@ class Entity {
     }
   }
 
-  look_at(vec, up = this.get_up()) {
+  look_at(vec, up = this.up) {
     // const frustrum_matrix = math.mat4.create();
     // math.mat4.look_at(frustrum_matrix, this.position, vec, up);
     // math.mat4.multiply(this.model_view_matrix, this.model_view_matrix, frustrum_matrix);
@@ -62,10 +58,10 @@ class Entity {
     const dir = [];
     math.vec3.subtract(dir, vec, this.position);
 
-    const angle = math.vec3.angle(this.get_forward(), dir);
+    const angle = math.vec3.angle(this.forward, dir);
 
     const axis = [];
-    math.vec3.cross(axis, this.get_forward(), dir);
+    math.vec3.cross(axis, this.forward, dir);
 
     math.mat4.rotate(this.model_view_matrix, this.model_view_matrix, angle, axis);
   }
@@ -76,15 +72,15 @@ class Entity {
     return math.vec3.normalize(out, out);
   }
 
-  get_right() {
+  get right() {
     return this.get_normal([1, 0, 0]);
   }
 
-  get_forward() {
+  get forward() {
     return this.get_normal([0, 1, 0]);
   }
 
-  get_up() {
+  get up() {
     return this.get_normal([0, 0, 1]);
   }
 
@@ -99,8 +95,8 @@ class Entity {
 
   get_matrix(out) {
     const look_at_vect = [];
-    math.vec3.add(look_at_vect, this.position, this.get_forward());
-    math.mat4.look_at(out, this.position, look_at_vect, this.get_up());
+    math.vec3.add(look_at_vect, this.position, this.forward);
+    math.mat4.look_at(out, this.position, look_at_vect, this.up);
     return out;
   }
 
@@ -109,23 +105,23 @@ class Entity {
   }
 
   rotate_rl(rad) {
-    this.rotate_along(this.get_up(), rad);
+    this.rotate_along(this.up, rad);
   }
 
   rotate_ud(rad) {
-    this.rotate_along(this.get_right(), rad);
+    this.rotate_along(this.right, rad);
   }
 
   move_f(dist) {
-    math.vec3.scale_and_add(this.position, this.position, this.get_forward(), dist);
+    math.vec3.scale_and_add(this.position, this.position, this.forward, dist);
   }
 
   move_r(dist) {
-    math.vec3.scale_and_add(this.position, this.position, this.get_right(), dist);
+    math.vec3.scale_and_add(this.position, this.position, this.right, dist);
   }
 
   move_u(dist) {
-    math.vec3.scale_and_add(this.position, this.position, this.get_up(), dist);
+    math.vec3.scale_and_add(this.position, this.position, this.up, dist);
   }
 
   do_step(tick_length) {
