@@ -17,4 +17,5 @@ game.add(cube);
 
 game.add_frame_listener('yo', delta => {
   //console.log(game.camera.position);
+  game.camera.look_at(cube.position);
 });

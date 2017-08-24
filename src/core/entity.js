@@ -49,22 +49,6 @@ class Entity {
       37: 'r_l'
     };
 
-    const look_at = math.vec3.from_values(-10, -10, -10);
-    const up = math.vec3.from_values(0, 0, 1);
-
-
-    // this.forward = this.get_forward();
-    // this.right = this.get_right();
-    // this.up = this.get_up();
-
-    math.vec3.subtract(this.forward, look_at, this.position);
-    math.vec3.cross(this.right, this.forward, up);
-    math.vec3.cross(this.up, this.right, this.forward);
-
-    math.vec3.normalize(this.forward, this.forward);
-    math.vec3.normalize(this.right, this.right);
-    math.vec3.normalize(this.up, this.up);
-
     if (this.vertices && this.indices && this.normals) {
       this.create_buffers();
     }
