@@ -24,7 +24,7 @@ cube8.color = Cervus.math.hex_to_vec("#ffffff");
 game.add(cube8);
 
 const cube = new Cervus.shapes.Box({
-  material: 'basic'
+  material: 'phong',//'basic'
 });
 cube.position[1] = -12;
 cube.position[0] = 3;
@@ -97,7 +97,7 @@ const vox1 = new Cervus.shapes.Box({
 
 const vox2 = new Cervus.shapes.Box({
   color: Cervus.math.hex_to_vec('#00ff00'),
-  material: 'phong',
+  material: 'basic',
   position: [ -3, -3, 2 ]
 });
 
@@ -121,6 +121,7 @@ game.add_frame_listener('cube_rotation', (delta) => {
     dir = 1;
   }
 
+  game.light_position = game.camera.position;
   sphere.position[0] += 0.06 * dir * -1;
   cube2.position[0] += 0.06 * dir;
   group.position[1] -= 0.06 * dir;
