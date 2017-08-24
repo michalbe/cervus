@@ -50,9 +50,10 @@ class Entity {
   }
 
   look_at(vec, up = this.up) {
-    // const frustrum_matrix = math.mat4.create();
-    // math.mat4.look_at(frustrum_matrix, this.position, vec, up);
-    // math.mat4.multiply(this.model_view_matrix, this.model_view_matrix, frustrum_matrix);
+    const frustrum_matrix = math.mat4.create();
+    math.mat4.targetTo(frustrum_matrix, this.position, vec, up);
+    // console.log(frustrum_matrix)
+    // math.mat4.multiply(this.model_view_matrix, frustrum_matrix, this.model_view_matrix);
 
     const dir = [];
     math.vec3.subtract(dir, vec, this.position);
@@ -65,25 +66,32 @@ class Entity {
     math.mat4.rotate(this.model_view_matrix, this.model_view_matrix, angle, axis);
   }
 
-  get_normal(vec) {
-    const zero = zero_vector.slice();
-    const out = zero_vector.slice();
-    math.vec3.transform_mat4(zero, zero, this.model_view_matrix);
-    math.vec3.transform_mat4(out, vec, this.model_view_matrix);
-    math.vec3.subtract(out, out, zero);
+  get right() {
+    const out = [
+      this.model_view_matrix[0],
+      this.model_view_matrix[1],
+      this.model_view_matrix[2]
+    ];
+    // XXX Is this needed?
     return math.vec3.normalize(out, out);
   }
 
-  get right() {
-    return this.get_normal([1, 0, 0]);
-  }
-
   get forward() {
-    return this.get_normal([0, 1, 0]);
+    const out = [
+      this.model_view_matrix[4],
+      this.model_view_matrix[5],
+      this.model_view_matrix[6]
+    ];
+    return math.vec3.normalize(out, out);
   }
 
   get up() {
-    return this.get_normal([0, 0, 1]);
+    const out = [
+      this.model_view_matrix[8],
+      this.model_view_matrix[9],
+      this.model_view_matrix[10]
+    ];
+    return math.vec3.normalize(out, out);
   }
 
   set position(vec) {
@@ -121,16 +129,15 @@ class Entity {
     const out = math.mat4.create();
     const look_at_vect = [];
     math.vec3.add(look_at_vect, this.position, this.forward);
-    math.mat4.look_at(out, this.position, look_at_vect, this.up);
+    math.mat4.lookAt(out, this.position, look_at_vect, this.up);
     return out;
-    return this.model_view_matrix;
-    return math.mat4.invert(out, this.model_view_matrix);
   }
 
   rotate_along(vec, rad) {
-    math.mat4.rotate(
-      this.model_view_matrix, this.model_view_matrix, rad, vec
-    );
+    const rotation_matrix = math.mat4.create();
+    math.mat4.fromRotation(rotation_matrix, rad, vec);
+    math.mat4.multiply(
+      this.model_view_matrix, rotation_matrix, this.model_view_matrix);
   }
 
   rotate_rl(rad) {
