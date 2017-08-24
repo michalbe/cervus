@@ -1,5 +1,5 @@
 import { create_float_buffer, create_index_buffer } from './context.js';
-import { math } from './math.js';
+import { math, look_at } from './math.js';
 import { zero_vector, unit_vector } from '../misc/defaults.js';
 import { materials } from '../materials/materials.js';
 
@@ -50,20 +50,7 @@ class Entity {
   }
 
   look_at(vec, up = this.up) {
-    const frustrum_matrix = math.mat4.create();
-    math.mat4.targetTo(frustrum_matrix, this.position, vec, up);
-    // console.log(frustrum_matrix)
-    // math.mat4.multiply(this.model_view_matrix, frustrum_matrix, this.model_view_matrix);
-
-    const dir = [];
-    math.vec3.subtract(dir, vec, this.position);
-
-    const angle = math.vec3.angle(this.forward, dir);
-
-    const axis = [];
-    math.vec3.cross(axis, this.forward, dir);
-
-    math.mat4.rotate(this.model_view_matrix, this.model_view_matrix, angle, axis);
+    look_at(this.model_view_matrix, this.position, vec, up);
   }
 
   get right() {
