@@ -84,6 +84,10 @@ class Entity {
     return this.get_normal([0, 0, 1]);
   }
 
+  set scale(vec) {
+    math.mat4.scale(this.model_view_matrix, this.model_view_matrix, vec);
+  }
+
   create_buffers() {
     this.buffers = {
       vertices: create_float_buffer(this.vertices),
@@ -189,7 +193,6 @@ class Entity {
 
     math.mat4.multiply(this.model_view_matrix, this.model_view_matrix, model_view_matrix_from);
     math.mat4.translate(this.model_view_matrix, this.model_view_matrix, this.position);
-    math.mat4.scale(this.model_view_matrix, this.model_view_matrix, this.scale);
 
     this.color_vec = [...this.color, this.color_opacity];
   }
