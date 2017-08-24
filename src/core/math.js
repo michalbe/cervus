@@ -5,7 +5,6 @@ import * as angle from 'gl-vec3/angle';
 import * as subtract from 'gl-vec3/subtract';
 import * as add from 'gl-vec3/add';
 import * as vec3_scale from 'gl-vec3/scale';
-import * as scale_and_add from 'gl-vec3/scaleAndAdd';
 import * as transform_mat4 from 'gl-vec3/transformMat4';
 import * as cross from 'gl-vec3/cross';
 
@@ -17,6 +16,7 @@ import * as translate from 'gl-mat4/translate';
 import * as scale from 'gl-mat4/scale';
 import * as identity from 'gl-mat4/identity';
 import * as look_at from 'gl-mat4/lookAt';
+import * as invert from 'gl-mat4/invert';
 
 import { hex_to_vec } from '../misc/utils.js';
 
@@ -29,7 +29,6 @@ const math = {
     subtract: subtract.default,
     add: add.default,
     scale: vec3_scale.default,
-    scale_and_add: scale_and_add.default,
     transform_mat4: transform_mat4.default,
     cross: cross.default
   },
@@ -41,7 +40,8 @@ const math = {
     translate: translate.default,
     scale: scale.default,
     identity: identity.default,
-    look_at: look_at.default
+    look_at: look_at.default,
+    invert: invert.default
   },
   to_radian: (a) => a * Math.PI / 180,
   hex_to_vec
