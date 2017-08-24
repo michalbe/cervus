@@ -13,10 +13,10 @@ const cube = new Cervus.shapes.Box({
 });
 
 cube.color = Cervus.math.hex_to_vec("#BADA55");
-cube.scale = [2, 1, 1];
+cube.scale = [1, 1, 1];
 game.add(cube);
 
 game.add_frame_listener('yo', delta => {
   //console.log(game.camera.position);
-  game.camera.look_at(cube.position);
+  // game.camera.look_at(cube.position);
 });

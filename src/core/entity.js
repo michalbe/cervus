@@ -8,7 +8,6 @@ class Entity {
     this.model_view_matrix = math.mat4.identity(math.mat4.create());
 
     this.position = options.position || zero_vector.slice();
-    this.rotation = options.rotation || zero_vector.slice();
     this.scale = options.scale || unit_vector.slice();
 
     this.material = options.material;
@@ -67,8 +66,11 @@ class Entity {
   }
 
   get_normal(vec) {
+    const zero = zero_vector.slice();
     const out = zero_vector.slice();
+    math.vec3.transform_mat4(zero, zero, this.model_view_matrix);
     math.vec3.transform_mat4(out, vec, this.model_view_matrix);
+    math.vec3.subtract(out, out, zero);
     return math.vec3.normalize(out, out);
   }
 
@@ -84,8 +86,26 @@ class Entity {
     return this.get_normal([0, 0, 1]);
   }
 
+  set position(vec) {
+    const offset = [];
+    math.vec3.subtract(offset, vec, this.position);
+    math.mat4.translate(
+      this.model_view_matrix, this.model_view_matrix, offset
+    );
+  }
+
+  get position() {
+    return [
+      this.model_view_matrix[12],
+      this.model_view_matrix[13],
+      this.model_view_matrix[14]
+    ];
+  }
+
   set scale(vec) {
-    math.mat4.scale(this.model_view_matrix, this.model_view_matrix, vec);
+    math.mat4.scale(
+      this.model_view_matrix, this.model_view_matrix, vec
+    );
   }
 
   create_buffers() {
@@ -98,14 +118,18 @@ class Entity {
   }
 
   get_matrix(out) {
+    const position = [0, -4, 0];
     const look_at_vect = [];
     math.vec3.add(look_at_vect, this.position, this.forward);
     math.mat4.look_at(out, this.position, look_at_vect, this.up);
     return out;
+    return math.mat4.invert(out, out);
   }
 
   rotate_along(vec, rad) {
-    math.mat4.rotate(this.model_view_matrix, this.model_view_matrix, rad, vec);
+    math.mat4.rotate(
+      this.model_view_matrix, this.model_view_matrix, rad, vec
+    );
   }
 
   rotate_rl(rad) {
@@ -116,16 +140,22 @@ class Entity {
     this.rotate_along(this.right, rad);
   }
 
+  move_along(vec, dist) {
+    const move = zero_vector.slice();
+    math.vec3.scale(move, vec, dist);
+    math.mat4.translate(this.model_view_matrix, this.model_view_matrix, move);
+  }
+
   move_f(dist) {
-    math.vec3.scale_and_add(this.position, this.position, this.forward, dist);
+    this.move_along(this.forward, dist);
   }
 
   move_r(dist) {
-    math.vec3.scale_and_add(this.position, this.position, this.right, dist);
+    this.move_along(this.right, dist);
   }
 
   move_u(dist) {
-    math.vec3.scale_and_add(this.position, this.position, this.up, dist);
+    this.move_along(this.up, dist);
   }
 
   do_step(tick_length) {
@@ -191,8 +221,7 @@ class Entity {
     const model_view_matrix_from = (this.parent && this.parent.model_view_matrix)
       || math.mat4.create();
 
-    math.mat4.multiply(this.model_view_matrix, this.model_view_matrix, model_view_matrix_from);
-    math.mat4.translate(this.model_view_matrix, this.model_view_matrix, this.position);
+    // math.mat4.multiply(this.model_view_matrix, this.model_view_matrix, model_view_matrix_from);
 
     this.color_vec = [...this.color, this.color_opacity];
   }

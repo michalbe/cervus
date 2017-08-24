@@ -26,10 +26,9 @@ game.add(cube8);
 const cube = new Cervus.shapes.Box({
   material: 'basic'
 });
-cube.position[1] = -12;
-cube.position[0] = 3;
+cube.position = [3, -12, 0];
 cube.color = Cervus.math.hex_to_vec("#BADA55");
-cube.scale[0] = cube.scale[1] = 2;
+cube.scale = [2, 2, 1];
 game.add(cube);
 
 const sphere = new Cervus.shapes.Sphere({
@@ -37,8 +36,7 @@ const sphere = new Cervus.shapes.Sphere({
   color: Cervus.math.hex_to_vec('#ff0000'),
   // rotation: [ Math.PI/4, 0, Math.PI/4 ]
 });
-sphere.position[1] = -10;
-sphere.position[0] = 3;
+sphere.position = [3, -10, 0];
 sphere.scale = [ 0.5, 0.5, 0.5 ];
 
 game.add(sphere);
@@ -61,8 +59,7 @@ const plane3 = new Cervus.shapes.Plane({
   color: Cervus.math.hex_to_vec('#CCCCCC')
 });
 
-plane3.position[1] = -15;
-plane3.position[2] = -1.5;
+plane3.position = [0, -15, -1.5];
 plane3.scale = [ 150, 150,  1 ];
 game.add(plane3);
 //
@@ -118,6 +115,16 @@ game.add_frame_listener('cube_rotation', (delta) => {
     dir = 1;
   }
 
-  sphere.position[0] += 0.06 * dir * -1;
-  cube2.position[0] += 0.06 * dir;
+  sphere.position = [
+    sphere.position[0] + 0.06 * dir * -1,
+    sphere.position[1],
+    sphere.position[2],
+  ];
+
+  cube2.position = [
+    cube2.position[0] + 0.06 * dir,
+    cube2.position[1],
+    cube2.position[2]
+  ];
+
 });
