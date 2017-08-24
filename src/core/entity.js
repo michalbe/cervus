@@ -5,7 +5,7 @@ import { materials } from '../materials/materials.js';
 
 class Entity {
   constructor(options = {}) {
-    this.model_view_matrix = math.mat4.identity(math.mat4.create());
+    this.model_view_matrix = math.mat4.create();
 
     this.position = options.position || zero_vector.slice();
     this.scale = options.scale || unit_vector.slice();
@@ -117,13 +117,14 @@ class Entity {
     }
   }
 
-  get_matrix(out) {
-    const position = [0, -4, 0];
+  get_view_matrix() {
+    const out = math.mat4.create();
     const look_at_vect = [];
     math.vec3.add(look_at_vect, this.position, this.forward);
     math.mat4.look_at(out, this.position, look_at_vect, this.up);
     return out;
-    return math.mat4.invert(out, out);
+    return this.model_view_matrix;
+    return math.mat4.invert(out, this.model_view_matrix);
   }
 
   rotate_along(vec, rad) {
