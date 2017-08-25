@@ -121,9 +121,13 @@ class Entity {
   }
 
   rotate_along(vec, rad) {
+    // Negate the origin vector so that we can go back.
+    const reverse_origin = this.origin.map(i => -i);
     const rotation_matrix = math.mat4.create();
     math.mat4.from_rotation(rotation_matrix, rad, vec);
+    math.mat4.translate(this.local_matrix, this.local_matrix, this.origin);
     math.mat4.multiply(this.local_matrix, this.local_matrix, rotation_matrix);
+    math.mat4.translate(this.local_matrix, this.local_matrix, reverse_origin);
   }
 
   rotate_rl(rad) {
