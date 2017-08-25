@@ -1,7 +1,6 @@
 import { create_float_buffer, create_index_buffer } from './context.js';
 import { math } from './math.js';
 import { zero_vector, unit_vector } from '../misc/defaults.js';
-import { materials } from '../materials/materials.js';
 import { hex_to_vec } from '../misc/utils.js';
 
 class Entity {
@@ -32,8 +31,7 @@ class Entity {
     this.vertices = this.vertices || options.vertices;
     this.normals = this.normals || options.normals;
 
-    this.material_desc = this.material && new materials[this.material];
-    this.program = this.material_desc && this.material_desc.program;
+    this.program = this.material && this.material.program;
 
     this.skip = false;
 
@@ -228,7 +226,7 @@ class Entity {
   }
 
   render(ticks) {
-    !this.skip && this.material && this.material_desc.render(this);
+    !this.skip && this.material && this.material.render(this);
     !this.skip && this.entities.forEach((entity) => {
       entity.render(ticks);
     });
