@@ -144,7 +144,7 @@ class Game {
     this.entities.forEach((entity) => entity.update());
 
     this.camera.update(this.tick_length, this);
-    this.viewMatrix = this.camera.get_view_matrix();
+    this.camera.get_view_matrix(this.viewMatrix);
   }
 
   draw(ticks_qty) {
