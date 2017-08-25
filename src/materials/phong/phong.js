@@ -45,7 +45,7 @@ class Phong {
     gl.uniformMatrix4fv(
       this.uniforms.w,
       gl.FALSE,
-      entity.model_view_matrix
+      entity.world_matrix
     );
 
     gl.uniform4fv(

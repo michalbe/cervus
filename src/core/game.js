@@ -23,9 +23,9 @@ class Game {
 
     this.options = default_options;
 
-    this.camera = new Entity({
-      position: [ 0, 0, 1.85 ]
-    });
+    this.camera = new Entity();
+
+    // this.camera.look_at([0, 0, 0]);
 
     this.camera.game = this;
 
@@ -142,7 +142,7 @@ class Game {
     this.entities.forEach((entity) => entity.update());
 
     this.camera.update(this.tick_length, this);
-    this.camera.get_matrix(this.viewMatrix);
+    this.camera.get_view_matrix(this.viewMatrix);
   }
 
   draw(ticks_qty) {

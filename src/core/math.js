@@ -5,7 +5,7 @@ import {
   angle,
   subtract,
   add,
-  scaleAndAdd,
+  scale,
   transformMat4,
   cross
 } from 'gl-matrix/src/gl-matrix/vec3';
@@ -14,16 +14,19 @@ import {
 import {
   create,
   perspective,
+  multiply,
   rotate,
   translate,
-  scale,
+  scale as mat4_scale,
   identity,
-  lookAt
+  fromRotation,
+  lookAt,
+  targetTo
 } from 'gl-matrix/src/gl-matrix/mat4';
 
 import { hex_to_vec } from '../misc/utils.js';
 
-const math = {
+export const math = {
   vec3: {
     from_values: fromValues,
     normalize,
@@ -31,21 +34,22 @@ const math = {
     angle,
     subtract,
     add,
-    scale_and_add: scaleAndAdd,
+    scale,
     transform_mat4: transformMat4,
     cross
   },
   mat4: {
     create,
     perspective,
+    multiply,
     rotate,
     translate,
-    scale,
+    scale: mat4_scale,
     identity,
-    look_at: lookAt
+    from_rotation: fromRotation,
+    look_at: lookAt,
+    target_to: targetTo
   },
   to_radian: (a) => a * Math.PI / 180,
   hex_to_vec
 };
-
-export { math };
