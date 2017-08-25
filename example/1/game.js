@@ -146,7 +146,7 @@ game.add_frame_listener('cube_rotation', (delta) => {
   ];
 
   parent_group.position = [
-    cube2.position[0] - 0.06 * dir,
-    ...cube2.position.slice(1)
+    parent_group.position[0] - 0.06 * dir,
+    ...parent_group.position.slice(1)
   ];
 });
