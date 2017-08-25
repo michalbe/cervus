@@ -8,11 +8,16 @@ const game = new Cervus.Game({
   // fps: 10
 });
 
+// By default all entities face the user.
+// Rotate the camera to see the scene.
+game.camera.position = [0, 1, 2];
+game.camera.rotate_rl(Math.PI);
+
 const cube = new Cervus.shapes.Box({
   material: 'phong',
 });
 
-cube.color = Cervus.math.hex_to_vec("#BADA55");
+cube.color = "#BADA55";
 cube.scale = [1, 1, 1];
 game.add(cube);
 
