@@ -248,7 +248,7 @@ class ShadowPhong {
       gl.uniformMatrix4fv(
         this.map_uniforms.mWorld,
         gl.FALSE,
-        entity.model_view_matrix
+        entity.world_matrix
       );
 
       // Set attributes
@@ -296,7 +296,7 @@ class ShadowPhong {
     gl.uniformMatrix4fv(
       this.uniforms.mWorld,
       gl.FALSE,
-      entity.model_view_matrix
+      entity.world_matrix
     );
     gl.uniform4fv(
       this.uniforms.meshColor,

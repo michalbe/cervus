@@ -1,46 +1,55 @@
-import * as from_values from 'gl-vec3/fromValues';
-import * as normalize from 'gl-vec3/normalize';
-import * as distance from 'gl-vec3/distance';
-import * as angle from 'gl-vec3/angle';
-import * as subtract from 'gl-vec3/subtract';
-import * as add from 'gl-vec3/add';
-import * as scale_and_add from 'gl-vec3/scaleAndAdd';
-import * as transform_mat4 from 'gl-vec3/transformMat4';
-import * as cross from 'gl-vec3/cross';
+import {
+  fromValues,
+  normalize,
+  distance,
+  angle,
+  subtract,
+  add,
+  scale,
+  transformMat4,
+  cross
+} from 'gl-matrix/src/gl-matrix/vec3';
 
-import * as create from 'gl-mat4/create';
-import * as perspective from 'gl-mat4/perspective';
-import * as rotate from 'gl-mat4/rotate';
-import * as translate from 'gl-mat4/translate';
-import * as scale from 'gl-mat4/scale';
-import * as identity from 'gl-mat4/identity';
-import * as look_at from 'gl-mat4/lookAt';
+
+import {
+  create,
+  perspective,
+  multiply,
+  rotate,
+  translate,
+  scale as mat4_scale,
+  identity,
+  fromRotation,
+  lookAt,
+  targetTo
+} from 'gl-matrix/src/gl-matrix/mat4';
 
 import { hex_to_vec } from '../misc/utils.js';
 
-const math = {
+export const math = {
   vec3: {
-    from_values: from_values.default,
-    normalize: normalize.default,
-    distance: distance.default,
-    angle: angle.default,
-    subtract: subtract.default,
-    add: add.default,
-    scale_and_add: scale_and_add.default,
-    transform_mat4: transform_mat4.default,
-    cross: cross.default
+    from_values: fromValues,
+    normalize,
+    distance,
+    angle,
+    subtract,
+    add,
+    scale,
+    transform_mat4: transformMat4,
+    cross
   },
   mat4: {
-    create: create.default,
-    perspective: perspective.default,
-    rotate: rotate.default,
-    translate: translate.default,
-    scale: scale.default,
-    identity: identity.default,
-    look_at: look_at.default
+    create,
+    perspective,
+    multiply,
+    rotate,
+    translate,
+    scale: mat4_scale,
+    identity,
+    from_rotation: fromRotation,
+    look_at: lookAt,
+    target_to: targetTo
   },
   to_radian: (a) => a * Math.PI / 180,
   hex_to_vec
 };
-
-export { math };
