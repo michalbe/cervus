@@ -32,46 +32,8 @@ export const math = {
     identity: mat4.identity,
     from_rotation: mat4.fromRotation,
     look_at: mat4.lookAt,
-    target_to
+    target_to: mat4.targetTo
   },
   to_radian: (a) => a * Math.PI / 180,
   hex_to_vec
-};
-
-function target_to(
-  out, [eyex, eyey, eyez], target, [upx, upy, upz]
-) {
-  let y0 = target[0] - eyex;
-  let y1 = target[1] - eyey;
-  let y2 = target[2] - eyez;
-
-  const len = y0*y0 + y1*y1 + y2*y2;
-  if (len > 0) {
-    const rev_magnitude = 1 / Math.sqrt(len);
-    y0 *= rev_magnitude;
-    y1 *= rev_magnitude;
-    y2 *= rev_magnitude;
-  }
-
-  const x0 = upy * y2 - upz * y1;
-  const x1 = upz * y0 - upx * y2;
-  const x2 = upx * y1 - upy * y0;
-
-  out[0] = x0;
-  out[1] = x1;
-  out[2] = x2;
-  out[3] = 0;
-  out[4] = y0;
-  out[5] = y1;
-  out[6] = y2;
-  out[7] = 0;
-  out[8] = y1 * x2 - y2 * x1;
-  out[9] = y2 * x0 - y0 * x2;
-  out[10] = y0 * x1 - y1 * x0;
-  out[11] = 0;
-  out[12] = eyex;
-  out[13] = eyey;
-  out[14] = eyez;
-  out[15] = 1;
-  return out;
 };
