@@ -6,7 +6,7 @@ import { hex_to_vec } from '../misc/utils.js';
 
 class Entity {
   constructor(options = {}) {
-    this.model_view_matrix = math.mat4.create();
+    this.local_matrix = math.mat4.create();
     this.world_matrix = math.mat4.create();
 
     this.position = options.position || zero_vector.slice();
@@ -58,40 +58,36 @@ class Entity {
   }
 
   look_at(vec, up = this.up) {
-    math.mat4.target_to(this.model_view_matrix, this.position, vec, up);
+    math.mat4.target_to(this.local_matrix, this.position, vec, up);
   }
 
   get right() {
-    const out = this.model_view_matrix.slice(0, 3);
+    const out = this.local_matrix.slice(0, 3);
     return math.vec3.normalize(out, out);
   }
 
   get forward() {
-    const out = this.model_view_matrix.slice(4, 7);
+    const out = this.local_matrix.slice(4, 7);
     return math.vec3.normalize(out, out);
   }
 
   get up() {
-    const out = this.model_view_matrix.slice(8, 11);
+    const out = this.local_matrix.slice(8, 11);
     return math.vec3.normalize(out, out);
   }
 
   set position(vec) {
     const offset = [];
     math.vec3.subtract(offset, vec, this.position);
-    math.mat4.translate(
-      this.model_view_matrix, this.model_view_matrix, offset
-    );
+    math.mat4.translate(this.local_matrix, this.local_matrix, offset);
   }
 
   get position() {
-    return this.model_view_matrix.slice(12, 15);
+    return this.local_matrix.slice(12, 15);
   }
 
   set scale(vec) {
-    math.mat4.scale(
-      this.model_view_matrix, this.model_view_matrix, vec
-    );
+    math.mat4.scale(this.local_matrix, this.local_matrix, vec);
   }
 
   set color(hex) {
@@ -127,9 +123,7 @@ class Entity {
   rotate_along(vec, rad) {
     const rotation_matrix = math.mat4.create();
     math.mat4.from_rotation(rotation_matrix, rad, vec);
-    math.mat4.multiply(
-      this.model_view_matrix, this.model_view_matrix, rotation_matrix
-    );
+    math.mat4.multiply(this.local_matrix, this.local_matrix, rotation_matrix);
   }
 
   rotate_rl(rad) {
@@ -143,7 +137,7 @@ class Entity {
   move_along(vec, dist) {
     const move = zero_vector.slice();
     math.vec3.scale(move, vec, dist);
-    math.mat4.translate(this.model_view_matrix, this.model_view_matrix, move);
+    math.mat4.translate(this.local_matrix, this.local_matrix, move);
   }
 
   move_r(dist) {
@@ -219,9 +213,11 @@ class Entity {
     }
 
     if (this.parent) {
-      math.mat4.multiply(this.world_matrix, this.parent.world_matrix, this.model_view_matrix);
+      math.mat4.multiply(
+        this.world_matrix, this.parent.world_matrix, this.local_matrix
+      );
     } else {
-      this.world_matrix = this.model_view_matrix.slice();
+      this.world_matrix = this.local_matrix.slice();
     }
 
     this.entities.forEach(entity => entity.update());
