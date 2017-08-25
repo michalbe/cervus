@@ -66,12 +66,12 @@ class Entity {
     return math.vec3.normalize(out, out);
   }
 
-  get forward() {
+  get up() {
     const out = this.local_matrix.slice(4, 7);
     return math.vec3.normalize(out, out);
   }
 
-  get up() {
+  get forward() {
     const out = this.local_matrix.slice(8, 11);
     return math.vec3.normalize(out, out);
   }
@@ -127,7 +127,7 @@ class Entity {
   }
 
   rotate_rl(rad) {
-    this.rotate_along(math.vec3.from_values(0, 0, 1), rad);
+    this.rotate_along(math.vec3.from_values(0, 1, 0), rad);
   }
 
   rotate_ud(rad) {
@@ -144,11 +144,11 @@ class Entity {
     this.move_along(math.vec3.from_values(1, 0, 0), dist);
   }
 
-  move_f(dist) {
+  move_u(dist) {
     this.move_along(math.vec3.from_values(0, 1, 0), dist);
   }
 
-  move_u(dist) {
+  move_f(dist) {
     this.move_along(math.vec3.from_values(0, 0, 1), dist);
   }
 
@@ -162,11 +162,11 @@ class Entity {
     }
 
     if (this.dir.r && !this.dir.l) {
-      this.move_r(tick_length / 1000 * this.move_speed);
+      this.move_r(-tick_length / 1000 * this.move_speed);
     }
 
     if (this.dir.l && !this.dir.r) {
-      this.move_r(-tick_length / 1000 * this.move_speed);
+      this.move_r(tick_length / 1000 * this.move_speed);
     }
 
     if (this.dir.u && !this.dir.d) {
@@ -186,11 +186,11 @@ class Entity {
     }
 
     if (this.dir.r_u && !this.dir.r_d) {
-      this.rotate_ud(tick_length / 1000 * this.rotate_speed);
+      this.rotate_ud(-tick_length / 1000 * this.rotate_speed);
     }
 
     if (this.dir.r_d && !this.dir.r_u) {
-      this.rotate_ud(-tick_length / 1000 * this.rotate_speed);
+      this.rotate_ud(tick_length / 1000 * this.rotate_speed);
     }
   }
 

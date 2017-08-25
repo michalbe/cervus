@@ -9,26 +9,32 @@ const game = new Cervus.Game({
   // fps: 1
 });
 
+// By default all entities face the user.
+// Rotate the camera to see the scene.
+game.camera.position = [0, 1, 2];
+game.camera.rotate_rl(Math.PI);
+
+
 const cube2 = new Cervus.shapes.Box({
   material: material
 });
-cube2.position = [ -5, -10, 3 ];
+cube2.position = [ 5, 3, -10 ];
 cube2.color = "#FF00FF";
 game.add(cube2);
 
 const cube8 = new Cervus.shapes.Box({
   material: material
 });
-cube8.position = [0, -5, 0 ];
+cube8.position = [0, 0, -5];
 cube8.color = "#ffffff";
 game.add(cube8);
 
 const cube = new Cervus.shapes.Box({
   material: 'phong',//'basic'
 });
-cube.position = [3, -12, 0];
+cube.position = [-3, 0, -12];
 cube.color = "#BADA55";
-cube.scale = [2, 2, 1];
+cube.scale = [2, 1, 2];
 game.add(cube);
 
 const sphere = new Cervus.shapes.Sphere({
@@ -36,7 +42,7 @@ const sphere = new Cervus.shapes.Sphere({
   color: '#ff0000',
   // rotation: [ Math.PI/4, 0, Math.PI/4 ]
 });
-sphere.position = [3, -10, 0];
+sphere.position = [3, 0, -10];
 sphere.scale = [ 0.5, 0.5, 0.5 ];
 
 game.add(sphere);
@@ -59,8 +65,8 @@ const plane3 = new Cervus.shapes.Plane({
   color: '#CCCCCC'
 });
 
-plane3.position = [0, -15, -1.5];
-plane3.scale = [ 150, 150,  1 ];
+plane3.position = [0, -1.5, 0];
+plane3.scale = [ 150, 1, 150 ];
 game.add(plane3);
 //
 // const plane4 = new Cervus.shapes.Plane({
@@ -78,7 +84,7 @@ const plane2 = new Cervus.shapes.Plane({
   material: material,
   color: '#cc00cc',
 });
-plane2.position = [ -3, -13, 1];
+plane2.position = [ 3, -1, -13];
 // plane2.rotation[0] = -Math.PI/2;
 plane2.scale = [ 2, 1, 2 ];
 game.add(plane2);
@@ -89,16 +95,16 @@ const vox1 = new Cervus.shapes.Box({
   scale: [0.5, 0.5, 0.5],
   color: '#0000ff',
   material: 'phong',
-  position: [-1, -1, 1]
+  position: [1, 1, -1]
 });
 
 const vox2 = new Cervus.shapes.Box({
   color: '#00ff00',
   material: 'basic',
-  position: [ -3, -3, 2 ]
+  position: [3, 2, -3]
 });
 
-group.origin = [ 1, 2, 2 ];
+group.origin = [ -1, 2, 2 ];
 // group.position[2] = -15;
 // group.position[1] = -10;
 // game.add(group);
@@ -135,9 +141,8 @@ game.add_frame_listener('cube_rotation', (delta) => {
   ];
 
   group.position = [
-    group.position[0],
-    group.position[1] - 0.06 * dir,
-    group.position[2],
+    ...group.position.slice(0, 2),
+    group.position[2] - 0.06 * dir
   ];
 
   parent_group.position = [
