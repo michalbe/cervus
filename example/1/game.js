@@ -117,14 +117,12 @@ game.add_frame_listener('cube_rotation', (delta) => {
 
   sphere.position = [
     sphere.position[0] + 0.06 * dir * -1,
-    sphere.position[1],
-    sphere.position[2],
+    ...sphere.position.slice(1)
   ];
 
   cube2.position = [
     cube2.position[0] + 0.06 * dir,
-    cube2.position[1],
-    cube2.position[2]
+    ...cube2.position.slice(1)
   ];
 
 });
