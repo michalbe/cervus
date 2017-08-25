@@ -1,6 +1,6 @@
 /* global Cervus */
 
-const material = 'phong';
+const material = new Cervus.materials.Phong();
 
 const game = new Cervus.Game({
   width: window.innerWidth,
@@ -30,7 +30,7 @@ cube8.color = "#ffffff";
 game.add(cube8);
 
 const cube = new Cervus.shapes.Box({
-  material: 'phong',//'basic'
+  material: material
 });
 cube.position = [-3, 0, -12];
 cube.color = "#BADA55";
@@ -94,13 +94,13 @@ const group = new Cervus.Entity({});
 const vox1 = new Cervus.shapes.Box({
   scale: [0.5, 0.5, 0.5],
   color: '#0000ff',
-  material: 'phong',
+  material: material,
   position: [1, 1, -1]
 });
 
 const vox2 = new Cervus.shapes.Box({
   color: '#00ff00',
-  material: 'basic',
+  material: new Cervus.materials.Basic,
   position: [3, 2, -3]
 });
 
