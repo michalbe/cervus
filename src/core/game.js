@@ -2,7 +2,7 @@ import { gl, canvas } from './context.js';
 import { hex_to_vec } from '../misc/utils.js';
 import { zero_vector } from '../misc/defaults.js';
 import { math } from './math.js';
-import { Camera } from './camera.js';
+import { Entity } from './entity.js';
 
 const default_options = {
   width: 800,
@@ -10,25 +10,24 @@ const default_options = {
   dom: document.body,
   fps: 60,
   autostart: true,
-  movable_camera: false,
+  keyboard_controlled_camera: false,
   clear_color: '#FFFFFF',
   light_position: zero_vector.slice(),
   light_intensity: 0.4
 };
 
 class Game {
-
   constructor(options) {
     this.entities = [];
     this.run = true;
 
     this.options = default_options;
 
-    this.camera = new Camera(
-      math.vec3.from_values(0, 0, 1.85),
-      math.vec3.from_values(0, -1, 1.85),
-      math.vec3.from_values(0, 0, 1)
-    );
+    this.camera = new Entity();
+
+    // this.camera.look_at([0, 0, 0]);
+
+    this.camera.game = this;
 
     this.projMatrix = math.mat4.create();
     this.viewMatrix = math.mat4.create();
@@ -48,7 +47,7 @@ class Game {
 
     this.light_position = this.options.light_position;
     this.light_intensity = this.options.light_intensity;
-    this.camera.moveable = this.options.movable_camera;
+    this.camera.keyboard_controlled = this.options.keyboard_controlled_camera;
     this.clear_color = this.options.clear_color;
     this.clear_color_vec = hex_to_vec(this.clear_color);
 
@@ -62,6 +61,11 @@ class Game {
     this.last_tick = performance.now();
     this.last_render = this.last_tick;
     this.tick_length = 1000/this.options.fps;
+
+    this.keys = {};
+
+    window.addEventListener('keydown', this.key_down.bind(this));
+    window.addEventListener('keyup', this.key_up.bind(this));
 
     this.actions = {};
 
@@ -111,6 +115,14 @@ class Game {
     delete this.actions[name];
   }
 
+  key_down(e) {
+    this.keys[e.keyCode] = true;
+  }
+
+  key_up(e) {
+    this.keys[e.keyCode] = false
+  }
+
   perform_ticks(ticks_qty) {
     if (this.run) {
       for(var i=0; i < ticks_qty; i++) {
@@ -127,10 +139,10 @@ class Game {
       }
     });
 
-
     this.entities.forEach((entity) => entity.update());
-    this.camera.update(this.tick_length);
-    this.camera.get_matrix(this.viewMatrix);
+
+    this.camera.update(this.tick_length, this);
+    this.camera.get_view_matrix(this.viewMatrix);
   }
 
   draw(ticks_qty) {
