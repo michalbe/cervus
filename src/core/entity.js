@@ -61,7 +61,7 @@ class Entity {
     math.mat4.target_to(this.local_matrix, this.position, vec, up);
   }
 
-  get right() {
+  get left() {
     const out = this.local_matrix.slice(0, 3);
     return math.vec3.normalize(out, out);
   }
