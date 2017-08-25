@@ -1,3 +1,2 @@
-import { Basic } from './src/materials/basic.js';
-import { Phong } from './src/materials/phong.js';
-export { Basic, Phong };
+export { Basic } from './src/materials/basic.js';
+export { Phong } from './src/materials/phong.js';
