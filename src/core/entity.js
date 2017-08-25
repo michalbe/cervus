@@ -2,18 +2,26 @@ import { create_float_buffer, create_index_buffer } from './context.js';
 import { math } from './math.js';
 import { zero_vector, unit_vector } from '../misc/defaults.js';
 import { materials } from '../materials/materials.js';
+import { hex_to_vec } from '../misc/utils.js';
 
 class Entity {
   constructor(options = {}) {
     this.model_view_matrix = math.mat4.create();
+    this.world_matrix = math.mat4.create();
 
     this.position = options.position || zero_vector.slice();
     this.scale = options.scale || unit_vector.slice();
+    this.origin = options.origin || zero_vector.slice();
 
     this.material = options.material;
 
-    this.color = options.color || [1.0, 1.0, 1.0];
-    this.color_opacity = 1.0;
+    if (this.material) {
+      this.color_vec = [];
+      this.color_opacity = 1.0;
+      this.color = options.color || '#ffffff';
+    }
+
+    this.entities = [];
 
     this.keyboard_controlled = false;
 
@@ -86,6 +94,15 @@ class Entity {
     );
   }
 
+  set color(hex) {
+    this._color = hex || '#ffffff';
+    this.color_vec = [...hex_to_vec(this._color), this.color_opacity];
+  }
+
+  get color() {
+    return this._color;
+  }
+
   create_buffers() {
     this.buffers = {
       vertices: create_float_buffer(this.vertices),
@@ -95,8 +112,12 @@ class Entity {
     }
   }
 
-  get_view_matrix() {
-    const out = math.mat4.create();
+  add(entity) {
+    entity.parent = this;
+    this.entities.push(entity);
+  }
+
+  get_view_matrix(out) {
     const look_at_vect = [];
     math.vec3.add(look_at_vect, this.position, this.forward);
     math.mat4.look_at(out, this.position, look_at_vect, this.up);
@@ -193,20 +214,24 @@ class Entity {
       this.do_step(tick_length);
     }
 
-    if (!this.material) {
+    if (!this.material && !this.entities.length) {
       return;
     }
 
-    const model_view_matrix_from = (this.parent && this.parent.model_view_matrix)
-      || math.mat4.create();
+    if (this.parent) {
+      math.mat4.multiply(this.world_matrix, this.parent.world_matrix, this.model_view_matrix);
+    } else {
+      this.world_matrix = this.model_view_matrix.slice();
+    }
 
-    // math.mat4.multiply(this.model_view_matrix, this.model_view_matrix, model_view_matrix_from);
-
-    this.color_vec = [...this.color, this.color_opacity];
+    this.entities.forEach(entity => entity.update());
   }
 
-  render() {
+  render(ticks) {
     !this.skip && this.material && this.material_desc.render(this);
+    !this.skip && this.entities.forEach((entity) => {
+      entity.render(ticks);
+    });
   }
 
   // generate_shadow_map() {

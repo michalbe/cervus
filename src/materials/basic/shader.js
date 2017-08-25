@@ -3,10 +3,10 @@ const vertex_code =`
   uniform mat4 p;
   uniform mat4 v;
   uniform mat4 w;
-  attribute vec3 V;
+  attribute vec3 P;
   void main()
   {
-    gl_Position = p * v * vec4((w * vec4(V, 1.0)).xyz, 1.0);
+    gl_Position = p * v * vec4((w * vec4(P, 1.0)).xyz, 1.0);
   }
 `;
 

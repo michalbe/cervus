@@ -13,27 +13,27 @@ const cube2 = new Cervus.shapes.Box({
   material: material
 });
 cube2.position = [ -5, -10, 3 ];
-cube2.color = Cervus.math.hex_to_vec("#FF00FF");
+cube2.color = "#FF00FF";
 game.add(cube2);
 
 const cube8 = new Cervus.shapes.Box({
   material: material
 });
 cube8.position = [0, -5, 0 ];
-cube8.color = Cervus.math.hex_to_vec("#ffffff");
+cube8.color = "#ffffff";
 game.add(cube8);
 
 const cube = new Cervus.shapes.Box({
-  material: 'basic'
+  material: 'phong',//'basic'
 });
 cube.position = [3, -12, 0];
-cube.color = Cervus.math.hex_to_vec("#BADA55");
+cube.color = "#BADA55";
 cube.scale = [2, 2, 1];
 game.add(cube);
 
 const sphere = new Cervus.shapes.Sphere({
   material: material,
-  color: Cervus.math.hex_to_vec('#ff0000'),
+  color: '#ff0000',
   // rotation: [ Math.PI/4, 0, Math.PI/4 ]
 });
 sphere.position = [3, -10, 0];
@@ -56,7 +56,7 @@ let dir = 1;
 
 const plane3 = new Cervus.shapes.Plane({
   material: material,
-  color: Cervus.math.hex_to_vec('#CCCCCC')
+  color: '#CCCCCC'
 });
 
 plane3.position = [0, -15, -1.5];
@@ -76,35 +76,38 @@ game.add(plane3);
 
 const plane2 = new Cervus.shapes.Plane({
   material: material,
-  color: Cervus.math.hex_to_vec('#cc00cc'),
+  color: '#cc00cc',
 });
 plane2.position = [ -3, -13, 1];
 // plane2.rotation[0] = -Math.PI/2;
 plane2.scale = [ 2, 1, 2 ];
 game.add(plane2);
 
-const group = new Cervus.Group();
+const parent_group = new Cervus.Entity({});
+const group = new Cervus.Entity({});
 const vox1 = new Cervus.shapes.Box({
   scale: [0.5, 0.5, 0.5],
-  color: Cervus.math.hex_to_vec('#0000ff'),
+  color: '#0000ff',
   material: 'phong',
   position: [-1, -1, 1]
 });
+
 const vox2 = new Cervus.shapes.Box({
-  color: Cervus.math.hex_to_vec('#00ff00'),
-  material: 'phong',
+  color: '#00ff00',
+  material: 'basic',
   position: [ -3, -3, 2 ]
 });
 
 group.origin = [ 1, 2, 2 ];
 // group.position[2] = -15;
 // group.position[1] = -10;
-game.add(group);
+// game.add(group);
 // game.add(vox1);
 // game.add(vox2);
 group.add(vox1);
 group.add(vox2);
-
+parent_group.add(group);
+game.add(parent_group);
 
 game.add_frame_listener('cube_rotation', (delta) => {
   // cube.rotation[0] = sphere.rotation[0] = group.rotation[2] = delta / 1000;
@@ -114,6 +117,12 @@ game.add_frame_listener('cube_rotation', (delta) => {
   } else if (cube2.position[0] < -5) {
     dir = 1;
   }
+
+  // if (~~delta%30 === 0) {
+  //   game.light_intensity = Math.random();
+  // }
+
+  game.light_position = game.camera.position;
 
   sphere.position = [
     sphere.position[0] + 0.06 * dir * -1,
@@ -125,4 +134,14 @@ game.add_frame_listener('cube_rotation', (delta) => {
     ...cube2.position.slice(1)
   ];
 
+  group.position = [
+    group.position[0],
+    group.position[1] - 0.06 * dir,
+    group.position[2],
+  ];
+
+  parent_group.position = [
+    cube2.position[0] - 0.06 * dir,
+    ...cube2.position.slice(1)
+  ];
 });
