@@ -1,22 +1,22 @@
 import { Entity } from '../core/entity.js';
 
 const vertices = [
-  -1,  1,  1,
-   1,  1,  1,
-   1, -1,  1,
-  -1, -1,  1
+  -1,  0,  1,
+   1,  0,  1,
+   1, 0,  -1,
+  -1, 0,  -1
 ];
 
 const indices = [
-   1,  0,  3,
-   1,  3,  2
+   0,  1,  3,
+   3,  1,  2
 ];
 
 const normals = [
-  0, 0, 1,
-  0, 0, 1,
-  0, 0, 1,
-  0, 0, 1
+  0, 1, 0,
+  0, 1, 0,
+  0, 1, 0,
+  0, 1, 0
 ];
 
 class Plane extends Entity {
