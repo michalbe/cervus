@@ -1,4 +1,3 @@
-import { Box } from './src/shapes/box.js';
-import { Plane } from './src/shapes/plane.js';
-import { Sphere } from './src/shapes/sphere.js';
-export { Box, Plane, Sphere };
+export { Box } from './src/shapes/box.js';
+export { Plane } from './src/shapes/plane.js';
+export { Sphere } from './src/shapes/sphere.js';
