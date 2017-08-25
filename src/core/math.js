@@ -7,14 +7,10 @@ import * as add from 'gl-vec3/add';
 import * as vec3_scale from 'gl-vec3/scale';
 import * as transform_mat4 from 'gl-vec3/transformMat4';
 import * as cross from 'gl-vec3/cross';
-
-// XXX We should simply re-export mat4 here and then in other places:
-// import { mat4 } from './core/math';
 import { mat4 } from 'gl-matrix';
-
 import { hex_to_vec } from '../misc/utils.js';
 
-const math = {
+export const math = {
   vec3: {
     from_values: from_values.default,
     normalize: normalize.default,
@@ -26,15 +22,23 @@ const math = {
     transform_mat4: transform_mat4.default,
     cross: cross.default
   },
-  // XXX Keep this here for now for compatibility.
-  mat4,
+  mat4: {
+    multiply: mat4.multiply,
+    create: mat4.create,
+    perspective: mat4.perspective,
+    rotate: mat4.rotate,
+    translate: mat4.translate,
+    scale: mat4.scale,
+    identity: mat4.identity,
+    from_rotation: mat4.fromRotation,
+    look_at: mat4.lookAt,
+    target_to
+  },
   to_radian: (a) => a * Math.PI / 180,
   hex_to_vec
 };
 
-export { math };
-
-export function look_at(
+function target_to(
   out, [eyex, eyey, eyez], target, [upx, upy, upz]
 ) {
   let y0 = target[0] - eyex;

@@ -1,5 +1,5 @@
 import { create_float_buffer, create_index_buffer } from './context.js';
-import { math, look_at } from './math.js';
+import { math } from './math.js';
 import { zero_vector, unit_vector } from '../misc/defaults.js';
 import { materials } from '../materials/materials.js';
 
@@ -50,7 +50,7 @@ class Entity {
   }
 
   look_at(vec, up = this.up) {
-    look_at(this.model_view_matrix, this.position, vec, up);
+    math.mat4.target_to(this.model_view_matrix, this.position, vec, up);
   }
 
   get right() {
@@ -116,13 +116,13 @@ class Entity {
     const out = math.mat4.create();
     const look_at_vect = [];
     math.vec3.add(look_at_vect, this.position, this.forward);
-    math.mat4.lookAt(out, this.position, look_at_vect, this.up);
+    math.mat4.look_at(out, this.position, look_at_vect, this.up);
     return out;
   }
 
   rotate_along(vec, rad) {
     const rotation_matrix = math.mat4.create();
-    math.mat4.fromRotation(rotation_matrix, rad, vec);
+    math.mat4.from_rotation(rotation_matrix, rad, vec);
     math.mat4.multiply(
       this.model_view_matrix, this.model_view_matrix, rotation_matrix
     );
