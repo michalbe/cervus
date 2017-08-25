@@ -54,30 +54,17 @@ class Entity {
   }
 
   get right() {
-    const out = [
-      this.model_view_matrix[0],
-      this.model_view_matrix[1],
-      this.model_view_matrix[2]
-    ];
-    // XXX Is this needed?
+    const out = this.model_view_matrix.slice(0, 3);
     return math.vec3.normalize(out, out);
   }
 
   get forward() {
-    const out = [
-      this.model_view_matrix[4],
-      this.model_view_matrix[5],
-      this.model_view_matrix[6]
-    ];
+    const out = this.model_view_matrix.slice(4, 7);
     return math.vec3.normalize(out, out);
   }
 
   get up() {
-    const out = [
-      this.model_view_matrix[8],
-      this.model_view_matrix[9],
-      this.model_view_matrix[10]
-    ];
+    const out = this.model_view_matrix.slice(8, 11);
     return math.vec3.normalize(out, out);
   }
 
@@ -90,11 +77,7 @@ class Entity {
   }
 
   get position() {
-    return [
-      this.model_view_matrix[12],
-      this.model_view_matrix[13],
-      this.model_view_matrix[14]
-    ];
+    return this.model_view_matrix.slice(12, 15);
   }
 
   set scale(vec) {
