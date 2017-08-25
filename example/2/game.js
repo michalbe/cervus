@@ -14,7 +14,7 @@ game.camera.position = [0, 1, 2];
 game.camera.rotate_rl(Math.PI);
 
 const cube = new Cervus.shapes.Box({
-  material: 'phong',
+  material: new Cervus.materials.Phong
 });
 
 cube.color = "#BADA55";
