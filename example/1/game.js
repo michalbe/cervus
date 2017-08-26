@@ -1,6 +1,6 @@
 /* global Cervus */
 
-const material = new Cervus.materials.Phong();
+const material = Cervus.materials.phong;
 
 const game = new Cervus.Game({
   width: window.innerWidth,
@@ -34,7 +34,7 @@ const cube = new Cervus.shapes.Box({
 });
 cube.position = [-3, 0, -12];
 cube.color = "#BADA55";
-cube.scale = [2, 1, 2];
+cube.scale = [2, 3, 2];
 game.add(cube);
 
 const sphere = new Cervus.shapes.Sphere({
@@ -100,7 +100,7 @@ const vox1 = new Cervus.shapes.Box({
 
 const vox2 = new Cervus.shapes.Box({
   color: '#00ff00',
-  material: new Cervus.materials.Basic,
+  material: Cervus.materials.basic,
   position: [3, 2, -3]
 });
 
@@ -118,6 +118,8 @@ game.add(parent_group);
 game.add_frame_listener('cube_rotation', (delta) => {
   // cube.rotation[0] = sphere.rotation[0] = group.rotation[2] = delta / 1000;
   cube.rotate_ud(16/1000);
+  sphere.rotate_ud(16/1000);
+  sphere.rotate_rl(16/1000);
   if (cube2.position[0] > 5) {
     dir = -1;
   } else if (cube2.position[0] < -5) {
