@@ -34,7 +34,7 @@ const cube = new Cervus.shapes.Box({
 });
 cube.position = [-3, 0, -12];
 cube.color = "#BADA55";
-cube.scale = [2, 3, 2];
+cube.local_scale = [2, 3, 2];
 game.add(cube);
 
 const sphere = new Cervus.shapes.Sphere({
@@ -43,7 +43,7 @@ const sphere = new Cervus.shapes.Sphere({
   // rotation: [ Math.PI/4, 0, Math.PI/4 ]
 });
 sphere.position = [3, 0, -10];
-sphere.scale = [ 0.5, 0.5, 0.5 ];
+sphere.local_scale = [ 0.5, 0.5, 0.5 ];
 
 game.add(sphere);
 
@@ -57,7 +57,7 @@ let dir = 1;
 // plane.position[2] = -50;
 // plane.position[1] = -2;
 // // plane.rotation[0] = -Math.PI/2 + 0.03;
-// plane.scale = [ 100, 1, 100 ];
+// plane.local_scale = [ 100, 1, 100 ];
 // game.add(plane);
 
 const plane3 = new Cervus.shapes.Plane({
@@ -66,7 +66,7 @@ const plane3 = new Cervus.shapes.Plane({
 });
 
 plane3.position = [0, -1.5, 0];
-plane3.scale = [ 150, 1, 150 ];
+plane3.local_scale = [ 150, 1, 150 ];
 game.add(plane3);
 //
 // const plane4 = new Cervus.shapes.Plane({
@@ -77,7 +77,7 @@ game.add(plane3);
 // plane4.position[1] = -15;
 // plane4.position[2] = 0;
 // // plane4.rotation[0] = Math.PI/2;
-// plane4.scale = [ 10, 10, 1 ];
+// plane4.local_scale = [ 10, 10, 1 ];
 // game.add(plane4);
 
 const plane2 = new Cervus.shapes.Plane({
@@ -86,13 +86,13 @@ const plane2 = new Cervus.shapes.Plane({
 });
 plane2.position = [ 3, -1, -13];
 // plane2.rotation[0] = -Math.PI/2;
-plane2.scale = [ 2, 1, 2 ];
+plane2.local_scale = [ 2, 1, 2 ];
 game.add(plane2);
 
 const parent_group = new Cervus.Entity({});
 const group = new Cervus.Entity({});
 const vox1 = new Cervus.shapes.Box({
-  scale: [0.5, 0.5, 0.5],
+  local_scale: [0.5, 0.5, 0.5],
   color: '#0000ff',
   material: material,
   position: [1, 1, -1]
