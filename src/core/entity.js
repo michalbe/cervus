@@ -8,8 +8,10 @@ class Entity {
     this.local_matrix = math.mat4.create();
     this.world_matrix = math.mat4.create();
 
+    this._local_scale = unit_vector.slice();
+
     this.position = options.position || zero_vector.slice();
-    this.scale = options.scale || unit_vector.slice();
+    this.local_scale = options.local_scale || unit_vector.slice();
     this.origin = options.origin || zero_vector.slice();
 
     this.material = options.material;
@@ -84,13 +86,20 @@ class Entity {
     return this.local_matrix.slice(12, 15);
   }
 
-  set scale(vec) {
-    this._scale = vec;
-    math.mat4.scale(this.local_matrix, this.local_matrix, vec);
+  set local_scale(vec) {
+    // Scale is given in values relative to the initial (1, 1, 1) scaling.
+    // Divide vec by the current scale to get the relative scaling.  Store the
+    // result temporarily in this._local_scale to avoid creating a new vector.
+    math.vec3.divide(this._local_scale, vec, this._local_scale);
+    math.mat4.scale(
+      this.local_matrix, this.local_matrix, this._local_scale
+    );
+    // Store the current scale for future scaling.
+    this._local_scale = vec;
   }
 
-  get scale() {
-    return this._scale;
+  get local_scale() {
+    return this._local_scale;
   }
 
   set color(hex) {

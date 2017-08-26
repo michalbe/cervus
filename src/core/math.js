@@ -5,6 +5,7 @@ import {
   angle,
   subtract,
   add,
+  divide,
   scale,
   transformMat4,
   cross
@@ -34,6 +35,7 @@ export const math = {
     angle,
     subtract,
     add,
+    divide,
     scale,
     transform_mat4: transformMat4,
     cross
