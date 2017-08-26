@@ -115,4 +115,5 @@ class Phong {
   }
 }
 
-export { Phong };
+const phong = new Phong();
+export { phong };
