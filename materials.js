@@ -1,2 +1,2 @@
-export { Basic } from './src/materials/basic.js';
-export { Phong } from './src/materials/phong.js';
+export { basic } from './src/materials/basic.js';
+export { phong } from './src/materials/phong.js';

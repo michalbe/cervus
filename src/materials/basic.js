@@ -85,4 +85,5 @@ class Basic {
   }
 }
 
-export { Basic };
+const basic = new Basic();
+export { basic };
