@@ -85,7 +85,12 @@ class Entity {
   }
 
   set scale(vec) {
+    this._scale = vec;
     math.mat4.scale(this.local_matrix, this.local_matrix, vec);
+  }
+
+  get scale() {
+    return this._scale;
   }
 
   set color(hex) {
