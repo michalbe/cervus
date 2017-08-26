@@ -13,13 +13,15 @@ const game = new Cervus.Game({
 game.camera.position = [0, 1, 2];
 game.camera.rotate_rl(Math.PI);
 
+const group = new Cervus.Entity();
 const cube = new Cervus.shapes.Box({
-  material: new Cervus.materials.Phong
+  material: Cervus.materials.phong
 });
-
 cube.color = "#BADA55";
 cube.scale = [1, 1, 1];
-game.add(cube);
+group.add(cube);
+
+game.add(group);
 
 game.add_frame_listener('yo', delta => {
   //console.log(game.camera.position);
