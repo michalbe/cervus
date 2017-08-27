@@ -18,7 +18,6 @@ import {
   translate,
   fromRotationTranslationScale,
   lookAt,
-  targetTo
 } from 'gl-matrix/src/gl-matrix/mat4';
 
 import {
