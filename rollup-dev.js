@@ -1,4 +1,3 @@
-import commonjs from 'rollup-plugin-commonjs';
 import resolve from 'rollup-plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
 import serve from 'rollup-plugin-serve'
@@ -9,16 +8,7 @@ export default {
   format: 'umd',
   moduleName: 'Cervus',
   plugins: [
-    commonjs({
-      // non-CommonJS modules will be ignored, but you can also
-      // specifically include/exclude files
-      include: 'node_modules/**',  // Default: undefined
-    }),
-    resolve({
-      customResolveOptions: {
-        moduleDirectory: 'node_modules'
-      }
-    }),
+    resolve(),
     babel({
       exclude: 'node_modules/**'
     }),
