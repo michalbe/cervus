@@ -5,7 +5,7 @@ const game = new Cervus.Game({
   height: window.innerHeight,
   keyboard_controlled_camera: true,
   light_position: [-1, 2, 5],
-  // fps: 10
+  fps: 10
 });
 
 // By default all entities face the user.
@@ -31,15 +31,23 @@ group.add(cube);
 
 game.add(group);
 
-let times = 100;
-const rotate_cube = () => {
-  times--;
-  //console.log(game.camera.position);
-  // game.camera.look_at(cube.position);
-  cube.rotate_rl(16/1000);
-  if (!times) {
-    game.remove_frame_action(rotate_cube);
-  }
-};
+// let times = 100;
+// const rotate_cube = () => {
+//   times--;
+//   //console.log(game.camera.position);
+//   // game.camera.look_at(cube.position);
+//   cube.rotate_rl(16/1000);
+//   if (!times) {
+//     game.remove_frame_action(rotate_cube);
+//   }
+// };
 
-game.add_frame_action(rotate_cube);
+setTimeout(() => {
+  const tween = new Cervus.tweens.BasicTween({
+    from: cube.position,
+    to: [0, 5, 4],
+    time: 2000,
+    game: game
+  });
+
+}, 200);
