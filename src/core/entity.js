@@ -7,6 +7,7 @@ class Entity {
   constructor(options = {}) {
     this.matrix = math.mat4.create();
     this.world_matrix = math.mat4.create();
+    this.world_to_local = math.mat4.create();
 
     this._scale = unit_vector.slice();
     this._rotation = math.quat.create();
@@ -124,6 +125,40 @@ class Entity {
     return out;
   }
 
+  look_at(target_position) {
+    // Find the direction we're looking at. target_position must be given in
+    // the current entity's coordinate space.  Use target's world_matrix and
+    // the current entity's world_to_local to go from target's space to the
+    // current entity space.
+    const forward = zero_vector.slice();
+    math.vec3.subtract(forward, target_position, this.position);
+    math.vec3.normalize(forward, forward);
+
+    // Assume that the world's horizontal plane is the frame of reference for
+    // the look_at rotations. This should be fine for most game cameras which
+    // don't need to roll.
+
+    // Find left by projecting forward onto the world's horizontal plane and
+    // rotating it 90 degress counter-clockwise.
+    const left = math.vec3.from_values(forward[0], 0, forward[2]);
+    const rot = math.mat4.create();
+    math.mat4.rotate(rot, rot, Math.PI/2, [0, 1, 0]);
+    math.vec3.transform_mat4(left, left, rot);
+    math.vec3.normalize(left, left);
+
+    // Find up by computing the cross-product of forward and left according to
+    // the right-hand rule.
+    const up = zero_vector.slice();
+    math.vec3.cross(up, forward, left);
+
+    // Create a quaternion out of the three axes. The vectors represent axes:
+    // they are perpenticular and normalized.
+    const rotation = math.quat.create();
+    math.quat.set_axes(rotation, left, up, forward);
+
+    this.rotation = rotation;
+  }
+
   rotate_along(vec, rad) {
     const rotation = math.quat.create();
     math.quat.set_axis_angle(rotation, vec, rad);
@@ -131,8 +166,7 @@ class Entity {
     // Quaternion multiplication: A * B applies the A rotation first, B second,
     // relative to the coordinate system resulting from A.
     math.quat.multiply(rotation, this.rotation, rotation);
-    this._rotation = rotation;
-    math.mat4.compose(this.matrix, rotation, this.position, this.scale);
+    this.rotation = rotation;
   }
 
   rotate_rl(rad) {
@@ -217,10 +251,6 @@ class Entity {
       this.do_step(tick_length);
     }
 
-    if (!this.material && !this.entities.length) {
-      return;
-    }
-
     if (this.parent) {
       math.mat4.multiply(
         this.world_matrix, this.parent.world_matrix, this.matrix
@@ -228,6 +258,8 @@ class Entity {
     } else {
       this.world_matrix = this.matrix.slice();
     }
+
+    math.mat4.invert(this.world_to_local, this.world_matrix);
 
     this.entities.forEach(entity => entity.update());
   }
