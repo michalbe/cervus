@@ -5,12 +5,15 @@ import { hex_to_vec } from '../misc/utils.js';
 
 class Entity {
   constructor(options = {}) {
-    this.local_matrix = math.mat4.create();
+    this.matrix = math.mat4.create();
     this.world_matrix = math.mat4.create();
 
-    this.position = options.position || zero_vector.slice();
+    this._scale = unit_vector.slice();
+    this._rotation = math.quat.create();
+
     this.scale = options.scale || unit_vector.slice();
-    this.origin = options.origin || zero_vector.slice();
+    this.position = options.position || zero_vector.slice();
+    this.rotation = options.rotation || math.quat.create();
 
     this.material = options.material;
 
@@ -55,42 +58,40 @@ class Entity {
     }
   }
 
-  look_at(vec, up = this.up) {
-    math.mat4.target_to(this.local_matrix, this.position, vec, up);
-  }
-
-  get left() {
-    const out = this.local_matrix.slice(0, 3);
-    return math.vec3.normalize(out, out);
-  }
-
   get up() {
-    const out = this.local_matrix.slice(4, 7);
+    const out = this.matrix.slice(4, 7);
     return math.vec3.normalize(out, out);
   }
 
   get forward() {
-    const out = this.local_matrix.slice(8, 11);
+    const out = this.matrix.slice(8, 11);
     return math.vec3.normalize(out, out);
   }
 
   set position(vec) {
-    const offset = [];
-    math.vec3.subtract(offset, vec, this.position);
-    math.mat4.translate(this.local_matrix, this.local_matrix, offset);
+    math.mat4.compose(this.matrix, this.rotation, vec, this.scale);
   }
 
   get position() {
-    return this.local_matrix.slice(12, 15);
+    return this.matrix.slice(12, 15);
   }
 
   set scale(vec) {
     this._scale = vec;
-    math.mat4.scale(this.local_matrix, this.local_matrix, vec);
+    math.mat4.compose(this.matrix, this.rotation, this.position, vec);
   }
 
   get scale() {
     return this._scale;
+  }
+
+  set rotation(quaternion) {
+    this._rotation = quaternion;
+    math.mat4.compose(this.matrix, quaternion, this.position, this.scale);
+  }
+
+  get rotation() {
+    return this._rotation;
   }
 
   set color(hex) {
@@ -124,13 +125,14 @@ class Entity {
   }
 
   rotate_along(vec, rad) {
-    // Negate the origin vector so that we can go back.
-    const reverse_origin = this.origin.map(i => -i);
-    const rotation_matrix = math.mat4.create();
-    math.mat4.from_rotation(rotation_matrix, rad, vec);
-    math.mat4.translate(this.local_matrix, this.local_matrix, this.origin);
-    math.mat4.multiply(this.local_matrix, this.local_matrix, rotation_matrix);
-    math.mat4.translate(this.local_matrix, this.local_matrix, reverse_origin);
+    const rotation = math.quat.create();
+    math.quat.set_axis_angle(rotation, vec, rad);
+
+    // Quaternion multiplication: A * B applies the A rotation first, B second,
+    // relative to the coordinate system resulting from A.
+    math.quat.multiply(rotation, this.rotation, rotation);
+    this._rotation = rotation;
+    math.mat4.compose(this.matrix, rotation, this.position, this.scale);
   }
 
   rotate_rl(rad) {
@@ -144,7 +146,7 @@ class Entity {
   move_along(vec, dist) {
     const move = zero_vector.slice();
     math.vec3.scale(move, vec, dist);
-    math.mat4.translate(this.local_matrix, this.local_matrix, move);
+    math.mat4.translate(this.matrix, this.matrix, move);
   }
 
   move_r(dist) {
@@ -221,10 +223,10 @@ class Entity {
 
     if (this.parent) {
       math.mat4.multiply(
-        this.world_matrix, this.parent.world_matrix, this.local_matrix
+        this.world_matrix, this.parent.world_matrix, this.matrix
       );
     } else {
-      this.world_matrix = this.local_matrix.slice();
+      this.world_matrix = this.matrix.slice();
     }
 
     this.entities.forEach(entity => entity.update());
