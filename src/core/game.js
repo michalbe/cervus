@@ -19,7 +19,6 @@ const default_options = {
 class Game {
   constructor(options) {
     this.entities = [];
-    this.run = true;
 
     this.options = default_options;
 
@@ -69,7 +68,7 @@ class Game {
 
     this.actions = {};
 
-    this.tick((typeof performance !== 'undefined' && performance.now()) || 0);
+    this.tick(performance.now());
 
     gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
@@ -82,9 +81,6 @@ class Game {
     );
 
     gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
-
-    // gl.enable(gl.CULL_FACE);
-    // gl.enable(gl.BLEND);
   }
 
   stop() {
@@ -93,10 +89,15 @@ class Game {
 
   start() {
     this.running = true;
+    this.last_tick = performance.now();
+    window.requestAnimationFrame((tick_time) => this.tick(tick_time));
   }
 
   tick(tick_time) {
-    window.requestAnimationFrame((tick_time) => this.tick(tick_time));
+    if (this.running) {
+      window.requestAnimationFrame((tick_time) => this.tick(tick_time));
+    }
+
     const next_tick = this.last_tick + this.tick_length;
 
     if (tick_time > next_tick) {
@@ -124,12 +125,10 @@ class Game {
   }
 
   perform_ticks(ticks_qty) {
-    if (this.run) {
       for(var i=0; i < ticks_qty; i++) {
         this.last_tick = this.last_tick + this.tick_length;
-        this.update( this.last_tick );
+        this.update(this.last_tick);
       }
-    }
   }
 
   update(tick_time) {
@@ -146,20 +145,18 @@ class Game {
   }
 
   draw(ticks_qty) {
-      if (this.run) {
-        this.clear_color_vec = hex_to_vec(this.clear_color);
-        gl.clearColor(
-          this.clear_color_vec[0],
-          this.clear_color_vec[1],
-          this.clear_color_vec[2],
-          1
-        );
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        gl.viewport(0, 0, canvas.width, canvas.height);
-        // this.entities.forEach((entity) => entity.generate_shadow_map && entity.generate_shadow_map(ticks_qty));
-        // gl.viewport(0, 0, canvas.width, canvas.height);
-        this.entities.forEach((entity) => entity.render(ticks_qty));
-      }
+    this.clear_color_vec = hex_to_vec(this.clear_color);
+    gl.clearColor(
+      this.clear_color_vec[0],
+      this.clear_color_vec[1],
+      this.clear_color_vec[2],
+      1
+    );
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    // this.entities.forEach((entity) => entity.generate_shadow_map && entity.generate_shadow_map(ticks_qty));
+    // gl.viewport(0, 0, canvas.width, canvas.height);
+    this.entities.forEach((entity) => entity.render(ticks_qty));
   }
 
   add(entity) {
