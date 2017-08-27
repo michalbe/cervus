@@ -4,8 +4,8 @@
   "author": "Michał Budzyński <michal@virtualdesign.pl>",
   "repository": "git@github.com:michalbe/cervus.git",
   "scripts": {
-    "build": "./node_modules/.bin/rollup -c",
-    "dev": "./node_modules/.bin/rollup -c -w"
+    "prod": "./node_modules/.bin/rollup -c rollup-prod.js && printf \"Size gzipped: %s\n\" $(gzip dist/cervus.min.js --stdout | wc -c | awk '{print $1/1000\"K\"}')",
+    "dev": "./node_modules/.bin/rollup -c rollup-dev.js -w"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
@@ -15,6 +15,7 @@
     "eslint-config-defaults": "^9.0.0",
     "rollup": "0.42.0",
     "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-closure-compiler-js": "^1.0.5",
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-livereload": "^0.4.0",
     "rollup-plugin-node-resolve": "^3.0.0",
