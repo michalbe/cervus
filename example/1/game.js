@@ -104,7 +104,6 @@ const vox2 = new Cervus.shapes.Box({
   position: [3, 2, -3]
 });
 
-group.origin = [ -1, 2, 2 ];
 // group.position[2] = -15;
 // group.position[1] = -10;
 // game.add(group);

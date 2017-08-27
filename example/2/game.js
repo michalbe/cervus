@@ -10,7 +10,7 @@ const game = new Cervus.Game({
 
 // By default all entities face the user.
 // Rotate the camera to see the scene.
-game.camera.position = [0, 1, 2];
+game.camera.position = [0, 1, 4];
 game.camera.rotate_rl(Math.PI);
 
 const group = new Cervus.Entity();
