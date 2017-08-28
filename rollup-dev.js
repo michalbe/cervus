@@ -5,7 +5,7 @@ import livereload from 'rollup-plugin-livereload'
 
 export default {
   entry: 'src/main.js',
-  format: 'umd',
+  format: 'iife',
   moduleName: 'Cervus',
   plugins: [
     resolve(),
