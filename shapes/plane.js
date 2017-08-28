@@ -1,4 +1,4 @@
-import { Entity } from '../core/entity';
+import { Entity } from '../core';
 
 const vertices = [
   -1,  0,  1,
@@ -19,7 +19,7 @@ const normals = [
   0, 1, 0
 ];
 
-class Plane extends Entity {
+export class Plane extends Entity {
   constructor(options = {}) {
     options.vertices = vertices;
     options.indices = indices;
@@ -28,5 +28,3 @@ class Plane extends Entity {
     super(options);
   }
 }
-
-export { Plane };

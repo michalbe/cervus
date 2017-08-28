@@ -1,5 +1,5 @@
 import { create_float_buffer, create_index_buffer } from './context';
-import { vec3, mat4, quat } from './math';
+import { vec3, mat4, quat } from '../math';
 import { hex_to_vec } from '../utils';
 
 // When using arrow keys for rotation simulate the mouse delta of this value.
@@ -32,7 +32,7 @@ const default_options = {
   skip: false,
 };
 
-class Entity {
+export class Entity {
   constructor(options) {
     this.matrix = mat4.create();
     this.world_matrix = mat4.create();
@@ -285,5 +285,3 @@ class Entity {
   //   this.material_desc.generate_shadow_map && this.material_desc.generate_shadow_map(this);
   // }
 }
-
-export { Entity }

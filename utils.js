@@ -1,4 +1,4 @@
-export const hex_to_vec = (hex) => {
+export function hex_to_vec(hex) {
   if (hex.charAt(0) === '#') {
     hex = hex.substr(1);
   }
@@ -12,9 +12,9 @@ export const hex_to_vec = (hex) => {
   return hex.match(/.{1,2}/g).map((el) => {
     return parseFloat((parseInt(el, 16) / 255).toFixed(1));
   });
-};
+}
 
-export const vec_to_hex = (vec) => {
+export function vec_to_hex(vec) {
   return vec.reduce((sum, value) => {
     let val = (~~(value * 255)).toString(16);
 
@@ -24,4 +24,4 @@ export const vec_to_hex = (vec) => {
 
     return sum + val;
   }, '#');
-};
+}

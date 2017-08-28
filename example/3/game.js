@@ -1,6 +1,6 @@
 /* global Cervus */
 
-const game = new Cervus.Game({
+const game = new Cervus.core.Game({
   width: window.innerWidth,
   height: window.innerHeight,
   far: 1000

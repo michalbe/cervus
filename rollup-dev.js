@@ -3,7 +3,7 @@ import serve from 'rollup-plugin-serve'
 import livereload from 'rollup-plugin-livereload'
 
 export default {
-  input: './src/main.js',
+  input: 'index.js',
   output: {
     file: 'dist/cervus.js',
     format: 'iife',
