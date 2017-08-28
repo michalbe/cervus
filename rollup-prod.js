@@ -3,9 +3,12 @@ import babel from 'rollup-plugin-babel';
 import closure from 'rollup-plugin-closure-compiler-js';
 
 export default {
-  entry: 'src/main.js',
-  format: 'iife',
-  moduleName: 'Cervus',
+  input: './src/main.js',
+  output: {
+    file: 'dist/cervus.min.js',
+    format: 'iife',
+    name: 'Cervus',
+  },
   plugins: [
     resolve(),
     babel({
@@ -13,5 +16,4 @@ export default {
     }),
     closure(),
   ],
-  dest: 'dist/cervus.min.js'
 };
