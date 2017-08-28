@@ -1,4 +1,4 @@
-import { create_program_object, create_shader_object, gl } from '../core/context.js';
+import { create_program_object, create_shader_object, gl } from '../core/context';
 
 const vertex_code =`
   precision mediump float;

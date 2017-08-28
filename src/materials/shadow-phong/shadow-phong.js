@@ -1,8 +1,8 @@
-import { vertex_code, fragment_code } from './shader.js';
-import { generator_vertex_code, generator_fragment_code } from './map-shader.js';
-import { create_program_object, create_shader_object, gl } from '../../core/context.js';
+import { vertex_code, fragment_code } from './shader';
+import { generator_vertex_code, generator_fragment_code } from './map-shader';
+import { create_program_object, create_shader_object, gl } from '../../core/context';
 import { vec3, mat4, vec2, glMatrix } from 'gl-matrix';
-import { Camera } from '../../core/camera.js';
+import { Camera } from '../../core/camera';
 
 class ShadowPhong {
 

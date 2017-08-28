@@ -1,6 +1,6 @@
-import { Box } from './box.js';
-import { Plane } from './plane.js';
-import { Sphere } from './sphere.js';
+import { Box } from './box';
+import { Plane } from './plane';
+import { Sphere } from './sphere';
 
 const shapes = { Box, Plane, Sphere };
 
