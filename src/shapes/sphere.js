@@ -1,4 +1,4 @@
-import { Entity } from '../core/entity.js';
+import { Entity } from '../core/entity';
 
 const t = 0.5 + Math.sqrt(5) / 2;
 const vertices = [

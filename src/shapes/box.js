@@ -1,4 +1,4 @@
-import { Entity } from '../core/entity.js';
+import { Entity } from '../core/entity';
 
 const vertices = [
   0.5, 0.5, 0.5,

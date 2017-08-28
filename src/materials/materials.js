@@ -1,5 +1,5 @@
-import { basic } from './basic.js'
-import { phong } from './phong.js'
+import { basic } from './basic'
+import { phong } from './phong'
 // import { ShadowPhong } from './shadow-phong/shadow-phong.js'
 
 const materials = {

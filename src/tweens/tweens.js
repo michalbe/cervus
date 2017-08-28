@@ -1,7 +1,7 @@
-import { BasicTween } from './basic-tween.js';
-import { VecTween } from './vec-tween.js';
-import { ColorTween } from './color-tween.js';
-import { ValueTween } from './value-tween.js';
+import { BasicTween } from './basic-tween';
+import { VecTween } from './vec-tween';
+import { ColorTween } from './color-tween';
+import { ValueTween } from './value-tween';
 
 const tweens = {
   BasicTween,

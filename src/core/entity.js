@@ -1,6 +1,6 @@
-import { create_float_buffer, create_index_buffer } from './context.js';
-import { vec3, mat4, quat } from './math.js';
-import { hex_to_vec } from '../utils.js';
+import { create_float_buffer, create_index_buffer } from './context';
+import { vec3, mat4, quat } from './math';
+import { hex_to_vec } from '../utils';
 
 class Entity {
   constructor(options = {}) {
