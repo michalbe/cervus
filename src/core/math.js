@@ -6,7 +6,8 @@ import {
   add,
   scale,
   transformMat4,
-  cross
+  cross,
+  lerp
 } from 'gl-matrix/src/gl-matrix/vec3';
 
 
@@ -40,7 +41,8 @@ export const vec3 = {
   add,
   scale,
   transform_mat4: transformMat4,
-  cross
+  cross,
+  lerp
 };
 
 export const mat4 = {
