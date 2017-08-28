@@ -103,7 +103,7 @@ fetch('models/scene.json')
   });
 });
 
-game.add_frame_listener('elo', () => {
+game.add_frame_action(() => {
   // game.light_position = game.camera.position;
 
   // meshes.forEach((mesh, i) => {
