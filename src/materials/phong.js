@@ -111,7 +111,7 @@ class Phong {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
 
     gl.uniform3fv(this.uniforms.lp, game.light_position);
-    gl.uniform2fv(this.uniforms.li, [1 - game.light_intensity, game.light_intensity]);
+    gl.uniform2fv(this.uniforms.li, [game.light_intensity, 1 - game.light_intensity]);
   }
 }
 

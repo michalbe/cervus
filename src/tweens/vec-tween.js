@@ -1,10 +1,10 @@
-import { math } from '../core/math';
+import { vec3 } from '../core/math';
 import { BasicTween } from './basic-tween';
 
 class VecTween extends BasicTween {
   action() {
     const _from = [];
-    math.vec3.lerp(_from, this.from, this.to, this.current_step);
+    vec3.lerp(_from, this.from, this.to, this.current_step);
     this.object[this.property] = _from;
   }
 
