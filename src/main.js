@@ -1,13 +1,5 @@
-import { Game } from './core/game.js';
-import { Entity } from './core/entity.js';
-import { math } from './core/math';
-import { materials } from './materials/materials.js';
-import { shapes } from './shapes/shapes.js';
-
-export {
-  Game,
-  Entity,
-  shapes,
-  math,
-  materials
-}
+export { Game } from './core/game';
+export { Entity } from './core/entity';
+export { vec3, mat4, quat, to_radian } from './core/math';
+export { materials } from './materials/materials';
+export { shapes } from './shapes/shapes';

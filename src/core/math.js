@@ -1,8 +1,7 @@
+const V = Float32Array;
+
 import {
-  fromValues,
   normalize,
-  distance,
-  angle,
   subtract,
   add,
   scale,
@@ -17,9 +16,8 @@ import {
   perspective,
   multiply,
   translate,
-  rotate,
   fromRotationTranslationScale,
-  lookAt,
+  lookAt
 } from 'gl-matrix/src/gl-matrix/mat4';
 
 import {
@@ -30,39 +28,41 @@ import {
   normalize as quat_normalize
 } from 'gl-matrix/src/gl-matrix/quat';
 
-import { hex_to_vec } from '../misc/utils.js';
-
-export const math = {
-  vec3: {
-    from_values: fromValues,
-    normalize,
-    distance,
-    angle,
-    subtract,
-    add,
-    scale,
-    transform_mat4: transformMat4,
-    cross
-  },
-  mat4: {
-    create,
-    invert,
-    perspective,
-    multiply,
-    translate,
-    rotate,
-    compose: fromRotationTranslationScale,
-    look_at: lookAt,
-  },
-  quat: {
-    create: quat_create,
-    multiply: quat_multiply,
-    set_axes,
-    set_axis_angle: setAxisAngle,
-  },
-  to_radian: (a) => a * Math.PI / 180,
-  hex_to_vec
+export const vec3 = {
+  zero: V.of(0, 0, 0),
+  unit: V.of(1, 1, 1),
+  left: V.of(1, 0, 0),
+  up: V.of(0, 1, 0),
+  forward: V.of(0, 0, 1),
+  of: (...vals) => V.of(...vals),
+  normalize,
+  subtract,
+  add,
+  scale,
+  transform_mat4: transformMat4,
+  cross
 };
+
+export const mat4 = {
+  create,
+  invert,
+  perspective,
+  multiply,
+  translate,
+  compose: fromRotationTranslationScale,
+  look_at: lookAt,
+};
+
+export const quat = {
+  create: quat_create,
+  multiply: quat_multiply,
+  set_axes,
+  set_axis_angle: setAxisAngle,
+};
+
+export function to_radian(a) {
+  return a * Math.PI / 180;
+}
 
 // XXX gl-matrix has a bug in quat.setAxes:
 // https://github.com/toji/gl-matrix/issues/234

@@ -51,7 +51,6 @@ let dir = 1;
 //
 // const plane = new Cervus.shapes.Plane({
 //   material: material,
-//   color: Cervus.math.hex_to_vec('#CCCCCC')
 // });
 //
 // plane.position[2] = -50;
@@ -71,7 +70,6 @@ game.add(plane3);
 //
 // const plane4 = new Cervus.shapes.Plane({
 //   material: material,
-//   color: Cervus.math.hex_to_vec('#00FF00')
 // });
 //
 // plane4.position[1] = -15;
