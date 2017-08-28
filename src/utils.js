@@ -13,3 +13,15 @@ export const hex_to_vec = (hex) => {
     return parseFloat((parseInt(el, 16) / 255).toFixed(1));
   });
 };
+
+export const vec_to_hex = (vec) => {
+  return vec.reduce((sum, value) => {
+    let val = (~~(value * 255)).toString(16);
+
+    if (val.length === 1) {
+      val = '0' + val;
+    }
+
+    return sum + val;
+  }, '#');
+};

@@ -5,7 +5,8 @@ const game = new Cervus.Game({
   height: window.innerHeight,
   keyboard_controlled_camera: true,
   light_position: [-1, 2, 5],
-  // fps: 10
+  light_intensity: 0.9
+  // fps: 1
 });
 
 // By default all entities face the user.
@@ -32,30 +33,61 @@ group.add(cube);
 
 game.add(group);
 
-// let times = 100;
-// const rotate_cube = () => {
-//   times--;
-//   //console.log(game.camera.position);
-//   // game.camera.look_at(cube.position);
-//   cube.rotate_rl(16/1000);
-//   if (!times) {
-//     game.remove_frame_action(rotate_cube);
-//   }
-// };
-
-
 game.add_frame_action(() => {
   game.camera.look_at(cube.position);
 });
 
-const tween = new Cervus.tweens.BasicTween({
+const tween = new Cervus.tweens.VecTween({
   object: cube,
   property: 'position',
-  to: [0, 1, -10],
-  time: 2000,
+  to: [0, 1, -5],
+  time: 3000,
+  game: game
+});
+
+// setTimeout(()=> {
+//   let time = new Date();
+//   tween.start().then(() => console.log('done!', new Date() - time));
+// }, 1000);
+
+const color_tween = new Cervus.tweens.ColorTween({
+  object: cube,
+  property: 'color',
+  to: '#ff00ff',
+  time: 600,
+  game: game
+});
+
+const color_tween2 = new Cervus.tweens.ColorTween({
+  object: cube,
+  property: 'color',
+  to: '#0000ff',
+  time: 600,
+  game: game
+});
+
+// setTimeout(()=> {
+//   let time = new Date();
+//   color_tween.start().then(() => {
+//     color_tween2.start().then(() => {
+//       color_tween.start().then(() => {
+//         console.log('color done!', new Date() - time)
+//       });
+//     });
+//   });
+// }, 1000);
+
+const light_tween= new Cervus.tweens.ValueTween({
+  object: game,
+  property: 'light_intensity',
+  to: 0.1,
+  time: 600,
   game: game
 });
 
 setTimeout(()=> {
-  tween.start().then(() => console.log('done!'));
+  let time = new Date();
+  light_tween.start().then(() => {
+    console.log('color done!', new Date() - time)
+  });
 }, 1000);
