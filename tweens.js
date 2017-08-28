@@ -1,3 +1,1 @@
-export {
-  BasicTween, ColorTween, ValueTween, VecTween
-} from './src/tweens/index';
+export * from './src/tweens/index';
