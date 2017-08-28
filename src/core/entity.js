@@ -2,7 +2,7 @@ import { create_float_buffer, create_index_buffer } from './context';
 import { vec3, mat4, quat } from './math';
 import { hex_to_vec } from '../utils';
 
-class Entity {
+export default class Entity {
   constructor(options = {}) {
     this.matrix = mat4.create();
     this.world_matrix = mat4.create();
@@ -278,5 +278,3 @@ class Entity {
   //   this.material_desc.generate_shadow_map && this.material_desc.generate_shadow_map(this);
   // }
 }
-
-export { Entity }

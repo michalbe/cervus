@@ -1,7 +1,7 @@
 import { vec3 } from '../core/math';
-import { BasicTween } from './basic-tween';
+import BasicTween from './basic-tween';
 
-class VecTween extends BasicTween {
+export default class VecTween extends BasicTween {
   action() {
     const _from = [];
     vec3.lerp(_from, this.from, this.to, this.current_step);
@@ -13,5 +13,3 @@ class VecTween extends BasicTween {
     this.from = this.object[this.property].slice();
   }
 }
-
-export { VecTween }

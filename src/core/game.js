@@ -1,7 +1,7 @@
 import { gl, canvas } from './context';
 import { hex_to_vec } from '../utils';
 import { vec3, mat4, to_radian } from './math';
-import { Entity } from './entity';
+import Entity from './entity';
 
 const default_options = {
   width: 800,
@@ -15,7 +15,7 @@ const default_options = {
   light_intensity: 0.6
 };
 
-class Game {
+export default class Game {
   constructor(options) {
     this.entities = [];
 
@@ -165,5 +165,3 @@ class Game {
     this.entities.push(entity);
   }
 }
-
-export { Game };

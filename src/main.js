@@ -1,6 +1,6 @@
-export { Game } from './core/game';
-export { Entity } from './core/entity';
+export { default as Game } from './core/game';
+export { default as Entity } from './core/entity';
 export { vec3, mat4, quat, to_radian } from './core/math';
-export { materials } from './materials/materials';
-export { shapes } from './shapes/shapes';
-export{ tweens } from './tweens/tweens';
+export { basic, phong } from './materials/index';
+export { Box, Plane, Sphere } from './shapes/index';
+export { BasicTween, ColorTween, ValueTween, VecTween } from './tweens/index';
