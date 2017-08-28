@@ -1,4 +1,3 @@
-import { math } from '../core/math';
 import { BasicTween } from './basic-tween';
 
 class ValueTween extends BasicTween {
