@@ -1,4 +1,4 @@
-class BasicTween {
+export default class BasicTween {
   constructor(options) {
     this.to = options.to;
     this.time = options.time || 1000;
@@ -38,5 +38,3 @@ class BasicTween {
     });
   }
 }
-
-export { BasicTween }

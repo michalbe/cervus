@@ -1,8 +1,8 @@
 import { vec_to_hex, hex_to_vec } from '../utils';
 import { vec3 } from '../core/math';
-import { BasicTween } from './basic-tween';
+import BasicTween from './basic-tween';
 
-class ColorTween extends BasicTween {
+export default class ColorTween extends BasicTween {
   action() {
     const _from = [];
     vec3.lerp(_from, this.from, this.to, this.current_step);
@@ -17,5 +17,3 @@ class ColorTween extends BasicTween {
     this.to = hex_to_vec(this.initial_to);
   }
 }
-
-export { ColorTween }

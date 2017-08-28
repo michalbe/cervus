@@ -1,6 +1,6 @@
 /* global Cervus */
 
-const material = Cervus.materials.phong;
+const material = Cervus.PhongMaterial;
 
 const game = new Cervus.Game({
   width: window.innerWidth,
@@ -15,21 +15,21 @@ game.camera.position = [0, 1, 2];
 game.camera.rotate_rl(Math.PI);
 
 
-const cube2 = new Cervus.shapes.Box({
+const cube2 = new Cervus.Box({
   material: material
 });
 cube2.position = [ 5, 3, -10 ];
 cube2.color = "#FF00FF";
 game.add(cube2);
 
-const cube8 = new Cervus.shapes.Box({
+const cube8 = new Cervus.Box({
   material: material
 });
 cube8.position = [0, 0, -5];
 cube8.color = "#ffffff";
 game.add(cube8);
 
-const cube = new Cervus.shapes.Box({
+const cube = new Cervus.Box({
   material: material
 });
 cube.position = [-3, 0, -12];
@@ -37,7 +37,7 @@ cube.color = "#BADA55";
 cube.scale = [2, 3, 2];
 game.add(cube);
 
-const sphere = new Cervus.shapes.Sphere({
+const sphere = new Cervus.Sphere({
   material: material,
   color: '#ff0000',
   // rotation: [ Math.PI/4, 0, Math.PI/4 ]
@@ -49,7 +49,7 @@ game.add(sphere);
 
 let dir = 1;
 //
-// const plane = new Cervus.shapes.Plane({
+// const plane = new Cervus.Plane({
 //   material: material,
 // });
 //
@@ -59,7 +59,7 @@ let dir = 1;
 // plane.scale = [ 100, 1, 100 ];
 // game.add(plane);
 
-const plane3 = new Cervus.shapes.Plane({
+const plane3 = new Cervus.Plane({
   material: material,
   color: '#CCCCCC'
 });
@@ -68,7 +68,7 @@ plane3.position = [0, -1.5, 0];
 plane3.scale = [ 150, 1, 150 ];
 game.add(plane3);
 //
-// const plane4 = new Cervus.shapes.Plane({
+// const plane4 = new Cervus.Plane({
 //   material: material,
 // });
 //
@@ -78,7 +78,7 @@ game.add(plane3);
 // plane4.scale = [ 10, 10, 1 ];
 // game.add(plane4);
 
-const plane2 = new Cervus.shapes.Plane({
+const plane2 = new Cervus.Plane({
   material: material,
   color: '#cc00cc',
 });
@@ -89,16 +89,16 @@ game.add(plane2);
 
 const parent_group = new Cervus.Entity({});
 const group = new Cervus.Entity({});
-const vox1 = new Cervus.shapes.Box({
+const vox1 = new Cervus.Box({
   scale: [0.5, 0.5, 0.5],
   color: '#0000ff',
   material: material,
   position: [1, 1, -1]
 });
 
-const vox2 = new Cervus.shapes.Box({
+const vox2 = new Cervus.Box({
   color: '#00ff00',
-  material: Cervus.materials.basic,
+  material: Cervus.BasicMaterial,
   position: [3, 2, -3]
 });
 

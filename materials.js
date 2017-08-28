@@ -1,2 +1,1 @@
-export { basic } from './src/materials/basic';
-export { phong } from './src/materials/phong';
+export * from './src/materials/index';

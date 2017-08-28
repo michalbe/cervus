@@ -1,6 +1,6 @@
-export { Game } from './core/game';
-export { Entity } from './core/entity';
-export { vec3, mat4, quat, to_radian } from './core/math';
-export { materials } from './materials/materials';
-export { shapes } from './shapes/shapes';
-export{ tweens } from './tweens/tweens';
+export { default as Game } from './core/game';
+export { default as Entity } from './core/entity';
+export * from './core/math';
+export * from './materials/index';
+export * from './shapes/index';
+export * from './tweens/index';
