@@ -1,8 +1,7 @@
-import { gl, canvas } from './context.js';
-import { hex_to_vec } from '../misc/utils.js';
-import { zero_vector } from '../misc/defaults.js';
-import { math } from './math.js';
-import { Entity } from './entity.js';
+import { gl, canvas } from './context';
+import { hex_to_vec } from '../utils';
+import { vec3, mat4, to_radian } from './math';
+import { Entity } from './entity';
 
 const default_options = {
   width: 800,
@@ -12,7 +11,7 @@ const default_options = {
   autostart: true,
   keyboard_controlled_camera: false,
   clear_color: '#FFFFFF',
-  light_position: zero_vector.slice(),
+  light_position: vec3.zero.slice(),
   light_intensity: 0.4
 };
 
@@ -28,12 +27,12 @@ class Game {
 
     this.camera.game = this;
 
-    this.projMatrix = math.mat4.create();
-    this.viewMatrix = math.mat4.create();
+    this.projMatrix = mat4.create();
+    this.viewMatrix = mat4.create();
 
-    math.mat4.perspective(
+    mat4.perspective(
       this.projMatrix,
-      math.to_radian(90),
+      to_radian(90),
       canvas.width / canvas.height,
       0.35,
       85.0

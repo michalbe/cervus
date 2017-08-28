@@ -1,20 +1,19 @@
 import { create_float_buffer, create_index_buffer } from './context.js';
-import { math } from './math.js';
-import { zero_vector, unit_vector } from '../misc/defaults.js';
-import { hex_to_vec } from '../misc/utils.js';
+import { vec3, mat4, quat } from './math.js';
+import { hex_to_vec } from '../utils.js';
 
 class Entity {
   constructor(options = {}) {
-    this.matrix = math.mat4.create();
-    this.world_matrix = math.mat4.create();
-    this.world_to_local = math.mat4.create();
+    this.matrix = mat4.create();
+    this.world_matrix = mat4.create();
+    this.world_to_local = mat4.create();
 
-    this._scale = unit_vector.slice();
-    this._rotation = math.quat.create();
+    this._scale = vec3.unit.slice();
+    this._rotation = quat.create();
 
-    this.scale = options.scale || unit_vector.slice();
-    this.position = options.position || zero_vector.slice();
-    this.rotation = options.rotation || math.quat.create();
+    this.scale = options.scale || vec3.unit.slice();
+    this.position = options.position || vec3.zero.slice();
+    this.rotation = options.rotation || quat.create();
 
     this.material = options.material;
 
@@ -61,16 +60,16 @@ class Entity {
 
   get up() {
     const out = this.matrix.slice(4, 7);
-    return math.vec3.normalize(out, out);
+    return vec3.normalize(out, out);
   }
 
   get forward() {
     const out = this.matrix.slice(8, 11);
-    return math.vec3.normalize(out, out);
+    return vec3.normalize(out, out);
   }
 
   set position(vec) {
-    math.mat4.compose(this.matrix, this.rotation, vec, this.scale);
+    mat4.compose(this.matrix, this.rotation, vec, this.scale);
   }
 
   get position() {
@@ -79,7 +78,7 @@ class Entity {
 
   set scale(vec) {
     this._scale = vec;
-    math.mat4.compose(this.matrix, this.rotation, this.position, vec);
+    mat4.compose(this.matrix, this.rotation, this.position, vec);
   }
 
   get scale() {
@@ -88,7 +87,7 @@ class Entity {
 
   set rotation(quaternion) {
     this._rotation = quaternion;
-    math.mat4.compose(this.matrix, quaternion, this.position, this.scale);
+    mat4.compose(this.matrix, quaternion, this.position, this.scale);
   }
 
   get rotation() {
@@ -120,8 +119,8 @@ class Entity {
 
   get_view_matrix(out) {
     const look_at_vect = [];
-    math.vec3.add(look_at_vect, this.position, this.forward);
-    math.mat4.look_at(out, this.position, look_at_vect, this.up);
+    vec3.add(look_at_vect, this.position, this.forward);
+    mat4.look_at(out, this.position, look_at_vect, this.up);
     return out;
   }
 
@@ -130,69 +129,73 @@ class Entity {
     // the current entity's coordinate space.  Use target's world_matrix and
     // the current entity's world_to_local to go from target's space to the
     // current entity space.
-    const forward = zero_vector.slice();
-    math.vec3.subtract(forward, target_position, this.position);
-    math.vec3.normalize(forward, forward);
+    const forward = vec3.zero.slice();
+    vec3.subtract(forward, target_position, this.position);
+    vec3.normalize(forward, forward);
 
     // Assume that the world's horizontal plane is the frame of reference for
     // the look_at rotations. This should be fine for most game cameras which
     // don't need to roll.
 
     // Find left by projecting forward onto the world's horizontal plane and
-    // rotating it 90 degress counter-clockwise.
-    const left = math.vec3.from_values(forward[0], 0, forward[2]);
-    const rot = math.mat4.create();
-    math.mat4.rotate(rot, rot, Math.PI/2, [0, 1, 0]);
-    math.vec3.transform_mat4(left, left, rot);
-    math.vec3.normalize(left, left);
+    // rotating it so it's perpendicular to forward.
+    const left = vec3.of(forward[0], 0, forward[2]);
+
+    // Rotate the projection 90 degrees counter-clockwise. The hardcoded matrix
+    // is equivalent to:
+    // const rot = mat4.create();
+    // mat4.rotate(rot, rot, Math.PI/2, [0, 1, 0]);
+    const rot = [0, 0, -1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1];
+    vec3.transform_mat4(left, left, rot);
+    vec3.normalize(left, left);
 
     // Find up by computing the cross-product of forward and left according to
     // the right-hand rule.
-    const up = zero_vector.slice();
-    math.vec3.cross(up, forward, left);
+    const up = vec3.zero.slice();
+    vec3.cross(up, forward, left);
 
     // Create a quaternion out of the three axes. The vectors represent axes:
     // they are perpenticular and normalized.
-    const rotation = math.quat.create();
-    math.quat.set_axes(rotation, left, up, forward);
+    const rotation = quat.create();
+    quat.set_axes(rotation, left, up, forward);
 
     this.rotation = rotation;
   }
 
   rotate_along(vec, rad) {
-    const rotation = math.quat.create();
-    math.quat.set_axis_angle(rotation, vec, rad);
+    const rotation = quat.create();
+    quat.set_axis_angle(rotation, vec, rad);
 
     // Quaternion multiplication: A * B applies the A rotation first, B second,
     // relative to the coordinate system resulting from A.
-    math.quat.multiply(rotation, this.rotation, rotation);
+    quat.multiply(rotation, this.rotation, rotation);
     this.rotation = rotation;
   }
 
   rotate_rl(rad) {
-    this.rotate_along(math.vec3.from_values(0, 1, 0), rad);
+    this.rotate_along(vec3.up, rad);
   }
 
   rotate_ud(rad) {
-    this.rotate_along(math.vec3.from_values(1, 0, 0), rad);
+    this.rotate_along(vec3.left, rad);
   }
 
   move_along(vec, dist) {
-    const move = zero_vector.slice();
-    math.vec3.scale(move, vec, dist);
-    math.mat4.translate(this.matrix, this.matrix, move);
+    const move = vec3.zero.slice();
+    vec3.scale(move, vec, dist);
+    mat4.translate(this.matrix, this.matrix, move);
   }
 
   move_r(dist) {
-    this.move_along(math.vec3.from_values(1, 0, 0), dist);
+    this.move_along(vec3.left, dist);
   }
 
   move_u(dist) {
-    this.move_along(math.vec3.from_values(0, 1, 0), dist);
+    this.move_along(vec3.up, dist);
   }
 
   move_f(dist) {
-    this.move_along(math.vec3.from_values(0, 0, 1), dist);
+    this.move_along(vec3.forward, dist);
   }
 
   do_step(tick_length) {
@@ -252,14 +255,14 @@ class Entity {
     }
 
     if (this.parent) {
-      math.mat4.multiply(
+      mat4.multiply(
         this.world_matrix, this.parent.world_matrix, this.matrix
       );
     } else {
       this.world_matrix = this.matrix.slice();
     }
 
-    math.mat4.invert(this.world_to_local, this.world_matrix);
+    mat4.invert(this.world_to_local, this.world_matrix);
 
     this.entities.forEach(entity => entity.update());
   }
