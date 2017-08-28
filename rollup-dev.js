@@ -4,9 +4,12 @@ import serve from 'rollup-plugin-serve'
 import livereload from 'rollup-plugin-livereload'
 
 export default {
-  entry: 'src/main.js',
-  format: 'iife',
-  moduleName: 'Cervus',
+  input: './src/main.js',
+  output: {
+    file: 'dist/cervus.js',
+    format: 'iife',
+    name: 'Cervus',
+  },
   plugins: [
     resolve(),
     babel({
@@ -20,6 +23,4 @@ export default {
       watch: ['dist', 'example']
     })
   ],
-  // external: [], // external shit goes here
-  dest: 'dist/cervus.js'
 };
