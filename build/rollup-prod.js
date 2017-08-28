@@ -3,7 +3,7 @@ import babel from 'rollup-plugin-babel';
 import closure from 'rollup-plugin-closure-compiler-js';
 
 export default {
-  input: './src/main.js',
+  input: 'main.js',
   output: {
     file: 'dist/cervus.min.js',
     format: 'iife',

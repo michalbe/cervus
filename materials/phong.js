@@ -115,5 +115,4 @@ class Phong {
   }
 }
 
-const phong = new Phong();
-export { phong };
+export default new Phong();

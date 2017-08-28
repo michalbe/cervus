@@ -14,8 +14,8 @@ const game = new Cervus.Game({
 game.camera.position = [0, 2, 4];
 game.camera.rotate_rl(Math.PI);
 
-const plane = new Cervus.shapes.Plane({
-  material: Cervus.materials.phong,
+const plane = new Cervus.Plane({
+  material: Cervus.PhongMaterial,
   color: "#eeeeee",
   scale: [100, 1, 100]
 });
@@ -23,8 +23,8 @@ const plane = new Cervus.shapes.Plane({
 game.add(plane);
 
 const group = new Cervus.Entity();
-const cube = new Cervus.shapes.Box({
-  material: Cervus.materials.phong,
+const cube = new Cervus.Box({
+  material: Cervus.PhongMaterial,
   position: [0, 1, 3]
 });
 cube.color = "#bada55";
