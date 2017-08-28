@@ -12,7 +12,7 @@ const default_options = {
   keyboard_controlled_camera: false,
   clear_color: '#FFFFFF',
   light_position: vec3.zero.slice(),
-  light_intensity: 0.4
+  light_intensity: 0.6
 };
 
 class Game {
