@@ -1,4 +1,4 @@
-const hex_to_vec = (hex) => {
+export const hex_to_vec = (hex) => {
   if (hex.charAt(0) === '#') {
     hex = hex.substr(1);
   }
@@ -13,5 +13,3 @@ const hex_to_vec = (hex) => {
     return parseFloat((parseInt(el, 16) / 255).toFixed(1));
   });
 };
-
-export { hex_to_vec }
