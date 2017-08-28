@@ -4,7 +4,7 @@ import closure from 'rollup-plugin-closure-compiler-js';
 
 export default {
   entry: 'src/main.js',
-  format: 'umd',
+  format: 'iife',
   moduleName: 'Cervus',
   plugins: [
     resolve(),
