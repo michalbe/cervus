@@ -140,7 +140,7 @@ class Game {
 
   perform_ticks(ticks_qty) {
     // Mouse delta is measured since the last time this.tick was run.  If there
-    // are more than one ticks to perform we need to scale the delta down to
+    // is more than one tick to perform we need to scale the delta down to
     // maintain consistent movement.
     this.mouse_delta.x /= ticks_qty;
     this.mouse_delta.y /= ticks_qty;

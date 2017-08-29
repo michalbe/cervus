@@ -206,14 +206,17 @@ class Entity {
     const angle_h = this.rotate_speed * time_delta * mouse_delta.x;
     const angle_v = this.rotate_speed * time_delta * mouse_delta.y;
 
-    // Polar to Cartesian conversion
-    // http://www.opengl-tutorial.org/beginners-tutorials/tutorial-6-keyboard-and-mouse/
+    // Polar to Cartesian, or (Ry angle_h)(Rx angle_v)(vec3.forward). The
+    // resulting Y coordinate is inverted to make the object look up when the
+    // mouse moves up.
     const forward = vec3.of(
       Math.cos(angle_v) * Math.sin(angle_h),
       Math.sin(angle_v),
       Math.cos(angle_v) * Math.cos(angle_h)
     );
     vec3.normalize(forward, forward);
+    // Transform forward to the object's local coordinate space (relative to
+    // the parent).
     vec3.transform_mat4(forward, forward, this.matrix);
     this.look_at(forward);
   }
