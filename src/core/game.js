@@ -49,7 +49,6 @@ class Game {
     this.camera.keyboard_controlled = this.options.keyboard_controlled_camera;
     this.camera.mouse_controlled = this.options.mouse_controlled_camera;
     this.clear_color = this.options.clear_color;
-    this.clear_color_vec = hex_to_vec(this.clear_color);
 
     canvas.width = this.options.width;
     canvas.height = this.options.height;
@@ -67,7 +66,6 @@ class Game {
 
     window.addEventListener('keydown', this.key_down.bind(this));
     window.addEventListener('keyup', this.key_up.bind(this));
-
     window.addEventListener('mousemove', this.mouse_move.bind(this));
 
     this.actions = [];
@@ -77,14 +75,23 @@ class Game {
     gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
 
+    gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
+  }
+
+  get clear_color() {
+    return this._clear_color;
+  }
+
+  set clear_color(hex) {
+    this._clear_color = hex;
+    const color_vec = hex_to_vec(hex);
+
     gl.clearColor(
-      this.clear_color_vec[0],
-      this.clear_color_vec[1],
-      this.clear_color_vec[2],
+      color_vec[0],
+      color_vec[1],
+      color_vec[2],
       1
     );
-
-    gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
   }
 
   stop() {
@@ -169,13 +176,6 @@ class Game {
   }
 
   draw(ticks_qty) {
-    this.clear_color_vec = hex_to_vec(this.clear_color);
-    gl.clearColor(
-      this.clear_color_vec[0],
-      this.clear_color_vec[1],
-      this.clear_color_vec[2],
-      1
-    );
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.viewport(0, 0, canvas.width, canvas.height);
     // this.entities.forEach((entity) => entity.generate_shadow_map && entity.generate_shadow_map(ticks_qty));
