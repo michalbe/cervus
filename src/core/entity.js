@@ -5,8 +5,35 @@ import { hex_to_vec } from '../utils';
 // When using arrow keys for rotation simulate the mouse delta of this value.
 const KEY_ROTATION_DELTA = 3;
 
+const default_options = {
+  scale: vec3.unit.slice(),
+  position: vec3.zero.slice(),
+  rotation: quat.create(),
+
+  keyboard_controlled: false,
+  mouse_controlled: false,
+
+  move_speed: 3.5,
+  rotate_speed: .5,
+
+  dir_desc: {
+    87: 'f',
+    65: 'l',
+    68: 'r',
+    83: 'b',
+    69: 'u',
+    81: 'd',
+    38: 'pu',
+    40: 'pd',
+    39: 'yr',
+    37: 'yl'
+  },
+
+  skip: false,
+};
+
 class Entity {
-  constructor(options = {}) {
+  constructor(options) {
     this.matrix = mat4.create();
     this.world_matrix = mat4.create();
     this.world_to_local = mat4.create();
@@ -14,11 +41,7 @@ class Entity {
     this._scale = vec3.unit.slice();
     this._rotation = quat.create();
 
-    this.scale = options.scale || vec3.unit.slice();
-    this.position = options.position || vec3.zero.slice();
-    this.rotation = options.rotation || quat.create();
-
-    this.material = options.material;
+    Object.assign(this, default_options, options);
 
     if (this.material) {
       this.color_vec = [];
@@ -28,32 +51,7 @@ class Entity {
 
     this.entities = [];
 
-    this.keyboard_controlled = false;
-    this.mouse_controlled = false;
-
-    this.dir_desc = {
-      87: 'f',
-      65: 'l',
-      68: 'r',
-      83: 'b',
-      69: 'u',
-      81: 'd',
-      38: 'pu',
-      40: 'pd',
-      39: 'yr',
-      37: 'yl'
-    };
-
-    this.move_speed = 3.5;
-    this.rotate_speed = .5;
-
-    this.indices = this.indices || options.indices;
-    this.vertices = this.vertices || options.vertices;
-    this.normals = this.normals || options.normals;
-
     this.program = this.material && this.material.program;
-
-    this.skip = false;
 
     if (this.vertices && this.indices && this.normals) {
       this.create_buffers();

@@ -4,13 +4,15 @@ import { vec3, mat4, to_radian } from './math';
 import { Entity } from './entity';
 
 const default_options = {
+  canvas,
   width: 800,
   height: 600,
   dom: document.body,
   fps: 60,
   autostart: true,
-  keyboard_controlled_camera: false,
-  mouse_controlled_camera: false,
+  fov: 60,
+  near: 0.35,
+  far: 85,
   clear_color: '#FFFFFF',
   light_position: vec3.zero.slice(),
   light_intensity: 0.6
@@ -18,14 +20,14 @@ const default_options = {
 
 class Game {
   constructor(options) {
+    Object.assign(this, default_options, options);
+
+    this.canvas.width = this.width;
+    this.canvas.height = this.height;
+    this.dom.appendChild(canvas);
+
     this.entities = [];
-
-    this.options = default_options;
-
     this.camera = new Entity();
-
-    // this.camera.look_at([0, 0, 0]);
-
     this.camera.game = this;
 
     this.projMatrix = mat4.create();
@@ -33,31 +35,17 @@ class Game {
 
     mat4.perspective(
       this.projMatrix,
-      to_radian(90),
-      canvas.width / canvas.height,
-      0.35,
-      85.0
+      to_radian(this.fov),
+      this.width / this.height,
+      this.near,
+      this.far
     )
 
-    options = options || {};
-    Object.keys(options).forEach(key => {
-      this.options[key] = options[key];
-    });
-
-    this.light_position = this.options.light_position;
-    this.light_intensity = this.options.light_intensity;
-    this.clear_color = this.options.clear_color;
-
-    canvas.width = this.options.width;
-    canvas.height = this.options.height;
-
-    this.options.dom.appendChild(canvas);
-
-    this.running = this.options.autostart;
+    this.running = this.autostart;
 
     this.last_tick = performance.now();
     this.last_render = this.last_tick;
-    this.tick_length = 1000/this.options.fps;
+    this.tick_length = 1000/this.fps;
 
     this.keys = {};
     this.mouse_delta = {x: 0, y: 0};
