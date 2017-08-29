@@ -229,8 +229,7 @@ class Entity {
     if (this.keyboard_controlled && this.game) {
       const current_dir = {};
 
-      for (const key_code of Object.keys(DIR_KEYS)) {
-        const dir = DIR_KEYS[key_code];
+      for (const [key_code, dir] of Object.entries(DIR_KEYS)) {
         current_dir[dir] = this.game.keys[key_code];
       }
 
