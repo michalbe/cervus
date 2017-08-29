@@ -132,15 +132,9 @@ class Entity {
     // don't need to roll.
 
     // Find left by projecting forward onto the world's horizontal plane and
-    // rotating it so it's perpendicular to forward.
-    const left = vec3.of(forward[0], 0, forward[2]);
-
-    // Rotate the projection 90 degrees counter-clockwise. The hardcoded matrix
-    // is equivalent to:
-    // const rot = mat4.create();
-    // mat4.rotate(rot, rot, Math.PI/2, [0, 1, 0]);
-    const rot = [0, 0, -1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1];
-    vec3.transform_mat4(left, left, rot);
+    // rotating it 90 degress counter-clockwise. For any (x, y, z), the rotated
+    // vector is (z, y, -x).
+    const left = vec3.of(forward[2], 0, -forward[0]);
     vec3.normalize(left, left);
 
     // Find up by computing the cross-product of forward and left according to
