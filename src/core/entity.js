@@ -35,9 +35,10 @@ class Entity {
     this.entities = [];
 
     this.keyboard_controlled = false;
+    this.mouse_controlled = false;
 
     this.move_speed = 3.5;
-    this.rotate_speed = 1.5;
+    this.rotate_speed = .5;
 
     this.indices = this.indices || options.indices;
     this.vertices = this.vertices || options.vertices;
@@ -200,6 +201,23 @@ class Entity {
     }
   }
 
+  do_look(tick_length, mouse_delta) {
+    const time_delta = tick_length / 1000;
+    const angle_h = this.rotate_speed * time_delta * mouse_delta.x;
+    const angle_v = this.rotate_speed * time_delta * mouse_delta.y;
+
+    // Polar to Cartesian conversion
+    // http://www.opengl-tutorial.org/beginners-tutorials/tutorial-6-keyboard-and-mouse/
+    const forward = vec3.of(
+      Math.cos(angle_v) * Math.sin(angle_h),
+      Math.sin(angle_v),
+      Math.cos(angle_v) * Math.cos(angle_h)
+    );
+    vec3.normalize(forward, forward);
+    vec3.transform_mat4(forward, forward, this.matrix);
+    this.look_at(forward);
+  }
+
   update(tick_length) {
     if (this.skip) {
       return;
@@ -216,6 +234,9 @@ class Entity {
       this.do_move(tick_length, current_dir);
     }
 
+    if (this.mouse_controlled && this.game) {
+      this.do_look(tick_length, this.game.mouse_delta);
+    }
 
     if (this.parent) {
       mat4.multiply(

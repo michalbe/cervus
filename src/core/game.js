@@ -10,6 +10,7 @@ const default_options = {
   fps: 60,
   autostart: true,
   keyboard_controlled_camera: false,
+  mouse_controlled_camera: false,
   clear_color: '#FFFFFF',
   light_position: vec3.zero.slice(),
   light_intensity: 0.6
@@ -46,6 +47,7 @@ class Game {
     this.light_position = this.options.light_position;
     this.light_intensity = this.options.light_intensity;
     this.camera.keyboard_controlled = this.options.keyboard_controlled_camera;
+    this.camera.mouse_controlled = this.options.mouse_controlled_camera;
     this.clear_color = this.options.clear_color;
     this.clear_color_vec = hex_to_vec(this.clear_color);
 
@@ -61,9 +63,12 @@ class Game {
     this.tick_length = 1000/this.options.fps;
 
     this.keys = {};
+    this.mouse_delta = {x: 0, y: 0};
 
     window.addEventListener('keydown', this.key_down.bind(this));
     window.addEventListener('keyup', this.key_up.bind(this));
+
+    window.addEventListener('mousemove', this.mouse_move.bind(this));
 
     this.actions = [];
 
@@ -125,11 +130,29 @@ class Game {
     this.keys[e.keyCode] = false
   }
 
+  mouse_move(e) {
+    // Accumulate the deltas for each mousemove event that that fired between
+    // any two ticks. Our +X is left, +Y is up while the browser's +X is to the
+    // right, +Y is down. Inverse the values by subtracting rather than adding.
+    this.mouse_delta.x -= e.movementX,
+    this.mouse_delta.y -= e.movementY
+  }
+
   perform_ticks(ticks_qty) {
-      for(var i=0; i < ticks_qty; i++) {
-        this.last_tick = this.last_tick + this.tick_length;
-        this.update(this.last_tick);
-      }
+    // Mouse delta is measured since the last time this.tick was run.  If there
+    // are more than one ticks to perform we need to scale the delta down to
+    // maintain consistent movement.
+    this.mouse_delta.x /= ticks_qty;
+    this.mouse_delta.y /= ticks_qty;
+
+    for(var i=0; i < ticks_qty; i++) {
+      this.last_tick = this.last_tick + this.tick_length;
+      this.update(this.last_tick);
+    }
+
+    // Reset the mouse delta.
+    this.mouse_delta.x = 0;
+    this.mouse_delta.y = 0;
   }
 
   update(tick_time) {
