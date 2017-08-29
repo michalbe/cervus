@@ -2,6 +2,15 @@ import { create_float_buffer, create_index_buffer } from './context';
 import { vec3, mat4, quat } from './math';
 import { hex_to_vec } from '../utils';
 
+const DIR_KEYS = {
+  87: 'f',
+  65: 'l',
+  68: 'r',
+  83: 'b',
+  69: 'u',
+  81: 'd',
+};
+
 class Entity {
   constructor(options = {}) {
     this.matrix = mat4.create();
@@ -37,21 +46,6 @@ class Entity {
     this.program = this.material && this.material.program;
 
     this.skip = false;
-
-    this.dir = {};
-
-    this.dir_desc = {
-      87: 'f',
-      65: 'l',
-      68: 'r',
-      83: 'b',
-      81: 'u',
-      69: 'd',
-      38: 'r_u',
-      40: 'r_d',
-      39: 'r_r',
-      37: 'r_l'
-    };
 
     if (this.vertices && this.indices && this.normals) {
       this.create_buffers();
@@ -186,57 +180,29 @@ class Entity {
     mat4.translate(this.matrix, this.matrix, move);
   }
 
-  move_r(dist) {
-    this.move_along(vec3.left, dist);
-  }
-
-  move_u(dist) {
-    this.move_along(vec3.up, dist);
-  }
-
-  move_f(dist) {
-    this.move_along(vec3.forward, dist);
-  }
-
-  do_step(tick_length) {
-    if (this.dir.f && !this.dir.b) {
-      this.move_f(tick_length / 1000 * this.move_speed);
+  do_move(tick_length, current_dir) {
+    if (current_dir.f) {
+      this.move_along(vec3.forward, tick_length / 1000 * this.move_speed);
     }
 
-    if (this.dir.b && !this.dir.f) {
-      this.move_f(-tick_length / 1000 * this.move_speed);
+    if (current_dir.b) {
+      this.move_along(vec3.forward, -tick_length / 1000 * this.move_speed);
     }
 
-    if (this.dir.r && !this.dir.l) {
-      this.move_r(-tick_length / 1000 * this.move_speed);
+    if (current_dir.r) {
+      this.move_along(vec3.left, -tick_length / 1000 * this.move_speed);
     }
 
-    if (this.dir.l && !this.dir.r) {
-      this.move_r(tick_length / 1000 * this.move_speed);
+    if (current_dir.l) {
+      this.move_along(vec3.left, tick_length / 1000 * this.move_speed);
     }
 
-    if (this.dir.u && !this.dir.d) {
-      this.move_u(tick_length / 1000 * this.move_speed);
+    if (current_dir.u) {
+      this.move_along(vec3.up, tick_length / 1000 * this.move_speed);
     }
 
-    if (this.dir.d && !this.dir.u) {
-      this.move_u(-tick_length / 1000 * this.move_speed);
-    }
-
-    if (this.dir.r_r && !this.dir.r_l) {
-      this.rotate_rl(-tick_length / 1000 * this.rotate_speed);
-    }
-
-    if (this.dir.r_l && !this.dir.r_r) {
-      this.rotate_rl(tick_length / 1000 * this.rotate_speed);
-    }
-
-    if (this.dir.r_u && !this.dir.r_d) {
-      this.rotate_ud(-tick_length / 1000 * this.rotate_speed);
-    }
-
-    if (this.dir.r_d && !this.dir.r_u) {
-      this.rotate_ud(tick_length / 1000 * this.rotate_speed);
+    if (current_dir.d) {
+      this.move_along(vec3.up, -tick_length / 1000 * this.move_speed);
     }
   }
 
@@ -246,13 +212,16 @@ class Entity {
     }
 
     if (this.keyboard_controlled && this.game) {
-      Object.keys(this.dir_desc).forEach((key) => {
-        if (this.dir_desc[key]) {
-          this.dir[this.dir_desc[key]] = this.game.keys[key] || false;
-        }
-      });
-      this.do_step(tick_length);
+      const current_dir = {};
+
+      for (const key_code of Object.keys(DIR_KEYS)) {
+        const dir = DIR_KEYS[key_code];
+        current_dir[dir] = this.game.keys[key_code];
+      }
+
+      this.do_move(tick_length, current_dir);
     }
+
 
     if (this.parent) {
       mat4.multiply(
