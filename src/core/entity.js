@@ -2,6 +2,9 @@ import { create_float_buffer, create_index_buffer } from './context';
 import { vec3, mat4, quat } from './math';
 import { hex_to_vec } from '../utils';
 
+// When using arrow keys for rotation simulate the mouse delta of this value.
+const KEY_ROTATION_DELTA = 3;
+
 class Entity {
   constructor(options = {}) {
     this.matrix = mat4.create();
@@ -26,9 +29,23 @@ class Entity {
     this.entities = [];
 
     this.keyboard_controlled = false;
+    this.mouse_controlled = false;
+
+    this.dir_desc = {
+      87: 'f',
+      65: 'l',
+      68: 'r',
+      83: 'b',
+      69: 'u',
+      81: 'd',
+      38: 'pu',
+      40: 'pd',
+      39: 'yr',
+      37: 'yl'
+    };
 
     this.move_speed = 3.5;
-    this.rotate_speed = 1.5;
+    this.rotate_speed = .5;
 
     this.indices = this.indices || options.indices;
     this.vertices = this.vertices || options.vertices;
@@ -37,21 +54,6 @@ class Entity {
     this.program = this.material && this.material.program;
 
     this.skip = false;
-
-    this.dir = {};
-
-    this.dir_desc = {
-      87: 'f',
-      65: 'l',
-      68: 'r',
-      83: 'b',
-      81: 'u',
-      69: 'd',
-      38: 'r_u',
-      40: 'r_d',
-      39: 'r_r',
-      37: 'r_l'
-    };
 
     if (this.vertices && this.indices && this.normals) {
       this.create_buffers();
@@ -138,15 +140,9 @@ class Entity {
     // don't need to roll.
 
     // Find left by projecting forward onto the world's horizontal plane and
-    // rotating it so it's perpendicular to forward.
-    const left = vec3.of(forward[0], 0, forward[2]);
-
-    // Rotate the projection 90 degrees counter-clockwise. The hardcoded matrix
-    // is equivalent to:
-    // const rot = mat4.create();
-    // mat4.rotate(rot, rot, Math.PI/2, [0, 1, 0]);
-    const rot = [0, 0, -1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1];
-    vec3.transform_mat4(left, left, rot);
+    // rotating it 90 degress counter-clockwise. For any (x, y, z), the rotated
+    // vector is (z, y, -x).
+    const left = vec3.of(forward[2], 0, -forward[0]);
     vec3.normalize(left, left);
 
     // Find up by computing the cross-product of forward and left according to
@@ -186,58 +182,65 @@ class Entity {
     mat4.translate(this.matrix, this.matrix, move);
   }
 
-  move_r(dist) {
-    this.move_along(vec3.left, dist);
+  handle_keys(tick_length, {f, b, l, r, u, d, pu, pd, yl, yr}) {
+    const dist = tick_length / 1000 * this.move_speed;
+
+    if (f) {
+      this.move_along(vec3.forward, dist);
+    }
+
+    if (b) {
+      this.move_along(vec3.forward, -dist);
+    }
+
+    if (l) {
+      this.move_along(vec3.left, dist);
+    }
+
+    if (r) {
+      this.move_along(vec3.left, -dist);
+    }
+
+    if (u) {
+      this.move_along(vec3.up, dist);
+    }
+
+    if (d) {
+      this.move_along(vec3.up, -dist);
+    }
+
+    // Simulate mouse deltas for rotation.
+    const mouse_delta = {
+      x: (yl ? KEY_ROTATION_DELTA : 0) - (yr ? KEY_ROTATION_DELTA : 0),
+      y: (pu ? KEY_ROTATION_DELTA : 0) - (pd ? KEY_ROTATION_DELTA : 0),
+    };
+
+    this.handle_mouse(tick_length, mouse_delta);
   }
 
-  move_u(dist) {
-    this.move_along(vec3.up, dist);
-  }
+  handle_mouse(tick_length, mouse_delta) {
+    const time_delta = tick_length / 1000;
+    const azimuth = this.rotate_speed * time_delta * mouse_delta.x;
+    const polar = this.rotate_speed * time_delta * mouse_delta.y;
 
-  move_f(dist) {
-    this.move_along(vec3.forward, dist);
-  }
-
-  do_step(tick_length) {
-    if (this.dir.f && !this.dir.b) {
-      this.move_f(tick_length / 1000 * this.move_speed);
+    // Check if there's any rotation to handle.
+    if (azimuth == 0 && polar == 0) {
+      return;
     }
 
-    if (this.dir.b && !this.dir.f) {
-      this.move_f(-tick_length / 1000 * this.move_speed);
-    }
-
-    if (this.dir.r && !this.dir.l) {
-      this.move_r(-tick_length / 1000 * this.move_speed);
-    }
-
-    if (this.dir.l && !this.dir.r) {
-      this.move_r(tick_length / 1000 * this.move_speed);
-    }
-
-    if (this.dir.u && !this.dir.d) {
-      this.move_u(tick_length / 1000 * this.move_speed);
-    }
-
-    if (this.dir.d && !this.dir.u) {
-      this.move_u(-tick_length / 1000 * this.move_speed);
-    }
-
-    if (this.dir.r_r && !this.dir.r_l) {
-      this.rotate_rl(-tick_length / 1000 * this.rotate_speed);
-    }
-
-    if (this.dir.r_l && !this.dir.r_r) {
-      this.rotate_rl(tick_length / 1000 * this.rotate_speed);
-    }
-
-    if (this.dir.r_u && !this.dir.r_d) {
-      this.rotate_ud(-tick_length / 1000 * this.rotate_speed);
-    }
-
-    if (this.dir.r_d && !this.dir.r_u) {
-      this.rotate_ud(tick_length / 1000 * this.rotate_speed);
-    }
+    // Polar (with the zenith being the Y axis) to Cartesian, but polar is
+    // counted from Z to Y rather than from Y to Z, so we swap cos(polar) for
+    // sin(polar) and vice versa.
+    const forward = vec3.of(
+      Math.cos(polar) * Math.sin(azimuth),
+      Math.sin(polar),
+      Math.cos(polar) * Math.cos(azimuth)
+    );
+    vec3.normalize(forward, forward);
+    // Transform forward to the object's local coordinate space (relative to
+    // the parent).
+    vec3.transform_mat4(forward, forward, this.matrix);
+    this.look_at(forward);
   }
 
   update(tick_length) {
@@ -246,12 +249,17 @@ class Entity {
     }
 
     if (this.keyboard_controlled && this.game) {
-      Object.keys(this.dir_desc).forEach((key) => {
-        if (this.dir_desc[key]) {
-          this.dir[this.dir_desc[key]] = this.game.keys[key] || false;
-        }
-      });
-      this.do_step(tick_length);
+      const current_dirs = {};
+
+      for (const [key_code, dir] of Object.entries(this.dir_desc)) {
+        current_dirs[dir] = this.game.keys[key_code];
+      }
+
+      this.handle_keys(tick_length, current_dirs);
+    }
+
+    if (this.mouse_controlled && this.game) {
+      this.handle_mouse(tick_length, this.game.mouse_delta);
     }
 
     if (this.parent) {
@@ -264,7 +272,7 @@ class Entity {
 
     mat4.invert(this.world_to_local, this.world_matrix);
 
-    this.entities.forEach(entity => entity.update());
+    this.entities.forEach(entity => entity.update(tick_length));
   }
 
   render(ticks) {

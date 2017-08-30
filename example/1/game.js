@@ -6,6 +6,7 @@ const game = new Cervus.Game({
   width: window.innerWidth,
   height: window.innerHeight,
   keyboard_controlled_camera: true,
+  mouse_controlled_camera: true,
   // fps: 1
 });
 
