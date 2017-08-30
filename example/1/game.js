@@ -5,11 +5,13 @@ const material = Cervus.materials.phong;
 const game = new Cervus.Game({
   width: window.innerWidth,
   height: window.innerHeight,
-  keyboard_controlled_camera: true,
-  mouse_controlled_camera: true,
   // fps: 1
 });
 
+game.camera.keyboard_controlled = true;
+game.camera.mouse_controlled = true;
+
+  mouse_controlled_camera: true,
 // By default all entities face the user.
 // Rotate the camera to see the scene.
 game.camera.position = [0, 1, 2];

@@ -46,8 +46,6 @@ class Game {
 
     this.light_position = this.options.light_position;
     this.light_intensity = this.options.light_intensity;
-    this.camera.keyboard_controlled = this.options.keyboard_controlled_camera;
-    this.camera.mouse_controlled = this.options.mouse_controlled_camera;
     this.clear_color = this.options.clear_color;
 
     canvas.width = this.options.width;

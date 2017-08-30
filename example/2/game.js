@@ -3,11 +3,12 @@
 const game = new Cervus.Game({
   width: window.innerWidth,
   height: window.innerHeight,
-  keyboard_controlled_camera: true,
   light_position: [-1, 2, 5],
   light_intensity: 0.9
   // fps: 1
 });
+
+game.camera.keyboard_controlled = true;
 
 // By default all entities face the user.
 // Rotate the camera to see the scene.
