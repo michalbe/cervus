@@ -9,7 +9,7 @@ const default_options = {
   height: 600,
   dom: document.body,
   fps: 60,
-  autostart: true,
+  running: true,
   fov: 60,
   near: 0.35,
   far: 85,
@@ -39,9 +39,7 @@ class Game {
       this.width / this.height,
       this.near,
       this.far
-    )
-
-    this.running = this.autostart;
+    );
 
     this.last_tick = performance.now();
     this.last_render = this.last_tick;
