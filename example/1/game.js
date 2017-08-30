@@ -4,7 +4,7 @@ const material = Cervus.materials.phong;
 
 const game = new Cervus.Game({
   width: window.innerWidth,
-  height: window.innerHeight,
+  height: window.innerHeight
   // fps: 1
 });
 
