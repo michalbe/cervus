@@ -2,6 +2,9 @@ import { create_float_buffer, create_index_buffer } from './context';
 import { vec3, mat4, quat } from './math';
 import { hex_to_vec } from '../utils';
 
+// When using arrow keys for rotation simulate the mouse delta of this value.
+const KEY_ROTATION_DELTA = 3;
+
 class Entity {
   constructor(options = {}) {
     this.matrix = mat4.create();
@@ -35,10 +38,10 @@ class Entity {
       83: 'b',
       69: 'u',
       81: 'd',
-      38: 'p_u',
-      40: 'p_d',
-      39: 'y_r',
-      37: 'y_l'
+      38: 'pu',
+      40: 'pd',
+      39: 'yr',
+      37: 'yl'
     };
 
     this.move_speed = 3.5;
@@ -179,46 +182,73 @@ class Entity {
     mat4.translate(this.matrix, this.matrix, move);
   }
 
-  do_move(tick_length, current_dir) {
+  handle_keys(tick_length, {f, b, l, r, u, d, pu, pd, yl, yr}) {
     const dist = tick_length / 1000 * this.move_speed;
 
-    if (current_dir.f) {
+    if (f) {
       this.move_along(vec3.forward, dist);
     }
 
-    if (current_dir.b) {
+    if (b) {
       this.move_along(vec3.forward, -dist);
     }
 
-    if (current_dir.r) {
-      this.move_along(vec3.left, -dist);
-    }
-
-    if (current_dir.l) {
+    if (l) {
       this.move_along(vec3.left, dist);
     }
 
-    if (current_dir.u) {
+    if (r) {
+      this.move_along(vec3.left, -dist);
+    }
+
+    if (u) {
       this.move_along(vec3.up, dist);
     }
 
-    if (current_dir.d) {
+    if (d) {
       this.move_along(vec3.up, -dist);
     }
+
+    let polar = 0;
+    let azimuth = 0;
+
+    if (pu) {
+      polar += KEY_ROTATION_DELTA;
+    }
+
+    if (pd) {
+      polar -= KEY_ROTATION_DELTA;
+    }
+
+    if (yl) {
+      azimuth += KEY_ROTATION_DELTA;
+    }
+
+    if (yr) {
+      azimuth -= KEY_ROTATION_DELTA;
+    }
+
+    // Simulate mouse deltas
+    this.handle_mouse(tick_length, {x: azimuth, y: polar});
   }
 
-  do_look(tick_length, mouse_delta) {
+  handle_mouse(tick_length, mouse_delta) {
     const time_delta = tick_length / 1000;
-    const angle_h = this.rotate_speed * time_delta * mouse_delta.x;
-    const angle_v = this.rotate_speed * time_delta * mouse_delta.y;
+    const azimuth = this.rotate_speed * time_delta * mouse_delta.x;
+    const polar = this.rotate_speed * time_delta * mouse_delta.y;
 
-    // Polar to Cartesian, or (Ry angle_h)(Rx angle_v)(vec3.forward). The
+    // Check if there's any rotation to handle.
+    if (azimuth == 0 && polar == 0) {
+      return;
+    }
+
+    // Polar to Cartesian, or (Ry azimuth)(Rx polar)(vec3.forward). The
     // resulting Y coordinate is inverted to make the object look up when the
     // mouse moves up.
     const forward = vec3.of(
-      Math.cos(angle_v) * Math.sin(angle_h),
-      Math.sin(angle_v),
-      Math.cos(angle_v) * Math.cos(angle_h)
+      Math.cos(polar) * Math.sin(azimuth),
+      Math.sin(polar),
+      Math.cos(polar) * Math.cos(azimuth)
     );
     vec3.normalize(forward, forward);
     // Transform forward to the object's local coordinate space (relative to
@@ -233,17 +263,17 @@ class Entity {
     }
 
     if (this.keyboard_controlled && this.game) {
-      const current_dir = {};
+      const current_dirs = {};
 
       for (const [key_code, dir] of Object.entries(this.dir_desc)) {
-        current_dir[dir] = this.game.keys[key_code];
+        current_dirs[dir] = this.game.keys[key_code];
       }
 
-      this.do_move(tick_length, current_dir);
+      this.handle_keys(tick_length, current_dirs);
     }
 
     if (this.mouse_controlled && this.game) {
-      this.do_look(tick_length, this.game.mouse_delta);
+      this.handle_mouse(tick_length, this.game.mouse_delta);
     }
 
     if (this.parent) {
