@@ -98,7 +98,7 @@ class Game {
     if (tick_time > next_tick) {
       const ticks_qty = Math.floor((tick_time - this.last_tick) / this.tick_length);
       this.perform_ticks(ticks_qty);
-      this.draw(this.last_tick);
+      this.render(this.last_tick);
     }
 
   }
@@ -159,7 +159,7 @@ class Game {
     this.camera.get_view_matrix(this.viewMatrix);
   }
 
-  draw(ticks_qty) {
+  render(ticks_qty) {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.viewport(0, 0, canvas.width, canvas.height);
     // this.entities.forEach((entity) => entity.generate_shadow_map && entity.generate_shadow_map(ticks_qty));
