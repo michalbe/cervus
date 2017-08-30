@@ -8,14 +8,12 @@ const game = new Cervus.Game({
   // fps: 1
 });
 
-game.camera.keyboard_controlled = true;
-game.camera.mouse_controlled = true;
-
-  mouse_controlled_camera: true,
 // By default all entities face the user.
 // Rotate the camera to see the scene.
 game.camera.position = [0, 1, 2];
 game.camera.rotate_rl(Math.PI);
+game.camera.keyboard_controlled = true;
+game.camera.mouse_controlled = true;
 
 
 const cube2 = new Cervus.shapes.Box({
