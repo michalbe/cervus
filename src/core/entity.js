@@ -209,27 +209,13 @@ class Entity {
       this.move_along(vec3.up, -dist);
     }
 
-    let polar = 0;
-    let azimuth = 0;
+    // Simulate mouse deltas for rotation.
+    const mouse_delta = {
+      x: (yl ? KEY_ROTATION_DELTA : 0) - (yr ? KEY_ROTATION_DELTA : 0),
+      y: (pu ? KEY_ROTATION_DELTA : 0) - (pd ? KEY_ROTATION_DELTA : 0),
+    };
 
-    if (pu) {
-      polar += KEY_ROTATION_DELTA;
-    }
-
-    if (pd) {
-      polar -= KEY_ROTATION_DELTA;
-    }
-
-    if (yl) {
-      azimuth += KEY_ROTATION_DELTA;
-    }
-
-    if (yr) {
-      azimuth -= KEY_ROTATION_DELTA;
-    }
-
-    // Simulate mouse deltas
-    this.handle_mouse(tick_length, {x: azimuth, y: polar});
+    this.handle_mouse(tick_length, mouse_delta);
   }
 
   handle_mouse(tick_length, mouse_delta) {
