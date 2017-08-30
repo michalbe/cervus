@@ -228,9 +228,9 @@ class Entity {
       return;
     }
 
-    // Polar to Cartesian, or (Ry azimuth)(Rx polar)(vec3.forward). The
-    // resulting Y coordinate is inverted to make the object look up when the
-    // mouse moves up.
+    // Polar (with the zenith being the Y axis) to Cartesian, but polar is
+    // counted from Z to Y rather than from Y to Z, so we swap cos(polar) for
+    // sin(polar) and vice versa.
     const forward = vec3.of(
       Math.cos(polar) * Math.sin(azimuth),
       Math.sin(polar),
