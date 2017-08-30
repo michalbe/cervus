@@ -256,7 +256,7 @@ class Entity {
 
     mat4.invert(this.world_to_local, this.world_matrix);
 
-    this.entities.forEach(entity => entity.update());
+    this.entities.forEach(entity => entity.update(tick_length));
   }
 
   render(ticks) {

@@ -162,9 +162,9 @@ class Game {
       }
     });
 
-    this.entities.forEach((entity) => entity.update());
+    this.entities.forEach((entity) => entity.update(this.tick_length));
 
-    this.camera.update(this.tick_length, this);
+    this.camera.update(this.tick_length);
     this.camera.get_view_matrix(this.viewMatrix);
   }
 
