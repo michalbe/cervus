@@ -2,15 +2,6 @@ import { create_float_buffer, create_index_buffer } from './context';
 import { vec3, mat4, quat } from './math';
 import { hex_to_vec } from '../utils';
 
-const DIR_KEYS = {
-  87: 'f',
-  65: 'l',
-  68: 'r',
-  83: 'b',
-  69: 'u',
-  81: 'd',
-};
-
 class Entity {
   constructor(options = {}) {
     this.matrix = mat4.create();
@@ -36,6 +27,19 @@ class Entity {
 
     this.keyboard_controlled = false;
     this.mouse_controlled = false;
+
+    this.dir_desc = {
+      87: 'f',
+      65: 'l',
+      68: 'r',
+      83: 'b',
+      69: 'u',
+      81: 'd',
+      38: 'p_u',
+      40: 'p_d',
+      39: 'y_r',
+      37: 'y_l'
+    };
 
     this.move_speed = 3.5;
     this.rotate_speed = .5;
@@ -176,28 +180,30 @@ class Entity {
   }
 
   do_move(tick_length, current_dir) {
+    const dist = tick_length / 1000 * this.move_speed;
+
     if (current_dir.f) {
-      this.move_along(vec3.forward, tick_length / 1000 * this.move_speed);
+      this.move_along(vec3.forward, dist);
     }
 
     if (current_dir.b) {
-      this.move_along(vec3.forward, -tick_length / 1000 * this.move_speed);
+      this.move_along(vec3.forward, -dist);
     }
 
     if (current_dir.r) {
-      this.move_along(vec3.left, -tick_length / 1000 * this.move_speed);
+      this.move_along(vec3.left, -dist);
     }
 
     if (current_dir.l) {
-      this.move_along(vec3.left, tick_length / 1000 * this.move_speed);
+      this.move_along(vec3.left, dist);
     }
 
     if (current_dir.u) {
-      this.move_along(vec3.up, tick_length / 1000 * this.move_speed);
+      this.move_along(vec3.up, dist);
     }
 
     if (current_dir.d) {
-      this.move_along(vec3.up, -tick_length / 1000 * this.move_speed);
+      this.move_along(vec3.up, -dist);
     }
   }
 
@@ -229,7 +235,7 @@ class Entity {
     if (this.keyboard_controlled && this.game) {
       const current_dir = {};
 
-      for (const [key_code, dir] of Object.entries(DIR_KEYS)) {
+      for (const [key_code, dir] of Object.entries(this.dir_desc)) {
         current_dir[dir] = this.game.keys[key_code];
       }
 
