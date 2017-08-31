@@ -36,7 +36,7 @@ class Entity {
   constructor(options) {
     this.matrix = mat4.create();
     this.world_matrix = mat4.create();
-    this.world_to_local = mat4.create();
+    this.world_to_self = mat4.create();
 
     this._scale = vec3.unit.slice();
     this._rotation = quat.create();
@@ -127,7 +127,7 @@ class Entity {
   look_at(target_position) {
     // Find the direction we're looking at. target_position must be given in
     // the current entity's coordinate space.  Use target's world_matrix and
-    // the current entity's world_to_local to go from target's space to the
+    // the current entity's world_to_self to go from target's space to the
     // current entity space.
     const forward = vec3.zero.slice();
     vec3.subtract(forward, target_position, this.position);
@@ -268,7 +268,7 @@ class Entity {
       this.world_matrix = this.matrix.slice();
     }
 
-    mat4.invert(this.world_to_local, this.world_matrix);
+    mat4.invert(this.world_to_self, this.world_matrix);
 
     this.entities.forEach(entity => entity.update(tick_length));
   }
