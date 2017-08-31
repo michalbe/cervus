@@ -188,18 +188,24 @@ class Entity {
   handle_keys(tick_length, {f, b, l, r, u, d, pu, pd, yl, yr}) {
     const dist = tick_length / 1000 * this.move_speed;
 
-    // The desired movement in self space.
-    const movement = vec3.of(
-      (l - r) * dist,
-      (u - d) * dist,
-      (f - b) * dist
-    );
+    // The desired XZ direction vector in self space. This corresponds to
+    // walking: we only consider the forward/back and left/right input.
+    const direction = vec3.of(l - r, 0, f - b);
 
     // Transform the input to local space.
-    vec3.transform_mat4(movement, movement, this.matrix);
-    // Subtract position from it to get the movement vector.
-    vec3.subtract(movement, movement, this.position);
-    this.translate(movement);
+    vec3.transform_mat4(direction, direction, this.matrix);
+    // Subtract position from it to go back to the direction vector.
+    vec3.subtract(direction, direction, this.position);
+
+    // Up and down movement always happens relative to the local space
+    // regardless of the current pitch of the entity.
+    direction[1] = (u - d);
+
+    // Scale direction by this tick's distance.
+    vec3.normalize(direction, direction);
+    vec3.scale(direction, direction, dist);
+
+    this.translate(direction);
 
     // Simulate mouse deltas for rotation.
     const mouse_delta = {
