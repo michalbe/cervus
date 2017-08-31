@@ -209,8 +209,8 @@ class Entity {
 
     // Simulate mouse deltas for rotation.
     const mouse_delta = {
-      x: (yl ? KEY_ROTATION_DELTA : 0) - (yr ? KEY_ROTATION_DELTA : 0),
-      y: (pu ? KEY_ROTATION_DELTA : 0) - (pd ? KEY_ROTATION_DELTA : 0),
+      x: yl * KEY_ROTATION_DELTA - yr * KEY_ROTATION_DELTA,
+      y: pu * KEY_ROTATION_DELTA - pd * KEY_ROTATION_DELTA,
     };
 
     this.handle_mouse(tick_length, mouse_delta);
@@ -250,7 +250,7 @@ class Entity {
       const current_dirs = {};
 
       for (const [key_code, dir] of Object.entries(this.dir_desc)) {
-        current_dirs[dir] = this.game.keys[key_code];
+        current_dirs[dir] = this.game.get_key(key_code);
       }
 
       this.handle_keys(tick_length, current_dirs);
