@@ -16,7 +16,6 @@ import {
   invert,
   perspective,
   multiply,
-  translate,
   fromRotationTranslationScale,
   lookAt
 } from 'gl-matrix/src/gl-matrix/mat4';
@@ -50,7 +49,6 @@ export const mat4 = {
   invert,
   perspective,
   multiply,
-  translate,
   compose: fromRotationTranslationScale,
   look_at: lookAt,
 };
