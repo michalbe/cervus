@@ -174,38 +174,32 @@ class Entity {
     this.rotate_along(vec3.left, rad);
   }
 
-  move_along(vec, dist) {
-    const move = vec3.zero.slice();
-    vec3.scale(move, vec, dist);
-    mat4.translate(this.matrix, this.matrix, move);
+  translate(vec, relative_to = this) {
+    const relative_to_self = mat4.create();
+    mat4.multiply(
+      relative_to_self, this.world_to_self, relative_to.world_matrix);
+
+    const movement = vec3.zero.slice();
+    vec3.transform_mat4(movement, vec, relative_to_self);
+    vec3.add(movement, this.position, movement);
+    this.position = movement;
   }
 
   handle_keys(tick_length, {f, b, l, r, u, d, pu, pd, yl, yr}) {
     const dist = tick_length / 1000 * this.move_speed;
 
-    if (f) {
-      this.move_along(vec3.forward, dist);
-    }
+    // The desired movement in self space.
+    const movement = vec3.of(
+      (l - r) * dist,
+      (u - d) * dist,
+      (f - b) * dist
+    );
 
-    if (b) {
-      this.move_along(vec3.forward, -dist);
-    }
-
-    if (l) {
-      this.move_along(vec3.left, dist);
-    }
-
-    if (r) {
-      this.move_along(vec3.left, -dist);
-    }
-
-    if (u) {
-      this.move_along(vec3.up, dist);
-    }
-
-    if (d) {
-      this.move_along(vec3.up, -dist);
-    }
+    // Transform the input to local space.
+    vec3.transform_mat4(movement, movement, this.matrix);
+    // Subtract position from it to get the movement vector.
+    vec3.subtract(movement, movement, this.position);
+    this.translate(movement);
 
     // Simulate mouse deltas for rotation.
     const mouse_delta = {
