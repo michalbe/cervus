@@ -174,31 +174,32 @@ class Entity {
     this.rotate_along(vec3.left, rad);
   }
 
-  translate(vec, relative_to = this) {
-    const relative_to_self = mat4.create();
-    mat4.multiply(
-      relative_to_self, this.world_to_self, relative_to.world_matrix);
-
+  // XXX Add a relative_to attribute for interpreting the translation in spaces
+  // other than the local space (relative to the parent).
+  translate(vec) {
     const movement = vec3.zero.slice();
-    vec3.transform_mat4(movement, vec, relative_to_self);
-    vec3.add(movement, this.position, movement);
+    vec3.add(movement, this.position, vec);
     this.position = movement;
   }
 
   handle_keys(tick_length, {f, b, l, r, u, d, pu, pd, yl, yr}) {
     const dist = tick_length / 1000 * this.move_speed;
 
-    // The desired XZ direction vector in self space. This corresponds to
-    // walking: we only consider the forward/back and left/right input.
+    // The desired XZ direction vector in self space. This is what the user
+    // wanted to do: walk forward/backward and left/right.
     const direction = vec3.of(l - r, 0, f - b);
 
-    // Transform the input to local space.
+    // Transform the input from self to local space.  If the user wanted to go
+    // "left" in the entity's self space what does it mean in the local space?
     vec3.transform_mat4(direction, direction, this.matrix);
-    // Subtract position from it to go back to the direction vector.
+    // Direction is now a point in the entity's local space. Subtract the
+    // position to go back to a movement vector.
     vec3.subtract(direction, direction, this.position);
 
     // Up and down movement always happens relative to the local space
-    // regardless of the current pitch of the entity.
+    // regardless of the current pitch of the entity.  This can be understood
+    // as projecting the direction vector to the XZ plane first (Y = 0) and
+    // then adding the Y input.
     direction[1] = (u - d);
 
     // Scale direction by this tick's distance.
