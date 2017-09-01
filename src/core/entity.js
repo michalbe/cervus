@@ -36,7 +36,7 @@ class Entity {
   constructor(options) {
     this.matrix = mat4.create();
     this.world_matrix = mat4.create();
-    this.world_to_local = mat4.create();
+    this.world_to_self = mat4.create();
 
     this._scale = vec3.unit.slice();
     this._rotation = quat.create();
@@ -127,7 +127,7 @@ class Entity {
   look_at(target_position) {
     // Find the direction we're looking at. target_position must be given in
     // the current entity's coordinate space.  Use target's world_matrix and
-    // the current entity's world_to_local to go from target's space to the
+    // the current entity's world_to_self to go from target's space to the
     // current entity space.
     const forward = vec3.zero.slice();
     vec3.subtract(forward, target_position, this.position);
@@ -174,43 +174,44 @@ class Entity {
     this.rotate_along(vec3.left, rad);
   }
 
-  move_along(vec, dist) {
-    const move = vec3.zero.slice();
-    vec3.scale(move, vec, dist);
-    mat4.translate(this.matrix, this.matrix, move);
+  // XXX Add a relative_to attribute for interpreting the translation in spaces
+  // other than the local space (relative to the parent).
+  translate(vec) {
+    const movement = vec3.zero.slice();
+    vec3.add(movement, this.position, vec);
+    this.position = movement;
   }
 
   handle_keys(tick_length, {f, b, l, r, u, d, pu, pd, yl, yr}) {
     const dist = tick_length / 1000 * this.move_speed;
 
-    if (f) {
-      this.move_along(vec3.forward, dist);
-    }
+    // The desired XZ direction vector in self space. This is what the user
+    // wanted to do: walk forward/backward and left/right.
+    const direction = vec3.of(l - r, 0, f - b);
 
-    if (b) {
-      this.move_along(vec3.forward, -dist);
-    }
+    // Transform the input from self to local space.  If the user wanted to go
+    // "left" in the entity's self space what does it mean in the local space?
+    vec3.transform_mat4(direction, direction, this.matrix);
+    // Direction is now a point in the entity's local space. Subtract the
+    // position to go back to a movement vector.
+    vec3.subtract(direction, direction, this.position);
 
-    if (l) {
-      this.move_along(vec3.left, dist);
-    }
+    // Up and down movement always happens relative to the local space
+    // regardless of the current pitch of the entity.  This can be understood
+    // as projecting the direction vector to the XZ plane first (Y = 0) and
+    // then adding the Y input.
+    direction[1] = (u - d);
 
-    if (r) {
-      this.move_along(vec3.left, -dist);
-    }
+    // Scale direction by this tick's distance.
+    vec3.normalize(direction, direction);
+    vec3.scale(direction, direction, dist);
 
-    if (u) {
-      this.move_along(vec3.up, dist);
-    }
-
-    if (d) {
-      this.move_along(vec3.up, -dist);
-    }
+    this.translate(direction);
 
     // Simulate mouse deltas for rotation.
     const mouse_delta = {
-      x: (yl ? KEY_ROTATION_DELTA : 0) - (yr ? KEY_ROTATION_DELTA : 0),
-      y: (pu ? KEY_ROTATION_DELTA : 0) - (pd ? KEY_ROTATION_DELTA : 0),
+      x: yl * KEY_ROTATION_DELTA - yr * KEY_ROTATION_DELTA,
+      y: pu * KEY_ROTATION_DELTA - pd * KEY_ROTATION_DELTA,
     };
 
     this.handle_mouse(tick_length, mouse_delta);
@@ -250,7 +251,7 @@ class Entity {
       const current_dirs = {};
 
       for (const [key_code, dir] of Object.entries(this.dir_desc)) {
-        current_dirs[dir] = this.game.keys[key_code];
+        current_dirs[dir] = this.game.get_key(key_code);
       }
 
       this.handle_keys(tick_length, current_dirs);
@@ -268,7 +269,7 @@ class Entity {
       this.world_matrix = this.matrix.slice();
     }
 
-    mat4.invert(this.world_to_local, this.world_matrix);
+    mat4.invert(this.world_to_self, this.world_matrix);
 
     this.entities.forEach(entity => entity.update(tick_length));
   }

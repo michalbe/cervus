@@ -114,11 +114,17 @@ class Game {
   }
 
   key_down(e) {
-    this.keys[e.keyCode] = true;
+    this.keys[e.keyCode] = 1;
   }
 
   key_up(e) {
-    this.keys[e.keyCode] = false
+    this.keys[e.keyCode] = 0
+  }
+
+  get_key(key_code) {
+    // Make sure we return 0 for undefined, i.e. keys we haven't seen
+    // pressed at all.
+    return this.keys[key_code] || 0;
   }
 
   mouse_move(e) {
