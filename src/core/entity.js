@@ -217,15 +217,15 @@ class Entity {
     this.handle_mouse(tick_length, mouse_delta);
   }
 
-  handle_mouse(tick_length, mouse_delta) {
-    const time_delta = tick_length / 1000;
-    const azimuth = this.rotate_speed * time_delta * mouse_delta.x;
-    const polar = this.rotate_speed * time_delta * mouse_delta.y;
-
-    // Check if there's any rotation to handle.
-    if (azimuth == 0 && polar == 0) {
+  handle_mouse(tick_length, {x, y}) {
+    // Check if there's any input to handle.
+    if (x === 0 && y === 0) {
       return;
     }
+
+    const time_delta = tick_length / 1000;
+    const azimuth = this.rotate_speed * time_delta * x;
+    const polar = this.rotate_speed * time_delta * y;
 
     // Polar (with the zenith being the Y axis) to Cartesian, but polar is
     // counted from Z to Y rather than from Y to Z, so we swap cos(polar) for
