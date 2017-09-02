@@ -13,10 +13,10 @@ export default {
     resolve(),
     serve({
       // open: true,
-      contentBase: ['example', 'dist']
+      contentBase: ['_example', 'dist']
     }),
     livereload({
-      watch: ['dist', 'example']
+      watch: ['dist', '_example']
     })
   ],
 };
