@@ -131,8 +131,8 @@ class Game {
     // Accumulate the deltas for each mousemove event that that fired between
     // any two ticks. Our +X is left, +Y is up while the browser's +X is to the
     // right, +Y is down. Inverse the values by subtracting rather than adding.
-    this.mouse_delta.x -= e.movementX,
-    this.mouse_delta.y -= e.movementY
+    this.mouse_delta.x -= e.movementX;
+    this.mouse_delta.y -= e.movementY;
   }
 
   perform_ticks(ticks_qty) {
