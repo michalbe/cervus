@@ -1,4 +1,5 @@
 /* global Cervus */
+const material = Cervus.materials.basic;
 
 const game = new Cervus.core.Game({
   width: window.innerWidth,
@@ -15,7 +16,7 @@ game.camera.rotate_rl(Math.PI);
 game.camera.keyboard_controlled = true;
 
 const plane = new Cervus.shapes.Plane({
-  material: Cervus.materials.phong,
+  material: material,
   color: "#eeeeee",
   scale: [100, 1, 100]
 });
@@ -29,7 +30,7 @@ group.rotate_along([0, 1, 0], Math.PI/2);
 game.add(group);
 
 const cube = new Cervus.shapes.Box({
-  material: Cervus.materials.phong,
+  material: material,
   color: "#bada55",
   position: [0, 1, 0]
 });

@@ -14,6 +14,8 @@ export class AnimatedEntity extends Entity {
     this.current_tick = 0;
 
     // I'll leave those in here as a foundation to our future documentation.
+    // Frame delay defines number of gameloop ticks after next frame will
+    // be rendered
     // this.frame_delay;
     // this.frames
 
@@ -21,24 +23,18 @@ export class AnimatedEntity extends Entity {
 
   create_buffers() {
     this.number_of_frames = this.frames.length;
-    this.buffers = this.frames.map(frame => {
-      return {
-        vertices: create_float_buffer(frame.vertices),
-        indices: create_index_buffer(frame.indices),
-        qty: frame.indices.length,
-        normals: create_float_buffer(frame.normals)
-      };
-    });
+    this.buffers = this.frames.map(frame => ({
+      vertices: create_float_buffer(frame.vertices),
+      indices: create_index_buffer(frame.indices),
+      qty: frame.indices.length,
+      normals: create_float_buffer(frame.normals)
+    }));
   }
 
   get_next_frame() {
     let current_frame = this.current_frame;
     current_frame++;
-    if (current_frame === this.number_of_frames) {
-      current_frame = 0;
-    }
-
-    return current_frame;
+    return current_frame % this.number_of_frames;
   }
 
   update(tick_length) {
@@ -47,6 +43,8 @@ export class AnimatedEntity extends Entity {
     }
 
     this.current_tick++;
+    // frame_delta is an interpolation amount between current and
+    // next frame vertices
     this.frame_delta = 1 - (this.current_tick % this.frame_delay)/this.frame_delay;
 
     if (!(this.current_tick % this.frame_delay)) {

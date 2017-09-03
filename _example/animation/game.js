@@ -21,6 +21,7 @@ const game = new Cervus.core.Game({
   width: window.innerWidth,
   height: window.innerHeight,
   light_intensity: 0.4,
+  // clear_color: 'ff00ff'
   // fps: 10
 });
 
@@ -30,7 +31,6 @@ game.camera.keyboard_controlled = true;
 // game.camera.mouse_controlled = true;
 
 const frames = [];
-const srames = [];
 
 let position, scale;
 
@@ -48,12 +48,7 @@ fetch('models/ptak.json')
     child.meshes.forEach((mesh_i, i) => {
       frames.push({
         vertices: json.meshes[mesh_i].vertices,
-        indices: [].concat.apply([], json.meshes[mesh_i].faces),
-        normals: json.meshes[mesh_i].normals
-      });
-      srames.push({
-        vertices: json.meshes[mesh_i].vertices,
-        indices: [].concat.apply([], json.meshes[mesh_i].faces),
+        indices: [].concat(...json.meshes[mesh_i].faces),
         normals: json.meshes[mesh_i].normals
       });
 
@@ -78,7 +73,7 @@ fetch('models/ptak.json')
 const create_bird = (x = 0, y = 0, z = 0) => {
   let animated_model;
   animated_model = new Cervus.core.AnimatedEntity({
-    material: Cervus.materials.animated_phong,
+    material: Cervus.materials.basic,
     color:  '#ff00ff',
     frame_delay: 16,
     position: [x, y, z],
@@ -93,7 +88,6 @@ const create_bird = (x = 0, y = 0, z = 0) => {
   game.add(animated_model);
 }
 setTimeout(() => {
-  // frames.splice(0, 0, srames[1]);
   for(let i=0; i< 20; i++) {
     setTimeout(() => {
       create_bird(
