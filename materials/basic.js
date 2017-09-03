@@ -1,86 +1,77 @@
-import { create_program_object, create_shader_object, gl } from '../core/context';
+import { gl } from '../core/context';
+import { Material } from './material';
 
-const vertex_code =`
-  precision mediump float;
-  uniform mat4 p;
-  uniform mat4 v;
-  uniform mat4 w;
-  attribute vec3 P;
-  void main()
-  {
-    gl_Position = p * v * vec4((w * vec4(P, 1.0)).xyz, 1.0);
-  }
-`;
-
-const fragment_code =`
-  precision mediump float;
-  uniform vec4 m;
-  void main() {
-    gl_FragColor = m;
-  }
-`;
-
-export class BasicMaterial {
+export class BasicMaterial extends Material {
   constructor() {
-    this.program = create_program_object(
-      create_shader_object(gl.VERTEX_SHADER, vertex_code),
-      create_shader_object(gl.FRAGMENT_SHADER, fragment_code)
+    super();
+
+    this.vertex_shader = {
+      variables: `uniform mat4 p;
+        uniform mat4 v;
+        uniform mat4 w;
+        uniform float frame_delta;
+        uniform float do_morph;
+        attribute vec3 P_current;
+        attribute vec3 P_next;`,
+
+      body: `if (do_morph == 1.0) {
+        float next_frame_delta = 1.0 - frame_delta;
+        gl_Position = p * v * vec4((w * vec4(P_next * next_frame_delta + P_current * frame_delta, 1.0)).xyz, 1.0);
+      } else {
+        gl_Position = p * v * vec4((w * vec4(P_current, 1.0)).xyz, 1.0);
+      }`
+    };
+
+    this.fragment_shader = {
+      variables: 'uniform vec4 c;',
+      body: 'gl_FragColor = c;'
+    };
+
+    this.setup_program();
+    this.get_uniforms_and_attrs(
+      ['p', 'v', 'w', 'c', 'frame_delta', 'do_morph'],
+      ['P_current', 'P_next']
     );
-
-    if (this.program.error) {
-      console.log(this.program.error); return;
-    }
-
-    this.uniforms = {
-      p: gl.getUniformLocation(this.program, 'p'),
-      v: gl.getUniformLocation(this.program, 'v'),
-      w: gl.getUniformLocation(this.program, 'w'),
-
-      m: gl.getUniformLocation(this.program, 'm'),
-    };
-
-    this.attribs = {
-      P: gl.getAttribLocation(this.program, 'P')
-    };
   }
 
-  render(entity) {
-    let ent = entity;
-    let game = ent.game;
+  apply_shader(entity) {
+    let buffers = entity.buffers;
 
-    while(ent.parent && !game) {
-      ent = ent.parent;
-      game = ent.game;
+    if (Array.isArray(entity.buffers)) {
+      buffers = entity.buffers[entity.current_frame];
     }
 
-    gl.useProgram(this.program);
-    gl.uniformMatrix4fv(this.uniforms.p, gl.FALSE, game.projMatrix);
-    gl.uniformMatrix4fv(this.uniforms.v, gl.FALSE, game.viewMatrix);
-
-    gl.uniformMatrix4fv(
-      this.uniforms.w,
-      gl.FALSE,
-      entity.world_matrix
-    );
-
-    gl.uniform4fv(
-      this.uniforms.m,
-      entity.color_vec
-    );
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, entity.buffers.vertices);
-
+    // current frame
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertices);
     gl.vertexAttribPointer(
-      this.attribs.P,
+      this.attribs.P_current,
       3, gl.FLOAT, gl.FALSE,
       0, 0
     );
 
-    gl.enableVertexAttribArray(this.attribs.P);
+    gl.enableVertexAttribArray(this.attribs.P_current);
 
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, entity.buffers.indices);
-    gl.drawElements(gl.TRIANGLES, entity.buffers.qty, gl.UNSIGNED_SHORT, 0);
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
+    gl.drawElements(gl.TRIANGLES, buffers.qty, gl.UNSIGNED_SHORT, 0);
+
+    if (typeof entity.next_frame === 'number') {
+      buffers = entity.buffers[entity.next_frame];
+      // next frame
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertices);
+
+      gl.vertexAttribPointer(
+        this.attribs.P_next,
+        3, gl.FLOAT, gl.FALSE,
+        0, 0
+      );
+      gl.enableVertexAttribArray(this.attribs.P_next);
+
+      gl.uniform1f(this.uniforms.do_morph, 1);
+    } else {
+      gl.uniform1f(this.uniforms.do_morph, 0);
+    }
+
+    gl.uniform1f(this.uniforms.frame_delta, entity.frame_delta);
   }
 }
 
