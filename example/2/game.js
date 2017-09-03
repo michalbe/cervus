@@ -1,6 +1,6 @@
 /* global Cervus */
 
-const game = new Cervus.Game({
+const game = new Cervus.core.Game({
   width: window.innerWidth,
   height: window.innerHeight,
   light_position: [-1, 2, 5],
@@ -22,7 +22,7 @@ const plane = new Cervus.shapes.Plane({
 
 game.add(plane);
 
-const group = new Cervus.Entity();
+const group = new Cervus.core.Entity();
 const cube = new Cervus.shapes.Box({
   material: Cervus.materials.phong,
   position: [0, 1, 3]

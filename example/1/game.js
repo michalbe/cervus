@@ -2,7 +2,7 @@
 
 const material = Cervus.materials.phong;
 
-const game = new Cervus.Game({
+const game = new Cervus.core.Game({
   width: window.innerWidth,
   height: window.innerHeight
   // fps: 1
@@ -88,8 +88,8 @@ plane2.position = [ 3, -1, -13];
 plane2.scale = [ 2, 1, 2 ];
 game.add(plane2);
 
-const parent_group = new Cervus.Entity({});
-const group = new Cervus.Entity({});
+const parent_group = new Cervus.core.Entity({});
+const group = new Cervus.core.Entity({});
 const vox1 = new Cervus.shapes.Box({
   scale: [0.5, 0.5, 0.5],
   color: '#0000ff',

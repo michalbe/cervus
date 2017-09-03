@@ -6,22 +6,34 @@ const vertex_code =`
   uniform mat4 v;
   uniform mat4 w;
   attribute vec3 P;
+  attribute vec3 N;
+  varying vec3 fp;
+  varying vec3 fn;
+
   void main()
   {
-    gl_Position = p * v * vec4((w * vec4(P, 1.0)).xyz, 1.0);
+    fp = (w * vec4(P, 1.0)).xyz;
+    fn = (w * vec4(N, 0.0)).xyz;
+    gl_Position = p * v * vec4(fp, 1.0);
   }
 `;
 
 const fragment_code =`
   precision mediump float;
-  uniform vec4 m;
-  void main() {
-    gl_FragColor = m;
+  uniform vec3 lp;
+  uniform vec4 c;
+  uniform vec2 li;
+  varying vec3 fp;
+  varying vec3 fn;
+
+  void main()
+  {
+    gl_FragColor = vec4(c.rgb * li.x + li.y * max(dot(fn, normalize(lp - fp)), 0.0), c.a);
   }
 `;
 
-class Basic {
 
+export class PhongMaterial {
   constructor() {
     this.program = create_program_object(
       create_shader_object(gl.VERTEX_SHADER, vertex_code),
@@ -37,11 +49,14 @@ class Basic {
       v: gl.getUniformLocation(this.program, 'v'),
       w: gl.getUniformLocation(this.program, 'w'),
 
-      m: gl.getUniformLocation(this.program, 'm'),
+      lp: gl.getUniformLocation(this.program, 'lp'),
+      c: gl.getUniformLocation(this.program, 'c'),
+      li: gl.getUniformLocation(this.program, 'li'),
     };
 
     this.attribs = {
-      P: gl.getAttribLocation(this.program, 'P')
+      P: gl.getAttribLocation(this.program, 'P'),
+      N: gl.getAttribLocation(this.program, 'N'),
     };
   }
 
@@ -65,7 +80,7 @@ class Basic {
     );
 
     gl.uniform4fv(
-      this.uniforms.m,
+      this.uniforms.c,
       entity.color_vec
     );
 
@@ -79,11 +94,24 @@ class Basic {
 
     gl.enableVertexAttribArray(this.attribs.P);
 
+    gl.bindBuffer(gl.ARRAY_BUFFER, entity.buffers.normals);
+    gl.vertexAttribPointer(
+      this.attribs.N,
+      3, gl.FLOAT, gl.FALSE,
+      0, 0
+    );
+
+    gl.enableVertexAttribArray(this.attribs.N);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, entity.buffers.indices);
     gl.drawElements(gl.TRIANGLES, entity.buffers.qty, gl.UNSIGNED_SHORT, 0);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+
+    gl.uniform3fv(this.uniforms.lp, game.light_position);
+    gl.uniform2fv(this.uniforms.li, [game.light_intensity, 1 - game.light_intensity]);
   }
 }
 
-const basic = new Basic();
-export { basic };
+export const phong = new PhongMaterial();

@@ -1,6 +1,6 @@
 import { BasicTween } from './basic-tween';
 
-class ValueTween extends BasicTween {
+export class ValueTween extends BasicTween {
   action() {
     this.object[this.property] = this.from +
       this.current_step * (this.to - this.from);
@@ -11,5 +11,3 @@ class ValueTween extends BasicTween {
     this.from = this.object[this.property];
   }
 }
-
-export { ValueTween }

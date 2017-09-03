@@ -1,4 +1,4 @@
-import { Entity } from '../core/entity';
+import { Entity } from '../core';
 
 const t = 0.5 + Math.sqrt(5) / 2;
 const vertices = [
@@ -54,7 +54,7 @@ const indices = [
   9, 8, 1
 ];
 
-class Sphere extends Entity {
+export class Sphere extends Entity {
   constructor(options = {}) {
     options.vertices = vertices;
     options.indices = indices;
@@ -64,5 +64,3 @@ class Sphere extends Entity {
   }
   // TODO: https://github.com/hughsk/icosphere/blob/master/index.js
 }
-
-export { Sphere };
