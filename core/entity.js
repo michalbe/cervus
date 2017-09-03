@@ -53,7 +53,7 @@ export class Entity {
 
     this.program = this.material && this.material.program;
 
-    if (this.vertices && this.indices && this.normals) {
+    if (this.vertices && this.vertices.length && this.indices && this.indices.length && this.normals && this.normals.length) {
       this.create_buffers();
     }
   }
