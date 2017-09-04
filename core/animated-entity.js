@@ -14,9 +14,9 @@ export class AnimatedEntity extends Entity {
     this.current_tick = 0;
 
     // I'll leave those in here as a foundation to our future documentation.
-    // Frame delay defines number of gameloop ticks after next frame will
+    // `frame_time` defines number of gameloop ticks after next frame will
     // be rendered
-    // this.frame_delay;
+    // this.frame_time;
     // this.frames
 
   }
@@ -45,9 +45,9 @@ export class AnimatedEntity extends Entity {
     this.current_tick++;
     // frame_delta is an interpolation amount between current and
     // next frame vertices
-    this.frame_delta = 1 - (this.current_tick % this.frame_delay)/this.frame_delay;
+    this.frame_delta = 1 - (this.current_tick % this.frame_time)/this.frame_time;
 
-    if (!(this.current_tick % this.frame_delay)) {
+    if (!(this.current_tick % this.frame_time)) {
       this.current_frame = this.next_frame;
       this.next_frame = this.get_next_frame();
     }

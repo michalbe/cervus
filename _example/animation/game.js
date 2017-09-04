@@ -75,7 +75,7 @@ const create_bird = (x = 0, y = 0, z = 0) => {
   animated_model = new Cervus.core.AnimatedEntity({
     material: Cervus.materials.basic,
     color:  '#ff00ff',
-    frame_delay: 16,
+    frame_time: 16,
     position: [x, y, z],
     scale: scale
   });
@@ -83,17 +83,18 @@ const create_bird = (x = 0, y = 0, z = 0) => {
   animated_model.frames = frames;
   animated_model.rotate_ud(Math.PI * 1.5);
   animated_model.create_buffers();
+  // animated_model.current_tick = ~~(Math.random()*100);
   // animated_model.current_frame = ~~(Math.random()*frames.length);
   // animated_model.next_frame = animated_model.get_next_frame();
   game.add(animated_model);
 }
 setTimeout(() => {
-  for(let i=0; i< 20; i++) {
+  for(let i=0; i< 5000; i++) {
     setTimeout(() => {
       create_bird(
-        5 - Math.random() * 10,
-        5 - Math.random() * 10,
-        5 - Math.random() * 10
+        50 - Math.random() * 100,
+        50 - Math.random() * 100,
+        50 - Math.random() * 100
       );
     }, 0);
     // create_bird();
