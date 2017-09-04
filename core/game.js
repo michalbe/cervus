@@ -177,4 +177,9 @@ export class Game {
     entity.game = this;
     this.entities.push(entity);
   }
+
+  remove(entity) {
+    const index = this.entities.indexOf(entity);
+    ~index && this.entities.splice(index, 1);
+  }
 }
