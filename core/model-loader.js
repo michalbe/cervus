@@ -4,9 +4,10 @@ export const model_loader = (url) => new Promise((resolve, reject) => {
   const meshes = [];
   fetch(url)
   .then((data) => {
-    // if (!data) {
-    //   return reject('File not found');
-    // }
+    if (!data.ok) {
+      reject('Model loader error: ' + data.statusText);
+      return;
+    }
     return data.json();
   })
   .then((json) => {
@@ -31,5 +32,5 @@ export const model_loader = (url) => new Promise((resolve, reject) => {
       });
       resolve(meshes);
     });
-  });
+  }).catch(reject);
 });
