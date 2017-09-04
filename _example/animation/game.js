@@ -13,7 +13,7 @@ game.camera.rotate_rl(Math.PI);
 game.camera.keyboard_controlled = true;
 // game.camera.mouse_controlled = true;
 
-Cervus.core.model_loader('models/birdd.json').then((models) => {
+Cervus.core.model_loader('models/bird.json').then((models) => {
   for(let i=0; i< 5000; i++) {
     setTimeout(() => {
       create_bird(
