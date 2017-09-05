@@ -1,4 +1,4 @@
-import { hex_to_vec } from '../utils';
+import { hex_to_rgb } from '../utils';
 import { vec3, mat4, to_radian } from '../math';
 import { gl, canvas } from './context';
 import { Entity } from './entity';
@@ -67,7 +67,7 @@ export class Game {
 
   set clear_color(hex) {
     this._clear_color = hex;
-    const color_vec = hex_to_vec(hex);
+    const color_vec = hex_to_rgb(hex);
 
     gl.clearColor(
       color_vec[0],
