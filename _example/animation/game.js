@@ -26,7 +26,7 @@ Cervus.core.model_loader('models/bird.json').then((models) => {
     }, 0);
     // create_bird();
   }
-}).catch(console.log);
+}).catch(console.error);
 
 
 const create_bird = (x = 0, y = 0, z = 0, scale, frames) => {

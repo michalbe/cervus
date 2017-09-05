@@ -1,23 +1,23 @@
 import { get_scaling } from '../math/mat4';
 
-export const model_loader = (url) => new Promise((resolve, reject) => {
+export function model_loader(url) {
   const meshes = [];
-  fetch(url)
-  .then((data) => {
+
+  function validate_response(data) {
     if (!data.ok) {
-      reject('Model loader error: ' + data.statusText);
-      return;
+      throw new Error('Model loader error: ' + data.statusText);
     }
+
     return data.json();
-  })
-  .then((json) => {
-    json.rootnode.children.forEach(child => {
+  }
+
+  function parse_model(json) {
+    for (const child of json.rootnode.children) {
       if (!child.meshes) {
-        reject('Meshes not found.');
-        return;
+        throw new Error('Meshes not found.');
       }
 
-      child.meshes.forEach((mesh) => {
+      for (const mesh of child.meshes) {
         meshes.push({
           vertices: json.meshes[mesh].vertices,
           indices: [].concat(...json.meshes[mesh].faces),
@@ -29,8 +29,13 @@ export const model_loader = (url) => new Promise((resolve, reject) => {
             child.transformation[11]
           ]
         });
-      });
-      resolve(meshes);
-    });
-  }).catch(reject);
-});
+      }
+    }
+
+    return meshes;
+  }
+
+  return fetch(url)
+    .then(validate_response)
+    .then(parse_model);
+}
