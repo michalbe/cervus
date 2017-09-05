@@ -1,41 +1,34 @@
 import { get_scaling } from '../math/mat4';
 
-export function model_loader(url) {
+export async function model_loader(url) {
   const meshes = [];
+  const data = await fetch(url);
 
-  function validate_response(data) {
-    if (!data.ok) {
-      throw new Error('Model loader error: ' + data.statusText);
-    }
-
-    return data.json();
+  if (!data.ok) {
+    throw new Error('Model loader error: ' + data.statusText);
   }
 
-  function parse_model(json) {
-    for (const child of json.rootnode.children) {
-      if (!child.meshes) {
-        throw new Error('Meshes not found.');
-      }
+  const json = await data.json();
 
-      for (const mesh of child.meshes) {
-        meshes.push({
-          vertices: json.meshes[mesh].vertices,
-          indices: [].concat(...json.meshes[mesh].faces),
-          normals: json.meshes[mesh].normals,
-          scale: get_scaling([], child.transformation),
-          position: [
-            child.transformation[3],
-            child.transformation[7],
-            child.transformation[11]
-          ]
-        });
-      }
+  for (const child of json.rootnode.children) {
+    if (!child.meshes) {
+      throw new Error('Meshes not found.');
     }
 
-    return meshes;
+    for (const mesh of child.meshes) {
+      meshes.push({
+        vertices: json.meshes[mesh].vertices,
+        indices: [].concat(...json.meshes[mesh].faces),
+        normals: json.meshes[mesh].normals,
+        scale: get_scaling([], child.transformation),
+        position: [
+          child.transformation[3],
+          child.transformation[7],
+          child.transformation[11]
+        ]
+      });
+    }
   }
 
-  return fetch(url)
-    .then(validate_response)
-    .then(parse_model);
+  return meshes;
 }
