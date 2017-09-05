@@ -26,7 +26,7 @@ export class Game {
     this.canvas.height = this.height;
     this.dom.appendChild(canvas);
 
-    this.entities = [];
+    this.entities = new Set();
     this.camera = new Entity();
     this.camera.game = this;
 
@@ -177,11 +177,10 @@ export class Game {
 
   add(entity) {
     entity.game = this;
-    this.entities.push(entity);
+    this.entities.add(entity);
   }
 
   remove(entity) {
-    const index = this.entities.indexOf(entity);
-    ~index && this.entities.splice(index, 1);
+    this.entities.delete(entity);
   }
 }
