@@ -42,8 +42,7 @@ export class Game {
     );
 
     this.last_tick = performance.now();
-    this.last_render = this.last_tick;
-    this.tick_length = 1000/this.fps;
+    this.tick_delta = 1000 / this.fps;
 
     this.keys = {};
     this.mouse_delta = {x: 0, y: 0};
@@ -54,7 +53,7 @@ export class Game {
 
     this.listeners = new Map();
 
-    this.tick(performance.now());
+    this.frame(performance.now());
 
     gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
@@ -85,22 +84,7 @@ export class Game {
   start() {
     this.running = true;
     this.last_tick = performance.now();
-    window.requestAnimationFrame((tick_time) => this.tick(tick_time));
-  }
-
-  tick(tick_time) {
-    if (this.running) {
-      window.requestAnimationFrame((tick_time) => this.tick(tick_time));
-    }
-
-    const next_tick = this.last_tick + this.tick_length;
-
-    if (tick_time > next_tick) {
-      const ticks_qty = Math.floor((tick_time - this.last_tick) / this.tick_length);
-      this.perform_ticks(ticks_qty);
-      this.render(this.last_tick);
-    }
-
+    window.requestAnimationFrame(frame_time => this.frame(frame_time));
   }
 
   emit(event_name, ...args) {
@@ -147,6 +131,19 @@ export class Game {
     this.mouse_delta.y -= e.movementY;
   }
 
+  frame(frame_time) {
+    if (this.running) {
+      window.requestAnimationFrame(frame_time => this.frame(frame_time));
+    }
+
+    if (frame_time > this.last_tick + this.tick_delta) {
+      const accumulated_delta = frame_time - this.last_tick;
+      const ticks_qty = Math.floor(accumulated_delta / this.tick_delta);
+      this.perform_ticks(ticks_qty);
+      this.render();
+    }
+  }
+
   perform_ticks(ticks_qty) {
     // Mouse delta is measured since the last time this.tick was run.  If there
     // is more than one tick to perform we need to scale the delta down to
@@ -154,9 +151,9 @@ export class Game {
     this.mouse_delta.x /= ticks_qty;
     this.mouse_delta.y /= ticks_qty;
 
-    for(var i=0; i < ticks_qty; i++) {
-      this.last_tick = this.last_tick + this.tick_length;
-      this.update(this.last_tick);
+    for (let i = 0; i < ticks_qty; i++) {
+      this.last_tick = this.last_tick + this.tick_delta;
+      this.update();
     }
 
     // Reset the mouse delta.
@@ -164,21 +161,17 @@ export class Game {
     this.mouse_delta.y = 0;
   }
 
-  update(tick_time) {
-    this.emit('tick', tick_time);
-
-    this.entities.forEach((entity) => entity.update(this.tick_length));
-
-    this.camera.update(this.tick_length);
+  update() {
+    this.emit('tick', this.last_tick);
+    this.entities.forEach(entity => entity.update(this.tick_delta));
+    this.camera.update(this.tick_delta);
     this.camera.get_view_matrix(this.viewMatrix);
   }
 
-  render(ticks_qty) {
+  render() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    gl.viewport(0, 0, canvas.width, canvas.height);
-    // this.entities.forEach((entity) => entity.generate_shadow_map && entity.generate_shadow_map(ticks_qty));
-    // gl.viewport(0, 0, canvas.width, canvas.height);
-    this.entities.forEach((entity) => entity.render(ticks_qty));
+    gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+    this.entities.forEach(entity => entity.render());
     this.emit('afterrender');
   }
 

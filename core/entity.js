@@ -274,11 +274,9 @@ export class Entity {
     this.entities.forEach(entity => entity.update(tick_length));
   }
 
-  render(ticks) {
+  render() {
     !this.skip && this.material && this.material.render(this);
-    !this.skip && this.entities.forEach((entity) => {
-      entity.render(ticks);
-    });
+    !this.skip && this.entities.forEach(entity => entity.render());
   }
 
   // generate_shadow_map() {
