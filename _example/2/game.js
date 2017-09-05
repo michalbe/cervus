@@ -33,7 +33,7 @@ group.add(cube);
 
 game.add(group);
 
-game.add_listener("tick", () => {
+game.on('tick', () => {
   game.camera.look_at(cube.position);
 });
 

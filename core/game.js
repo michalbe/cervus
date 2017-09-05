@@ -95,7 +95,7 @@ export class Game {
     }
   }
 
-  add_listener(event_name, handler) {
+  on(event_name, handler) {
     if (!this.listeners.has(event_name)) {
       this.listeners.set(event_name, new Set());
     }
@@ -103,7 +103,7 @@ export class Game {
     this.listeners.get(event_name).add(handler);
   }
 
-  remove_listener(event_name, handler) {
+  off(event_name, handler) {
     if (this.listeners.has(event_name)) {
       this.listeners.get(event_name).delete(handler);
     }
