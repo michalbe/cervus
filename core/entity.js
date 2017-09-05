@@ -49,7 +49,7 @@ export class Entity {
       this.color = options.color || '#ffffff';
     }
 
-    this.entities = [];
+    this.entities = new Set();
 
     this.program = this.material && this.material.program;
 
@@ -114,7 +114,7 @@ export class Entity {
 
   add(entity) {
     entity.parent = this;
-    this.entities.push(entity);
+    this.entities.add(entity);
   }
 
   get_view_matrix(out) {
