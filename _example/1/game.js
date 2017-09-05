@@ -113,7 +113,7 @@ group.add(vox2);
 parent_group.add(group);
 game.add(parent_group);
 
-game.add_frame_action(() => {
+game.on('tick', () => {
   // cube.rotation[0] = sphere.rotation[0] = group.rotation[2] = delta / 1000;
   cube.rotate_ud(16/1000);
   sphere.rotate_ud(16/1000);

@@ -42,8 +42,7 @@ export class Game {
     );
 
     this.last_tick = performance.now();
-    this.last_render = this.last_tick;
-    this.tick_length = 1000/this.fps;
+    this.tick_delta = 1000 / this.fps;
 
     this.keys = {};
     this.mouse_delta = {x: 0, y: 0};
@@ -52,9 +51,9 @@ export class Game {
     window.addEventListener('keyup', this.key_up.bind(this));
     window.addEventListener('mousemove', this.mouse_move.bind(this));
 
-    this.actions = [];
+    this.listeners = new Map();
 
-    this.tick(performance.now());
+    this.frame(performance.now());
 
     gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
@@ -85,32 +84,29 @@ export class Game {
   start() {
     this.running = true;
     this.last_tick = performance.now();
-    window.requestAnimationFrame((tick_time) => this.tick(tick_time));
+    window.requestAnimationFrame(frame_time => this.frame(frame_time));
   }
 
-  tick(tick_time) {
-    if (this.running) {
-      window.requestAnimationFrame((tick_time) => this.tick(tick_time));
+  emit(event_name, ...args) {
+    if (this.listeners.has(event_name)) {
+      for (const handler of this.listeners.get(event_name)) {
+        handler(...args);
+      }
+    }
+  }
+
+  on(event_name, handler) {
+    if (!this.listeners.has(event_name)) {
+      this.listeners.set(event_name, new Set());
     }
 
-    const next_tick = this.last_tick + this.tick_length;
+    this.listeners.get(event_name).add(handler);
+  }
 
-    if (tick_time > next_tick) {
-      const ticks_qty = Math.floor((tick_time - this.last_tick) / this.tick_length);
-      this.perform_ticks(ticks_qty);
-      this.render(this.last_tick);
+  off(event_name, handler) {
+    if (this.listeners.has(event_name)) {
+      this.listeners.get(event_name).delete(handler);
     }
-
-  }
-
-  add_frame_action(action) {
-    this.actions.push(action);
-  }
-
-  remove_frame_action(action_to_remove) {
-    this.actions = this.actions.filter(action => {
-      return action !== action_to_remove;
-    });
   }
 
   key_down(e) {
@@ -135,6 +131,19 @@ export class Game {
     this.mouse_delta.y -= e.movementY;
   }
 
+  frame(frame_time) {
+    if (this.running) {
+      window.requestAnimationFrame(frame_time => this.frame(frame_time));
+    }
+
+    if (frame_time > this.last_tick + this.tick_delta) {
+      const accumulated_delta = frame_time - this.last_tick;
+      const ticks_qty = Math.floor(accumulated_delta / this.tick_delta);
+      this.perform_ticks(ticks_qty);
+      this.render();
+    }
+  }
+
   perform_ticks(ticks_qty) {
     // Mouse delta is measured since the last time this.tick was run.  If there
     // is more than one tick to perform we need to scale the delta down to
@@ -142,9 +151,9 @@ export class Game {
     this.mouse_delta.x /= ticks_qty;
     this.mouse_delta.y /= ticks_qty;
 
-    for(var i=0; i < ticks_qty; i++) {
-      this.last_tick = this.last_tick + this.tick_length;
-      this.update(this.last_tick);
+    for (let i = 0; i < ticks_qty; i++) {
+      this.last_tick = this.last_tick + this.tick_delta;
+      this.update();
     }
 
     // Reset the mouse delta.
@@ -152,25 +161,18 @@ export class Game {
     this.mouse_delta.y = 0;
   }
 
-  update(tick_time) {
-    Object.keys(this.actions).forEach(action => {
-      if (this.actions[action]) {
-        this.actions[action](tick_time);
-      }
-    });
-
-    this.entities.forEach((entity) => entity.update(this.tick_length));
-
-    this.camera.update(this.tick_length);
+  update() {
+    this.emit('tick', this.last_tick);
+    this.entities.forEach(entity => entity.update(this.tick_delta));
+    this.camera.update(this.tick_delta);
     this.camera.get_view_matrix(this.viewMatrix);
   }
 
-  render(ticks_qty) {
+  render() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    gl.viewport(0, 0, canvas.width, canvas.height);
-    // this.entities.forEach((entity) => entity.generate_shadow_map && entity.generate_shadow_map(ticks_qty));
-    // gl.viewport(0, 0, canvas.width, canvas.height);
-    this.entities.forEach((entity) => entity.render(ticks_qty));
+    gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+    this.entities.forEach(entity => entity.render());
+    this.emit('afterrender');
   }
 
   add(entity) {

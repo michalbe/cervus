@@ -49,6 +49,6 @@ const create_bird = (x = 0, y = 0, z = 0, scale, frames) => {
 
 
 
-game.add_frame_action(() => {
+game.on('tick', () => {
   game.light_position = game.camera.position;
 });
