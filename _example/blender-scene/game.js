@@ -103,7 +103,7 @@ fetch('models/scene.json')
   });
 });
 
-game.add_frame_action(() => {
+game.add_listener('tick', () => {
   // game.light_position = game.camera.position;
 
   // meshes.forEach((mesh, i) => {

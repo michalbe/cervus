@@ -14,7 +14,7 @@ export class BasicTween {
     );
     this.action();
     if (this.current_step === 1) {
-      this.game.remove_frame_action(this.do_step.bound);
+      this.game.remove_listener("tick", this.do_step.bound);
       resolve();
     }
   }
@@ -34,7 +34,7 @@ export class BasicTween {
       this.do_step.bound = (tick) => {
         this.do_step(tick, resolve);
       };
-      this.game.add_frame_action(this.do_step.bound);
+      this.game.add_listener("tick", this.do_step.bound);
     });
   }
 }

@@ -52,7 +52,7 @@ export class Game {
     window.addEventListener('keyup', this.key_up.bind(this));
     window.addEventListener('mousemove', this.mouse_move.bind(this));
 
-    this.actions = [];
+    this.listeners = new Map();
 
     this.tick(performance.now());
 
@@ -103,14 +103,26 @@ export class Game {
 
   }
 
-  add_frame_action(action) {
-    this.actions.push(action);
+  emit(event_name, ...args) {
+    if (this.listeners.has(event_name)) {
+      for (const handler of this.listeners.get(event_name)) {
+        handler(...args);
+      }
+    }
   }
 
-  remove_frame_action(action_to_remove) {
-    this.actions = this.actions.filter(action => {
-      return action !== action_to_remove;
-    });
+  add_listener(event_name, handler) {
+    if (!this.listeners.has(event_name)) {
+      this.listeners.set(event_name, new Set());
+    }
+
+    this.listeners.get(event_name).add(handler);
+  }
+
+  remove_listener(event_name, handler) {
+    if (this.listeners.has(event_name)) {
+      this.listeners.get(event_name).delete(handler);
+    }
   }
 
   key_down(e) {
@@ -153,11 +165,7 @@ export class Game {
   }
 
   update(tick_time) {
-    Object.keys(this.actions).forEach(action => {
-      if (this.actions[action]) {
-        this.actions[action](tick_time);
-      }
-    });
+    this.emit('tick', tick_time);
 
     this.entities.forEach((entity) => entity.update(this.tick_length));
 
@@ -171,6 +179,7 @@ export class Game {
     // this.entities.forEach((entity) => entity.generate_shadow_map && entity.generate_shadow_map(ticks_qty));
     // gl.viewport(0, 0, canvas.width, canvas.height);
     this.entities.forEach((entity) => entity.render(ticks_qty));
+    this.emit('afterrender');
   }
 
   add(entity) {
