@@ -10,11 +10,11 @@ export class BasicTween {
   do_step(tick, resolve) {
     this.current_step = Math.min(
       1,
-      ((tick - this.first_tick) / this.tick_length) * this.step
+      ((tick - this.first_tick) / this.tick_delta) * this.step
     );
     this.action();
     if (this.current_step === 1) {
-      this.game.remove_frame_action(this.do_step.bound);
+      this.game.off('tick', this.do_step.bound);
       resolve();
     }
   }
@@ -22,9 +22,9 @@ export class BasicTween {
   action() {}
 
   pre_start() {
-    this.tick_length = this.game.tick_length;
+    this.tick_delta = this.game.tick_delta;
     this.first_tick = this.game.last_tick;
-    this.number_of_ticks = Math.ceil(this.time / this.tick_length);
+    this.number_of_ticks = Math.ceil(this.time / this.tick_delta);
     this.step = 1 / this.number_of_ticks;
   }
 
@@ -34,7 +34,7 @@ export class BasicTween {
       this.do_step.bound = (tick) => {
         this.do_step(tick, resolve);
       };
-      this.game.add_frame_action(this.do_step.bound);
+      this.game.on('tick', this.do_step.bound);
     });
   }
 }
