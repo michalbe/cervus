@@ -1,6 +1,6 @@
 import { create_float_buffer, create_index_buffer } from './context';
 import { vec3, mat4, quat } from '../math';
-import { hex_to_vec } from '../utils';
+import { hex_to_rgb } from '../utils';
 
 // When using arrow keys for rotation simulate the mouse delta of this value.
 const KEY_ROTATION_DELTA = 3;
@@ -96,7 +96,7 @@ export class Entity {
 
   set color(hex) {
     this._color = hex || '#ffffff';
-    this.color_vec = [...hex_to_vec(this._color), this.color_opacity];
+    this.color_vec = [...hex_to_rgb(this._color), this.color_opacity];
   }
 
   get color() {
