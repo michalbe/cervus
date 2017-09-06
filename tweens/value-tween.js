@@ -1,6 +1,6 @@
-import { BasicTween } from './basic-tween';
+import { Tween } from '../core';
 
-export class ValueTween extends BasicTween {
+export class ValueTween extends Tween {
   action() {
     this.object[this.property] = this.from +
       this.current_step * (this.to - this.from);

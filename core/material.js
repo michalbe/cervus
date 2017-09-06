@@ -1,4 +1,4 @@
-import { create_program_object, create_shader_object, gl } from '../core/context';
+import { create_program_object, create_shader_object, gl } from './context';
 import { Transform, Render } from '../components';
 
 export class Material {

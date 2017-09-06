@@ -1,5 +1,5 @@
 import { gl } from '../core/context';
-import { Material } from './material';
+import { Material } from '../core';
 
 import { Render, Morph } from '../components';
 
