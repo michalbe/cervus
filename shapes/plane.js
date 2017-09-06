@@ -1,5 +1,8 @@
 import { Entity } from '../core';
 
+import { Render } from '../components';
+import { Transform } from '../components';
+
 const vertices = [
   -1,  0,  1,
    1,  0,  1,
@@ -21,9 +24,15 @@ const normals = [
 
 export class Plane extends Entity {
   constructor(options = {}) {
-    options.vertices = vertices;
-    options.indices = indices;
-    options.normals = normals;
+    options.components = [
+      new Transform(),
+      new Render({
+        vertices,
+        indices,
+        normals,
+        material: options.material
+      })
+    ];
 
     super(options);
   }

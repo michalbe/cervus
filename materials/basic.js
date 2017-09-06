@@ -1,6 +1,8 @@
 import { gl } from '../core/context';
 import { Material } from './material';
 
+import { Render, Morph } from '../components';
+
 export class BasicMaterial extends Material {
   constructor() {
     super();
@@ -35,10 +37,29 @@ export class BasicMaterial extends Material {
   }
 
   apply_shader(entity) {
-    let buffers = entity.buffers;
+    const [render, morph] = entity.get_components(Render, Morph);
+    let buffers = render.buffers;
 
-    if (Array.isArray(entity.buffers)) {
-      buffers = entity.buffers[entity.current_frame];
+    if (morph) {
+
+      buffers = render.buffers[morph.current_frame];
+
+      // next frame
+      gl.bindBuffer(gl.ARRAY_BUFFER, render.buffers[morph.next_frame].vertices);
+      gl.vertexAttribPointer(
+        this.attribs.P_next,
+        3, gl.FLOAT, gl.FALSE,
+        0, 0
+      );
+      gl.enableVertexAttribArray(this.attribs.P_next);
+
+      gl.uniform1f(this.uniforms.do_morph, 1);
+      gl.uniform1f(this.uniforms.frame_delta, morph.frame_delta);
+
+    } else {
+
+      gl.uniform1f(this.uniforms.do_morph, 0);
+
     }
 
     // current frame
@@ -53,25 +74,6 @@ export class BasicMaterial extends Material {
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
     gl.drawElements(gl.TRIANGLES, buffers.qty, gl.UNSIGNED_SHORT, 0);
-
-    if (typeof entity.next_frame === 'number') {
-      buffers = entity.buffers[entity.next_frame];
-      // next frame
-      gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertices);
-
-      gl.vertexAttribPointer(
-        this.attribs.P_next,
-        3, gl.FLOAT, gl.FALSE,
-        0, 0
-      );
-      gl.enableVertexAttribArray(this.attribs.P_next);
-
-      gl.uniform1f(this.uniforms.do_morph, 1);
-    } else {
-      gl.uniform1f(this.uniforms.do_morph, 0);
-    }
-
-    gl.uniform1f(this.uniforms.frame_delta, entity.frame_delta);
   }
 }
 

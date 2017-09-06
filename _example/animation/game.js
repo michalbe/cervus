@@ -4,17 +4,18 @@ const game = new Cervus.core.Game({
   width: window.innerWidth,
   height: window.innerHeight,
   light_intensity: 0.4,
-  // clear_color: 'ff00ff'
-  // fps: 10
+  clear_color: 'cff',
+  // fps: 1
 });
 
-game.camera.position = [0, 1, 2];
-game.camera.rotate_rl(Math.PI);
-game.camera.keyboard_controlled = true;
-// game.camera.mouse_controlled = true;
+const [camera_transform, camera_move] = game.camera.get_components(Cervus.components.Transform, Cervus.components.Move);
+// camera_transform.position = [0, 1, 2];
+camera_transform.rotate_rl(Math.PI);
+camera_move.keyboard_controlled = true;
+camera_move.mouse_controlled = true;
 
 Cervus.core.model_loader('models/bird.json').then((models) => {
-  for(let i=0; i< 5000; i++) {
+  for(let i = 0; i < 1000; i++) {
     setTimeout(() => {
       create_bird(
         50 - Math.random() * 100,
@@ -31,24 +32,36 @@ Cervus.core.model_loader('models/bird.json').then((models) => {
 
 const create_bird = (x = 0, y = 0, z = 0, scale, frames) => {
   let animated_model;
-  animated_model = new Cervus.core.AnimatedEntity({
-    material: Cervus.materials.basic,
-    color:  '#ff00ff',
-    frame_time: 16,
-    position: [x, y, z],
-    scale: scale
+  animated_model = new Cervus.core.Entity({
+    components: [
+      new Cervus.components.Transform({
+        position: [x, y, z],
+        scale: scale
+      }),
+      new Cervus.components.Render({
+        material: Cervus.materials.basic,
+        color:  '#ff00ff'
+      }),
+      new Cervus.components.Morph({
+        frame_time: 16,
+        // frames: frames
+      })
+    ]
   });
-  animated_model.frames = frames;
-  animated_model.rotate_ud(Math.PI * 1.5);
-  animated_model.create_buffers();
+  animated_model.get_component(Cervus.components.Morph).frames = frames;
+  animated_model.get_component(Cervus.components.Transform).rotate_ud(Math.PI * 1.5);
+
+  animated_model.get_component(Cervus.components.Morph).create_buffers();
   // animated_model.current_tick = ~~(Math.random()*100);
   // animated_model.current_frame = ~~(Math.random()*frames.length);
   // animated_model.next_frame = animated_model.get_next_frame();
   game.add(animated_model);
+
+  return animated_model;
 };
 
 
 
 game.on('tick', () => {
-  game.light_position = game.camera.position;
+  game.light_position = camera_transform.position;
 });
