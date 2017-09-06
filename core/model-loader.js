@@ -14,7 +14,8 @@ export function model_loader(url) {
   function parse_model(json) {
     for (const child of json.rootnode.children) {
       if (!child.meshes) {
-        throw new Error('Meshes not found.');
+        console.warn("Model doesn't contain any mesh (is it Camera?)");
+        continue;
       }
 
       for (const mesh of child.meshes) {
@@ -25,11 +26,15 @@ export function model_loader(url) {
           scale: get_scaling([], child.transformation),
           position: [
             child.transformation[3],
-            child.transformation[7],
-            child.transformation[11]
+            child.transformation[11],
+            -child.transformation[7]
           ]
         });
       }
+    }
+
+    if (!meshes.length) {
+      throw new Error('Meshes not found.');
     }
 
     return meshes;
