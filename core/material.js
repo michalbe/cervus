@@ -1,4 +1,5 @@
-import { create_program_object, create_shader_object, gl } from '../core/context';
+import { create_program_object, create_shader_object, gl } from './context';
+import { Transform, Render } from '../components';
 
 export class Material {
   constructor() {
@@ -52,19 +53,21 @@ export class Material {
       game = ent.game;
     }
 
+    const [entity_transform, entity_render] = entity.get_components(Transform, Render);
+
     gl.useProgram(this.program);
     gl.uniformMatrix4fv(this.uniforms.p, gl.FALSE, game.projMatrix);
     gl.uniformMatrix4fv(this.uniforms.v, gl.FALSE, game.viewMatrix);
-
+    // console.log(entity_transform.world_matrix, entity_render.color_vec);
     gl.uniformMatrix4fv(
       this.uniforms.w,
       gl.FALSE,
-      entity.world_matrix
+      entity_transform.world_matrix
     );
 
     gl.uniform4fv(
       this.uniforms.c,
-      entity.color_vec
+      entity_render.color_vec
     );
 
     this.apply_shader(entity, game);

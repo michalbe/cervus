@@ -1,4 +1,4 @@
-export class BasicTween {
+export class Tween {
   constructor(options) {
     this.to = options.to;
     this.time = options.time || 1000;

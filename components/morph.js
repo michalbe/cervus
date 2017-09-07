@@ -1,29 +1,29 @@
-import { create_float_buffer, create_index_buffer } from './context';
-import { Entity } from './entity';
+import { Component } from '../core';
+import { create_float_buffer, create_index_buffer } from '../core';
 
-export class AnimatedEntity extends Entity {
+import { Render } from './render';
+
+const default_options = {
+  buffers: [],
+  current_frame: 0,
+  next_frame: 1,
+  current_tick: 0,
+  frame_time: 16
+}
+
+export class Morph extends Component {
   constructor(options) {
     super(options);
+    Object.assign(this,  default_options, options);
 
-    if (!this.frames || !this.frames.length) {
-      this.buffers = [];
+    if (this.frames && this.frames.length) {
+      this.create_buffers();
     }
-
-    this.current_frame = 0;
-    this.next_frame = 1;
-    this.current_tick = 0;
-
-    // I'll leave those in here as a foundation to our future documentation.
-    // `frame_time` defines number of gameloop ticks after next frame will
-    // be rendered
-    // this.frame_time;
-    // this.frames
-
   }
 
   create_buffers() {
     this.number_of_frames = this.frames.length;
-    this.buffers = this.frames.map(frame => ({
+    this.entity.get_component(Render).buffers = this.frames.map(frame => ({
       vertices: create_float_buffer(frame.vertices),
       indices: create_index_buffer(frame.indices),
       qty: frame.indices.length,
@@ -37,12 +37,9 @@ export class AnimatedEntity extends Entity {
     return current_frame % this.number_of_frames;
   }
 
-  update(tick_length) {
-    if (this.skip) {
-      return;
-    }
-
+  update() {
     this.current_tick++;
+
     // frame_delta is an interpolation amount between current and
     // next frame vertices
     this.frame_delta = 1 - (this.current_tick % this.frame_time)/this.frame_time;
@@ -51,6 +48,5 @@ export class AnimatedEntity extends Entity {
       this.current_frame = this.next_frame;
       this.next_frame = this.get_next_frame();
     }
-    super.update(tick_length);
   }
 }
