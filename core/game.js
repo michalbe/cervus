@@ -2,6 +2,7 @@ import { hex_to_rgb } from '../utils';
 import { vec3, mat4, to_radian } from '../math';
 import { gl, canvas } from './context';
 import { Entity } from './entity';
+import { Transform, Move } from '../components';
 
 const default_options = {
   canvas,
@@ -27,7 +28,13 @@ export class Game {
     this.dom.appendChild(canvas);
 
     this.entities = new Set();
-    this.camera = new Entity();
+    this.camera = new Entity({
+      components: [
+        new Transform(),
+        new Move()
+      ]
+    });
+
     this.camera.game = this;
 
     this.projMatrix = mat4.create();
@@ -165,7 +172,7 @@ export class Game {
     this.emit('tick', this.last_tick);
     this.entities.forEach(entity => entity.update(this.tick_delta));
     this.camera.update(this.tick_delta);
-    this.camera.get_view_matrix(this.viewMatrix);
+    this.camera.get_component(Transform).get_view_matrix(this.viewMatrix);
   }
 
   render() {

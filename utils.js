@@ -6,7 +6,7 @@ export function hex_to_rgb(hex) {
   if (hex.length === 3) {
     hex = hex.split('').map(
       el => el + el
-    );
+    ).join('');
   }
 
   return hex.match(/.{1,2}/g).map(
