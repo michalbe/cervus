@@ -1,6 +1,6 @@
 {
   "name": "cervus",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "author": "Michał Budzyński <michal@virtualdesign.pl>",
   "repository": "git@github.com:michalbe/cervus.git",
   "module": "./index.js",
