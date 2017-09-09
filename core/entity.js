@@ -4,11 +4,12 @@ const default_options = {
 };
 
 export class Entity {
-  constructor(options) {
+  constructor(options = {}) {
     Object.assign(this, default_options, options);
 
     this.entities = new Set();
     this.components = new Map();
+
     this.add_components(options.components);
   }
 
@@ -17,7 +18,7 @@ export class Entity {
     this.components.set(component.constructor, component);
   }
 
-  add_components(components) {
+  add_components(components = []) {
     components.forEach((component) => this.add_component(component));
   }
 
