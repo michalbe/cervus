@@ -19,6 +19,8 @@ const default_options = {
   light_intensity: 0.6
 };
 
+const EVENTS = ["keydown", "keyup", "mousemove"];
+
 export class Game {
   constructor(options) {
     Object.assign(this, default_options, options);
@@ -27,7 +29,8 @@ export class Game {
     this.canvas.height = this.height;
     this.dom.appendChild(canvas);
 
-    this.entities = new Set();
+    this.reset();
+
     this.camera = new Entity({
       components: [
         new Transform(),
@@ -48,19 +51,17 @@ export class Game {
       this.far
     );
 
-    this.last_tick = performance.now();
     this.tick_delta = 1000 / this.fps;
 
-    this.keys = {};
-    this.mouse_delta = {x: 0, y: 0};
+    for (const event_name of EVENTS) {
+      const handler_name = "on" + event_name;
+      this[handler_name] = this[handler_name].bind(this);
+      window.addEventListener(event_name, this[handler_name]);
+    }
 
-    window.addEventListener('keydown', this.key_down.bind(this));
-    window.addEventListener('keyup', this.key_up.bind(this));
-    window.addEventListener('mousemove', this.mouse_move.bind(this));
-
-    this.listeners = new Map();
-
-    this.frame(performance.now());
+    if (this.running) {
+      this.start();
+    }
 
     gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
@@ -94,6 +95,19 @@ export class Game {
     window.requestAnimationFrame(frame_time => this.frame(frame_time));
   }
 
+  reset() {
+    this.entities = new Set();
+    this.listeners = new Map();
+    this.keys = {};
+    this.mouse_delta = {x: 0, y: 0};
+  }
+
+  destroy() {
+    for (const event_name of EVENTS) {
+      window.removeEventListener(event_name, this[handler_name]);
+    }
+  }
+
   emit(event_name, ...args) {
     if (this.listeners.has(event_name)) {
       for (const handler of this.listeners.get(event_name)) {
@@ -116,11 +130,11 @@ export class Game {
     }
   }
 
-  key_down(e) {
+  onkeydown(e) {
     this.keys[e.keyCode] = 1;
   }
 
-  key_up(e) {
+  onkeyup(e) {
     this.keys[e.keyCode] = 0
   }
 
@@ -130,7 +144,7 @@ export class Game {
     return this.keys[key_code] || 0;
   }
 
-  mouse_move(e) {
+  onmousemove(e) {
     // Accumulate the deltas for each mousemove event that that fired between
     // any two ticks. Our +X is left, +Y is up while the browser's +X is to the
     // right, +Y is down. Inverse the values by subtracting rather than adding.
