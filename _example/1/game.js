@@ -28,10 +28,11 @@ game.add(cube2);
 const cube8 = new Cervus.shapes.Box();
 const [cube8_transform, cube8_render] = cube8.get_components(Cervus.components.Transform, Cervus.components.Render);
 cube8_transform.position = [0, 0, -5];
-cube8_render.color = "#ffffff";
-cube8_render.material = Cervus.materials.basic;
+cube8_render.color = "#cff";
+cube8_render.material = material;//Cervus.materials.basic;
 cube8.add_component(new Cervus.components.Move({
-  keyboard_controlled: true
+  keyboard_controlled: true,
+  mouse_controlled: true
 }));
 game.add(cube8);
 
@@ -50,6 +51,7 @@ sphere_render.material = material;
 sphere_transform.position = [3, 0, -10];
 sphere_transform.scale = [ 0.5, 0.5, 0.5 ];
 game.add(sphere);
+// sphere.add(cube);
 
 const plane3 = new Cervus.shapes.Plane();
 const [plane3_transform, plane3_render] = plane3.get_components(Cervus.components.Transform, Cervus.components.Render);

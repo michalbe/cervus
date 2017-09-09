@@ -15,6 +15,8 @@ camera_move.keyboard_controlled = true;
 camera_move.mouse_controlled = true;
 
 Cervus.core.model_loader('models/bird.json').then((models) => {
+  // models.splice(1, 1);
+  console.log(models);
   for(let i = 0; i < 1000; i++) {
     setTimeout(() => {
       create_bird(
