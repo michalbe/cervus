@@ -17,8 +17,6 @@ export class Transform extends Component {
       world_matrix: mat4.create(),
       world_to_self: mat4.create()
     },  default_options, options));
-
-    Object.assign(this,  default_options, options);
   }
 
   get up() {
