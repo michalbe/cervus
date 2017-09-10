@@ -41,8 +41,9 @@ export class Entity {
       return;
     }
 
-    this.components.forEach(component => component.update(tick_delta));
-    this.entities.forEach(entity => entity.update(tick_delta));
+    const update_each = updatable => updatable.update(tick_delta);
+    this.components.forEach(update_each);
+    this.entities.forEach(update_each);
   }
 
   render(tick_delta) {
@@ -54,5 +55,4 @@ export class Entity {
     this.components.forEach(render_each);
     this.entities.forEach(render_each);
   }
-
 }
