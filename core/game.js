@@ -104,7 +104,7 @@ export class Game {
 
   destroy() {
     for (const event_name of EVENTS) {
-      window.removeEventListener(event_name, this[handler_name]);
+      window.removeEventListener(event_name, this[event_name]);
     }
   }
 
