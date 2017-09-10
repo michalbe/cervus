@@ -15,6 +15,7 @@ export class Entity {
 
   add_component(component) {
     component.entity = this;
+    component.mount();
     this.components.set(component.constructor, component);
   }
 
