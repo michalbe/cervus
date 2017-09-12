@@ -5,18 +5,15 @@ export class Tween {
     this.game = options.game;
     this.object = options.object;
     this.property = options.property;
+    this.cb = options.cb;
   }
 
-  do_step(tick, resolve) {
+  do_step(tick) {
     this.current_step = Math.min(
       1,
       ((tick - this.first_tick) / this.tick_delta) * this.step
     );
     this.action();
-    if (this.current_step === 1) {
-      this.game.off('tick', this.do_step.bound);
-      resolve();
-    }
   }
 
   action() {}
@@ -31,10 +28,15 @@ export class Tween {
   start() {
     this.pre_start();
     return new Promise((resolve) => {
-      this.do_step.bound = (tick) => {
-        this.do_step(tick, resolve);
+      const bound = (tick) => {
+        if (this.current_step === 1) {
+          this.game.off('tick', bound);
+          resolve();
+        } else {
+          this.do_step(tick, resolve);
+        }
       };
-      this.game.on('tick', this.do_step.bound);
+      this.game.on('tick', bound);
     });
   }
 }
