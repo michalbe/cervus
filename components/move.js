@@ -33,7 +33,7 @@ export class Move extends Component {
     Object.assign(this,  default_options, options);
   }
 
-  handle_keys(tick_length, {f, b, l, r, u, d, pu, pd, yl, yr}) {
+  handle_keys(tick_length, {f = 0, b = 0, l = 0, r = 0, u = 0, d = 0, pu = 0, pd = 0, yl = 0, yr = 0}) {
     const entity_transform = this.entity.get_component(Transform);
     const dist = tick_length / 1000 * this.move_speed;
 
