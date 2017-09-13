@@ -9,8 +9,18 @@ export class Material {
 
   setup_program() {
     this.program = create_program_object(
-      create_shader_object(gl.VERTEX_SHADER, this.get_shader_code('vertex')),
-      create_shader_object(gl.FRAGMENT_SHADER, this.get_shader_code('fragment'))
+      create_shader_object(
+        gl.VERTEX_SHADER,
+        this.get_shader_code(
+          this.vertex_shader.variables,
+          this.vertex_shader.body
+        )
+      ),
+      create_shader_object(gl.FRAGMENT_SHADER,
+        this.get_shader_code(
+          this.fragment_shader.variables,
+          this.fragment_shader.body
+        ))
     );
 
     if (this.program.error) {
@@ -28,14 +38,14 @@ export class Material {
     });
   }
 
-  get_shader_code(type) {
+  get_shader_code(variables, body) {
     return `
       precision mediump float;
-      ${this[type + '_shader'].variables}
+      ${variables}
 
       void main()
       {
-        ${this[type + '_shader'].body}
+        ${body}
       }
     `;
   }
