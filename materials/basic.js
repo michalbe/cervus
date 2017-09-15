@@ -13,8 +13,8 @@ export class BasicMaterial extends Material {
         uniform mat4 w;
         uniform float frame_delta;
         uniform float do_morph;
-        attribute vec3 P_current;
-        attribute vec3 P_next;`,
+        in vec3 P_current;
+        in vec3 P_next;`,
 
       body: `if (do_morph == 1.0) {
         float next_frame_delta = 1.0 - frame_delta;
@@ -25,8 +25,11 @@ export class BasicMaterial extends Material {
     };
 
     this.fragment_shader = {
-      variables: 'uniform vec4 c;',
-      body: 'gl_FragColor = c;'
+      variables: `
+        uniform vec4 c;
+        out vec4 frag_color;
+      `,
+      body: 'frag_color = c;'
     };
 
     this.setup_program();
