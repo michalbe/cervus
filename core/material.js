@@ -39,7 +39,7 @@ export class Material {
   }
 
   get_shader_code(variables, body) {
-    return `
+    return `#version 300 es
       precision mediump float;
       ${variables}
 
