@@ -1,5 +1,5 @@
 export const canvas = document.createElement('canvas');
-export const gl = canvas.getContext('webgl');
+export const gl = canvas.getContext('webgl2');
 
 export function create_float_buffer(data) {
   const buffer = gl.createBuffer();
