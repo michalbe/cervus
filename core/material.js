@@ -9,12 +9,11 @@ export class Material {
     this.uniforms = {};
     this.attribs = {};
     this.draw_mode = gl.TRIANGLES;
-    this.features_from_components(Array.from(options.requires || []));
+    this.features = new Set([].concat(
+      ...Array.from(options.requires || []).map(comp => comp.features))
+    );
   }
 
-  features_from_components(components) {
-    this.features = new Set([].concat(...components.map(comp => comp.features)));
-  }
 
   add_feature(feature) {
     this.features.add(feature);
