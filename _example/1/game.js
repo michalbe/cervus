@@ -1,6 +1,18 @@
 /* global Cervus */
 
-const material = Cervus.materials.phong;
+const phong_material = new Cervus.materials.PhongMaterial({
+  components: [
+    Cervus.components.Render,
+    Cervus.components.Transform
+  ]
+});
+
+const basic_material = new Cervus.materials.BasicMaterial({
+  components: [
+    Cervus.components.Render,
+    Cervus.components.Transform
+  ]
+});
 
 const game = new Cervus.core.Game({
   width: window.innerWidth,
@@ -21,7 +33,7 @@ camera_transform.rotate_rl(Math.PI);
 const cube2 = new Cervus.shapes.Box();
 const [cube2_transform, cube2_render] = cube2.get_components(Cervus.components.Transform, Cervus.components.Render);
 cube2_transform.position = [ 5, 3, -10 ];
-cube2_render.material = material;
+cube2_render.material = phong_material;
 cube2_render.color = "#FF00FF";
 game.add(cube2);
 
@@ -29,7 +41,7 @@ const cube8 = new Cervus.shapes.Box();
 const [cube8_transform, cube8_render] = cube8.get_components(Cervus.components.Transform, Cervus.components.Render);
 cube8_transform.position = [0, 0, -5];
 cube8_render.color = "#cff";
-cube8_render.material = material;//Cervus.materials.basic;
+cube8_render.material = phong_material;
 cube8.add_component(new Cervus.components.Move({
   keyboard_controlled: true,
   mouse_controlled: true
@@ -41,13 +53,13 @@ const [cube_transform, cube_render] = cube.get_components(Cervus.components.Tran
 cube_transform.position = [-3, 0, -12];
 cube_transform.scale = [2, 3, 1];
 cube_render.color = "#BADA55";
-cube_render.material = material;
+cube_render.material = basic_material;
 game.add(cube);
 
 const sphere = new Cervus.shapes.Sphere();
 const [sphere_transform, sphere_render] = sphere.get_components(Cervus.components.Transform, Cervus.components.Render);
 sphere_render.color = '#ff0000';
-sphere_render.material = material;
+sphere_render.material = phong_material;
 sphere_transform.position = [3, 0, -10];
 sphere_transform.scale = [ 0.5, 0.5, 0.5 ];
 game.add(sphere);
@@ -58,7 +70,7 @@ const [plane3_transform, plane3_render] = plane3.get_components(Cervus.component
 plane3_transform.position = [0, -1.5, 0];
 plane3_transform.scale = [ 150, 1, 150 ];
 plane3_render.color = '#ccc';
-plane3_render.material = material;
+plane3_render.material = phong_material;
 game.add(plane3);
 
 let dir = 1;

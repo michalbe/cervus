@@ -5,9 +5,11 @@ const default_options = {
 export class Component {
   constructor(options) {
     Object.assign(this,  default_options, options);
-    this.features = [];
   }
 
+  static get features() {
+    return [];
+  }
   /*
    * Called in Entity.add_component.
    *
