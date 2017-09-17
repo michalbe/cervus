@@ -9,12 +9,10 @@ export class Material {
     this.uniforms = {};
     this.attribs = {};
     this.features = [];
-    this.featuresFromComponents(Array.from(options.components) || []);
-
-    // this.setup_program();
+    this.features_from_components(Array.from(options.components) || []);
   }
 
-  featuresFromComponents(components) {
+  features_from_components(components) {
     this.features = components
       .reduce((memo, component) => {
         if (component.features.length > 0) {
@@ -59,18 +57,6 @@ export class Material {
     });
   }
 
-  // get_shader_code(variables, body) {
-  //   return `#version 300 es
-  //     precision mediump float;
-  //     ${variables}
-  //
-  //     void main()
-  //     {
-  //       ${body}
-  //     }
-  //   `;
-  // }
-
   // apply_shader(entity, game) {
   //
   // }
@@ -89,7 +75,7 @@ export class Material {
     gl.useProgram(this.program);
     gl.uniformMatrix4fv(this.uniforms.p, gl.FALSE, game.projMatrix);
     gl.uniformMatrix4fv(this.uniforms.v, gl.FALSE, game.viewMatrix);
-    // console.log(entity_transform.world_matrix, entity_render.color_vec);
+
     gl.uniformMatrix4fv(
       this.uniforms.w,
       gl.FALSE,
