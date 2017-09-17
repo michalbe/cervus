@@ -64,7 +64,7 @@ export class PhongMaterial extends Material {
         1 - light.get_component(Light).intensity
       ]);
 
-      // gl.uniform3fv(this.uniforms.lp, light.get_component(Light).color_vec);
+      gl.uniform3fv(this.uniforms.lp, light.get_component(Light).color_vec);
     });
 
   }
