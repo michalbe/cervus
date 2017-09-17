@@ -125,16 +125,19 @@ setTimeout(()=> {
 // }, 1000);
 let dir = 1;
 const light_transform = Array.from(game.entities_by_component.get(Cervus.components.Light))[0].get_component(Cervus.components.Transform);
+const light_light = Array.from(game.entities_by_component.get(Cervus.components.Light))[0].get_component(Cervus.components.Light);
 game.on('tick', () => {
-  if (light_transform.position[0] > 5) {
+  if (light_transform.position[0] > 3) {
+    light_light.color = '#ff00ff';
     dir = -1;
-  } else if (light_transform.position[0] < -5) {
+  } else if (light_transform.position[0] < -3) {
     dir = 1;
+    light_light.color = '#00ff00';
   }
 
   light_transform.position = [
     light_transform.position[0] + 0.06 * dir,
-    0,
+    1,
     light_transform.position[2] + 0.06 * dir
   ];
 });
