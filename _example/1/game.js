@@ -7,6 +7,13 @@ const phong_material = new Cervus.materials.PhongMaterial({
   ]
 });
 
+const wireframe_material = new Cervus.materials.WireframeMaterial({
+  requires: [
+    Cervus.components.Render,
+    Cervus.components.Transform
+  ]
+});
+
 const basic_material = new Cervus.materials.BasicMaterial({
   requires: [
     Cervus.components.Render,
@@ -33,7 +40,7 @@ camera_transform.rotate_rl(Math.PI);
 const cube2 = new Cervus.shapes.Box();
 const [cube2_transform, cube2_render] = cube2.get_components(Cervus.components.Transform, Cervus.components.Render);
 cube2_transform.position = [ 5, 3, -10 ];
-cube2_render.material = phong_material;
+cube2_render.material = wireframe_material;
 cube2_render.color = "#FF00FF";
 game.add(cube2);
 

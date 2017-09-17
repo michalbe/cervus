@@ -60,7 +60,7 @@ export class PhongMaterial extends Material {
     gl.enableVertexAttribArray(this.attribs.N_current);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
-    gl.drawElements(gl.TRIANGLES, buffers.qty, gl.UNSIGNED_SHORT, 0);
+    gl.drawElements(this.draw_mode, buffers.qty, gl.UNSIGNED_SHORT, 0);
 
     gl.uniform3fv(this.uniforms.lp, game.light_position);
     gl.uniform2fv(this.uniforms.li, [game.light_intensity, 1 - game.light_intensity]);

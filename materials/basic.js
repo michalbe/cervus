@@ -10,7 +10,7 @@ export class BasicMaterial extends Material {
     this.setup_program();
     this.get_uniforms_and_attrs(
       ['p', 'v', 'w', 'c', 'frame_delta', 'do_morph'],
-      ['P_current',  'P_next']
+      ['P_current', 'P_next']
     );
   }
 
@@ -51,6 +51,6 @@ export class BasicMaterial extends Material {
     gl.enableVertexAttribArray(this.attribs.P_current);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
-    gl.drawElements(gl.TRIANGLES, buffers.qty, gl.UNSIGNED_SHORT, 0);
+    gl.drawElements(this.draw_mode, buffers.qty, gl.UNSIGNED_SHORT, 0);
   }
 }
