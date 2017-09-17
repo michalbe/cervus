@@ -7,6 +7,9 @@ export class Component {
     Object.assign(this,  default_options, options);
   }
 
+  static get features() {
+    return [];
+  }
   /*
    * Called in Entity.add_component.
    *

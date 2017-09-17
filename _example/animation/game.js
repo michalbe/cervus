@@ -8,6 +8,14 @@ const game = new Cervus.core.Game({
   // fps: 1
 });
 
+const material = new Cervus.materials.BasicMaterial({
+  requires: [
+    Cervus.components.Render,
+    Cervus.components.Transform,
+    Cervus.components.Morph
+  ]
+});
+
 const [camera_transform, camera_move] = game.camera.get_components(Cervus.components.Transform, Cervus.components.Move);
 // camera_transform.position = [0, 1, 2];
 camera_transform.rotate_rl(Math.PI);
@@ -41,7 +49,7 @@ const create_bird = (x = 0, y = 0, z = 0, scale, frames) => {
         scale: scale
       }),
       new Cervus.components.Render({
-        material: Cervus.materials.basic,
+        material: material,
         color:  '#ff00ff'
       }),
       new Cervus.components.Morph({

@@ -1,26 +1,35 @@
 import { create_program_object, create_shader_object, gl } from './context';
 import { Transform, Render } from '../components';
 
+import { vertex } from '../shaders';
+import { fragment } from '../shaders';
+
 export class Material {
-  constructor() {
+  constructor(options) {
     this.uniforms = {};
     this.attribs = {};
+    // this.features = [];
+    this.features_from_components(Array.from(options.requires || []));
+  }
+
+  features_from_components(components) {
+    this.features = new Set([].concat(...components.map(comp => comp.features)));
+  }
+
+  add_feature(feature) {
+    this.features.add(feature);
   }
 
   setup_program() {
     this.program = create_program_object(
       create_shader_object(
         gl.VERTEX_SHADER,
-        this.get_shader_code(
-          this.vertex_shader.variables,
-          this.vertex_shader.body
-        )
+        vertex(Array.from(this.features))
       ),
-      create_shader_object(gl.FRAGMENT_SHADER,
-        this.get_shader_code(
-          this.fragment_shader.variables,
-          this.fragment_shader.body
-        ))
+      create_shader_object(
+        gl.FRAGMENT_SHADER,
+        fragment(Array.from(this.features))
+      )
     );
 
     if (this.program.error) {
@@ -36,18 +45,6 @@ export class Material {
     attrs.forEach(attr => {
       this.attribs[attr] = gl.getAttribLocation(this.program, attr);
     });
-  }
-
-  get_shader_code(variables, body) {
-    return `#version 300 es
-      precision mediump float;
-      ${variables}
-
-      void main()
-      {
-        ${body}
-      }
-    `;
   }
 
   // apply_shader(entity, game) {
@@ -68,7 +65,7 @@ export class Material {
     gl.useProgram(this.program);
     gl.uniformMatrix4fv(this.uniforms.p, gl.FALSE, game.projMatrix);
     gl.uniformMatrix4fv(this.uniforms.v, gl.FALSE, game.viewMatrix);
-    // console.log(entity_transform.world_matrix, entity_render.color_vec);
+
     gl.uniformMatrix4fv(
       this.uniforms.w,
       gl.FALSE,

@@ -1,5 +1,10 @@
 /* global Cervus */
-const material = Cervus.materials.phong;
+const material = new Cervus.materials.PhongMaterial({
+  requires: [
+    Cervus.components.Render,
+    Cervus.components.Transform
+  ]
+});
 
 const game = new Cervus.core.Game({
   width: window.innerWidth,

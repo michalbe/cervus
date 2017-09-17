@@ -8,7 +8,7 @@ const default_options = {
   current_frame: 0,
   next_frame: 1,
   current_tick: 0,
-  frame_time: 16
+  frame_time: 16,
 }
 
 export class Morph extends Component {
@@ -19,6 +19,10 @@ export class Morph extends Component {
     if (this.frames && this.frames.length) {
       this.create_buffers();
     }
+  }
+
+  static get features() {
+    return ['MORPH'];
   }
 
   create_buffers() {
