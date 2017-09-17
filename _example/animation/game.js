@@ -9,7 +9,7 @@ const game = new Cervus.core.Game({
 });
 
 const material = new Cervus.materials.BasicMaterial({
-  components: [
+  requires: [
     Cervus.components.Render,
     Cervus.components.Transform,
     Cervus.components.Morph

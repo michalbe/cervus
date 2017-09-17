@@ -15,7 +15,7 @@ game.camera.get_component(Cervus.components.Move).keyboard_controlled = true;
 game.camera.get_component(Cervus.components.Move).mouse_controlled = true;
 
 const material = new Cervus.materials.BasicMaterial({
-  components: [
+  requires: [
     Cervus.components.Render,
     Cervus.components.Transform
   ]

@@ -1,14 +1,14 @@
 /* global Cervus */
 
 const phong_material = new Cervus.materials.PhongMaterial({
-  components: [
+  requires: [
     Cervus.components.Render,
     Cervus.components.Transform
   ]
 });
 
 const basic_material = new Cervus.materials.BasicMaterial({
-  components: [
+  requires: [
     Cervus.components.Render,
     Cervus.components.Transform
   ]

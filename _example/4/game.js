@@ -1,6 +1,6 @@
 /* global Cervus */
 const material = new Cervus.materials.PhongMaterial({
-  components: [
+  requires: [
     Cervus.components.Render,
     Cervus.components.Transform
   ]
