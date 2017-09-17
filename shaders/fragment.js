@@ -14,7 +14,7 @@ export function fragment(defines) {
     #ifdef LIGHTS
       uniform vec3 lp; // light position
       uniform vec2 li; // light intensity
-
+      uniform vec3 lc; // light color
       in vec3 fn; // vertex normals
    #endif
 
@@ -23,7 +23,7 @@ export function fragment(defines) {
     void main()
     {
       #ifdef LIGHTS
-        frag_color = vec4(c.rgb * li.x + li.y * max(dot(fn, normalize(lp - fp)), 0.0), c.a);
+        frag_color = vec4(c.rgb * li.x + li.y * max(dot(fn, normalize(lp - fp)) * lc, 0.0), c.a);
       #endif
 
       #ifndef LIGHTS

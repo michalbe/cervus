@@ -1,7 +1,7 @@
 import { gl } from '../core/context';
 import { Material } from '../core';
 
-import { Render, Morph } from '../components';
+import { Render, Morph, Light, Transform } from '../components';
 
 export class PhongMaterial extends Material {
   constructor(options) {
@@ -10,7 +10,7 @@ export class PhongMaterial extends Material {
 
     this.setup_program();
     this.get_uniforms_and_attrs(
-      ['p', 'v', 'w', 'lp', 'li', 'c', 'frame_delta'],
+      ['p', 'v', 'w', 'lp', 'li', 'lc', 'c', 'frame_delta'],
       ['P_current', 'P_next', 'N_current', 'N_next']
     );
   }
@@ -55,7 +55,16 @@ export class PhongMaterial extends Material {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
     gl.drawElements(this.draw_mode, buffers.qty, gl.UNSIGNED_SHORT, 0);
 
-    gl.uniform3fv(this.uniforms.lp, game.light_position);
-    gl.uniform2fv(this.uniforms.li, [game.light_intensity, 1 - game.light_intensity]);
+    const light = Array.from(game.get_entities_by_component(Light))[0];
+
+    gl.uniform3fv(this.uniforms.lp, light.get_component(Transform).position);
+    gl.uniform2fv(this.uniforms.li, [
+      light.get_component(Light).intensity,
+      1 - light.get_component(Light).intensity
+    ]);
+
+    gl.uniform3fv(this.uniforms.lc, light.get_component(Light).color_vec);
+
+
   }
 }

@@ -15,6 +15,13 @@ const material = new Cervus.materials.PhongMaterial({
   ]
 });
 
+const wireframe = new Cervus.materials.WireframeMaterial({
+  requires: [
+    Cervus.components.Render,
+    Cervus.components.Transform
+  ]
+});
+
 // By default all entities face the user.
 // Rotate the camera to see the scene.
 const [camera_transform, camera_move] = game.camera.get_components(Cervus.components.Transform, Cervus.components.Move);
@@ -46,6 +53,20 @@ cube_render.color = "#bada55";
 cube_render.material = material;
 group.add(cube);
 game.add(group);
+
+const light = Array.from(game.entities_by_component.get(Cervus.components.Light))[0];
+const light_transform = light.get_component(Cervus.components.Transform);
+const light_light = light.get_component(Cervus.components.Light);
+light_transform.position = [0, 1, 0];
+light_transform.scale = [0.2, 0.2, 0.2];
+light.add_component(
+  new Cervus.components.Render({
+    color: '#ff00ff',
+    material: wireframe,
+    indices: cube_render.indices,
+    vertices: cube_render.vertices
+  })
+);
 
 game.on('tick', () => {
   game.camera.get_component(Cervus.components.Transform).look_at(cube_transform.position);
@@ -105,3 +126,20 @@ setTimeout(()=> {
 //     console.log('color done!', new Date() - time)
 //   });
 // }, 1000);
+let dir = 1;
+
+game.on('tick', () => {
+  if (light_transform.position[0] > 3) {
+    light_light.color = '#ff00ff';
+    dir = -1;
+  } else if (light_transform.position[0] < -3) {
+    dir = 1;
+    light_light.color = '#00ff00';
+  }
+
+  light_transform.position = [
+    light_transform.position[0] + 0.06 * dir,
+    1,
+    light_transform.position[2] + 0.06 * dir
+  ];
+});

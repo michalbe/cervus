@@ -1,8 +1,8 @@
 import { hex_to_rgb } from '../utils';
-import { vec3, mat4, to_radian } from '../math';
+import { mat4, to_radian } from '../math';
 import { gl, canvas } from './context';
 import { Entity } from './entity';
-import { Transform, Move } from '../components';
+import { Transform, Move, Light } from '../components';
 
 const default_options = {
   canvas,
@@ -15,8 +15,6 @@ const default_options = {
   near: 0.35,
   far: 85,
   clear_color: '#FFFFFF',
-  light_position: vec3.zero.slice(),
-  light_intensity: 0.6
 };
 
 const EVENTS = ["keydown", "keyup", "mousemove"];
@@ -39,6 +37,14 @@ export class Game {
     });
 
     this.camera.game = this;
+
+    const light = new Entity({
+      components: [
+        new Transform(),
+        new Light()
+      ]
+    });
+    this.add(light);
 
     this.projMatrix = mat4.create();
     this.viewMatrix = mat4.create();
@@ -100,6 +106,7 @@ export class Game {
     this.listeners = new Map();
     this.keys = {};
     this.mouse_delta = {x: 0, y: 0};
+    this.entities_by_component = new WeakMap();
   }
 
   destroy() {
@@ -196,12 +203,34 @@ export class Game {
     this.emit('afterrender');
   }
 
+  add_to_components_sets(entity) {
+    entity.components.forEach((component => {
+      if (!this.entities_by_component.has(component.constructor)) {
+        this.entities_by_component.set(component.constructor, new Set());
+      }
+
+      this.entities_by_component.get(component.constructor).add(entity);
+    }));
+  }
+
+  remove_from_components_sets(entity) {
+    entity.components.forEach((component => {
+      this.entities_by_component.get(component.constructor).delete(entity);
+    }));
+  }
+
+  get_entities_by_component(component) {
+    return this.entities_by_component.get(component);
+  }
+
   add(entity) {
     entity.game = this;
     this.entities.add(entity);
+    this.add_to_components_sets(entity);
   }
 
   remove(entity) {
+    this.remove_from_components_sets(entity);
     this.entities.delete(entity);
   }
 }
