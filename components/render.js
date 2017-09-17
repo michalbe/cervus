@@ -8,7 +8,7 @@ const default_options = {
   indices: [],
   normals: [],
   color: 'fff',
-  color_opacity: 1
+  opacity: 1
 }
 
 export class Render extends Component {
@@ -21,7 +21,7 @@ export class Render extends Component {
 
   set color(hex) {
     this._color = hex || 'fff';
-    this.color_vec = [...hex_to_rgb(this._color), this.color_opacity];
+    this.color_vec = [...hex_to_rgb(this._color), this.opacity];
   }
 
   get color() {

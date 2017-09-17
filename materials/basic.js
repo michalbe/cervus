@@ -9,7 +9,7 @@ export class BasicMaterial extends Material {
 
     this.setup_program();
     this.get_uniforms_and_attrs(
-      ['p', 'v', 'w', 'c', 'frame_delta', 'do_morph'],
+      ['p', 'v', 'w', 'c', 'frame_delta'],
       ['P_current', 'P_next']
     );
   }
@@ -30,13 +30,7 @@ export class BasicMaterial extends Material {
         0, 0
       );
       gl.enableVertexAttribArray(this.attribs.P_next);
-
-      gl.uniform1f(this.uniforms.do_morph, 1);
       gl.uniform1f(this.uniforms.frame_delta, morph.frame_delta);
-
-    } else {
-
-      gl.uniform1f(this.uniforms.do_morph, 0);
 
     }
 
