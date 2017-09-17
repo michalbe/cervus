@@ -100,6 +100,7 @@ export class Game {
     this.listeners = new Map();
     this.keys = {};
     this.mouse_delta = {x: 0, y: 0};
+    this.entities_by_component = new WeakMap();
   }
 
   destroy() {
@@ -196,12 +197,31 @@ export class Game {
     this.emit('afterrender');
   }
 
+  add_to_components_sets(entity) {
+    entity.components.forEach((component => {
+      if (!this.entities_by_component.has(component.constructor)) {
+        this.entities_by_component.set(component.constructor, new Set());
+      }
+
+      this.entities_by_component.get(component.constructor).add(entity);
+    }));
+  }
+
+  remove_from_components_sets(entity) {
+    entity.components.forEach((component => {
+      this.entities_by_component.get(component.constructor).delete(entity);
+    }));
+  }
+
   add(entity) {
     entity.game = this;
     this.entities.add(entity);
+
+    this.add_to_components_sets(entity);
   }
 
   remove(entity) {
+    this.remove_from_components_sets(entity);
     this.entities.delete(entity);
   }
 }
