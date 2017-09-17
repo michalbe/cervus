@@ -7,6 +7,13 @@ const game = new Cervus.core.Game({
   // fps: 1
 });
 
+const material = new Cervus.materials.PhongMaterial({
+  requires: [
+    Cervus.components.Render,
+    Cervus.components.Transform
+  ]
+});
+
 game.camera.get_component(Cervus.components.Move).keyboard_controlled = true;
 game.camera.get_component(Cervus.components.Move).move_speed = 10;
 
@@ -25,7 +32,7 @@ Cervus.core.model_loader('models/scene.json')
             vertices: mesh.vertices,
             indices: mesh.indices,
             normals: mesh.normals,
-            material: Cervus.materials.phong,
+            material: material,
             color:  '111'
           })
         ]
