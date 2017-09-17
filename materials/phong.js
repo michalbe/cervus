@@ -10,7 +10,7 @@ export class PhongMaterial extends Material {
 
     this.setup_program();
     this.get_uniforms_and_attrs(
-      ['p', 'v', 'w', 'lp', 'li', 'c', 'frame_delta'],
+      ['p', 'v', 'w', 'lp', 'li', 'lc', 'c', 'frame_delta'],
       ['P_current', 'P_next', 'N_current', 'N_next']
     );
   }
@@ -58,12 +58,13 @@ export class PhongMaterial extends Material {
     const lights = game.get_entities_by_component(Light);
 
     lights.forEach((light) => {
-
       gl.uniform3fv(this.uniforms.lp, light.get_component(Transform).position);
       gl.uniform2fv(this.uniforms.li, [
         light.get_component(Light).intensity,
         1 - light.get_component(Light).intensity
       ]);
+
+      // gl.uniform3fv(this.uniforms.lp, light.get_component(Light).color_vec);
     });
 
   }

@@ -14,7 +14,7 @@ export function fragment(defines) {
     #ifdef LIGHTS
       uniform vec3 lp; // light position
       uniform vec2 li; // light intensity
-
+      uniform vec3 lc; // light color
       in vec3 fn; // vertex normals
    #endif
 
