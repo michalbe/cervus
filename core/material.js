@@ -8,7 +8,7 @@ export class Material {
   constructor(options) {
     this.uniforms = {};
     this.attribs = {};
-    // this.features = [];
+    this.draw_mode = gl.TRIANGLES;
     this.features_from_components(Array.from(options.requires || []));
   }
 
