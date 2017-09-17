@@ -54,9 +54,12 @@ cube_render.material = material;
 group.add(cube);
 game.add(group);
 
-Array.from(game.entities_by_component.get(Cervus.components.Light))[0].get_component(Cervus.components.Transform).position = [0, 1, 0];
-Array.from(game.entities_by_component.get(Cervus.components.Light))[0].get_component(Cervus.components.Transform).scale = [0.2, 0.2, 0.2];
-Array.from(game.entities_by_component.get(Cervus.components.Light))[0].add_component(
+const light = Array.from(game.entities_by_component.get(Cervus.components.Light))[0];
+const light_transform = light.get_component(Cervus.components.Transform);
+const light_light = light.get_component(Cervus.components.Light);
+light_transform.position = [0, 1, 0];
+light_transform.scale = [0.2, 0.2, 0.2];
+light.add_component(
   new Cervus.components.Render({
     color: '#ff00ff',
     material: wireframe,
@@ -124,8 +127,7 @@ setTimeout(()=> {
 //   });
 // }, 1000);
 let dir = 1;
-const light_transform = Array.from(game.entities_by_component.get(Cervus.components.Light))[0].get_component(Cervus.components.Transform);
-const light_light = Array.from(game.entities_by_component.get(Cervus.components.Light))[0].get_component(Cervus.components.Light);
+
 game.on('tick', () => {
   if (light_transform.position[0] > 3) {
     light_light.color = '#ff00ff';
