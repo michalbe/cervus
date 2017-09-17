@@ -35,7 +35,7 @@ export class BasicMaterial extends Material {
     this.setup_program();
     this.get_uniforms_and_attrs(
       ['p', 'v', 'w', 'c', 'frame_delta', 'do_morph'],
-      ['P_current', 'P_next']
+      ['P_current',  'P_next']
     );
   }
 

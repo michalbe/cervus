@@ -2,9 +2,23 @@ import { create_program_object, create_shader_object, gl } from './context';
 import { Transform, Render } from '../components';
 
 export class Material {
-  constructor() {
+  constructor(options) {
     this.uniforms = {};
     this.attribs = {};
+    this.features = [];
+    this.featuresFromComponents(Array.from(options.components) || []);
+  }
+
+  featuresFromComponents(components) {
+    this.features = this.features.concat(components
+      .reduce((memo, component) => {
+        if (component.features.length > 0) {
+          return memo.concat(component.features);
+        } else {
+          return memo;
+        }
+      }, []))
+      .filter((feature, i, features) => features.indexOf(feature) === i);
   }
 
   setup_program() {
@@ -38,17 +52,17 @@ export class Material {
     });
   }
 
-  get_shader_code(variables, body) {
-    return `#version 300 es
-      precision mediump float;
-      ${variables}
-
-      void main()
-      {
-        ${body}
-      }
-    `;
-  }
+  // get_shader_code(variables, body) {
+  //   return `#version 300 es
+  //     precision mediump float;
+  //     ${variables}
+  //
+  //     void main()
+  //     {
+  //       ${body}
+  //     }
+  //   `;
+  // }
 
   // apply_shader(entity, game) {
   //
