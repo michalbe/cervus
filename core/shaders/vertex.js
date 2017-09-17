@@ -24,7 +24,7 @@ export const vertex = (defines) =>
     out vec3 fn; // output normal
   #endif
 
-  out vec3 fp; // poutput vertex position
+  out vec3 fp; // output vertex position
 
   void main()
   {
