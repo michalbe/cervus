@@ -46,6 +46,6 @@ export const vertex = (defines) =>
       #endif
     #endif
 
-    gl_P_current = p * v * vec4(fp, 1.0);
+    gl_Position = p * v * vec4(fp, 1.0);
   }
 `;

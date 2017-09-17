@@ -5,6 +5,7 @@ const default_options = {
 export class Component {
   constructor(options) {
     Object.assign(this,  default_options, options);
+    this.features = [];
   }
 
   /*

@@ -4,44 +4,45 @@ import { Material } from '../core';
 import { Render, Morph } from '../components';
 
 export class PhongMaterial extends Material {
-  constructor() {
-    super();
-
-    this.vertex_shader = {
-      variables: `  uniform mat4 p;
-        uniform mat4 v;
-        uniform mat4 w;
-        uniform float frame_delta;
-        uniform float do_morph;
-        in vec3 P_current;
-        in vec3 P_next;
-        in vec3 N_current;
-        in vec3 N_next;
-        out vec3 fp;
-        out vec3 fn;`,
-
-      body: `if (do_morph == 1.0) {
-        float next_frame_delta = 1.0 - frame_delta;
-        fp = (w * vec4(P_next * next_frame_delta + P_current * frame_delta, 1.0)).xyz;
-        fn = (w * vec4(N_next * next_frame_delta + N_current * frame_delta, 0.0)).xyz;
-      } else {
-        fp = (w * vec4(P_current, 1.0)).xyz;
-        fn = (w * vec4(N_current, 0.0)).xyz;
-      }
-      gl_Position = p * v * vec4(fp, 1.0);`
-    };
-
-    this.fragment_shader = {
-      variables: `uniform vec3 lp;
-        uniform vec4 c;
-        uniform vec2 li;
-        in vec3 fp;
-        in vec3 fn;
-        out vec4 frag_color;
-      `,
-
-      body: `frag_color = vec4(c.rgb * li.x + li.y * max(dot(fn, normalize(lp - fp)), 0.0), c.a);`
-    };
+  constructor(options) {
+    super(options);
+    this.add_feature('LIGHTS');
+    // this.vertex_shader = {
+    //   variables: `  uniform mat4 p;
+    //     uniform mat4 v;
+    //     uniform mat4 w;
+    //     uniform float frame_delta;
+    //     uniform float do_morph;
+    //     in vec3 P_current;
+    //     in vec3 P_next;
+    //     in vec3 N_current;
+    //     in vec3 N_next;
+    //     out vec3 fp;
+    //     out vec3 fn;`,
+    //
+    //   body: `if (do_morph == 1.0) {
+    //     float next_frame_delta = 1.0 - frame_delta;
+    //     fp = (w * vec4(P_next * next_frame_delta + P_current * frame_delta, 1.0)).xyz;
+    //     fn = (w * vec4(N_next * next_frame_delta + N_current * frame_delta, 0.0)).xyz;
+    //   } else {
+    //     fp = (w * vec4(P_current, 1.0)).xyz;
+    //     fn = (w * vec4(N_current, 0.0)).xyz;
+    //   }
+    //   gl_Position = p * v * vec4(fp, 1.0);`
+    // };
+    //
+    // this.fragment_shader = {
+    //   variables: `uniform vec3 lp;
+    //     uniform vec4 c;
+    //     uniform vec2 li;
+    //     in vec3 fp;
+    //     in vec3 fn;
+    //     out vec4 frag_color;
+    //   `,
+    //
+    //   body: `frag_color = vec4(c.rgb * li.x + li.y * max(dot(fn, normalize(lp - fp)), 0.0), c.a);`
+    // };
+    //
 
     this.setup_program();
     this.get_uniforms_and_attrs(
@@ -102,4 +103,4 @@ export class PhongMaterial extends Material {
   }
 }
 
-export const phong = new PhongMaterial();
+// export const phong = new PhongMaterial();

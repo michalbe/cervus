@@ -8,7 +8,8 @@ const default_options = {
   current_frame: 0,
   next_frame: 1,
   current_tick: 0,
-  frame_time: 16
+  frame_time: 16,
+  features: ['MORPH']
 }
 
 export class Morph extends Component {

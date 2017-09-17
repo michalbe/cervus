@@ -14,8 +14,12 @@ game.camera.get_component(Cervus.components.Transform).position = [0, 1.5, 0];
 game.camera.get_component(Cervus.components.Move).keyboard_controlled = true;
 game.camera.get_component(Cervus.components.Move).mouse_controlled = true;
 
+const material = new Cervus.materials.BasicMaterial({
+  components: [Cervus.components.Render, Cervus.components.Transform]
+});
+
 const plane = new Cervus.shapes.Plane();
-plane.get_component(Cervus.components.Render).material = Cervus.materials.phong;
+plane.get_component(Cervus.components.Render).material = material;
 plane.get_component(Cervus.components.Render).color = "#000000";
 plane.get_component(Cervus.components.Transform).scale = [1000, 1, 1000];
 game.add(plane);

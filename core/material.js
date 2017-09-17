@@ -1,40 +1,47 @@
 import { create_program_object, create_shader_object, gl } from './context';
 import { Transform, Render } from '../components';
 
+import { vertex } from './shaders';
+import { fragment } from './shaders';
+
 export class Material {
   constructor(options) {
     this.uniforms = {};
     this.attribs = {};
     this.features = [];
     this.featuresFromComponents(Array.from(options.components) || []);
+
+    // this.setup_program();
   }
 
   featuresFromComponents(components) {
-    this.features = this.features.concat(components
+    this.features = components
       .reduce((memo, component) => {
         if (component.features.length > 0) {
           return memo.concat(component.features);
         } else {
           return memo;
         }
-      }, []))
+      }, [])
       .filter((feature, i, features) => features.indexOf(feature) === i);
+  }
+
+  add_feature(feature) {
+    if (this.features.indexOf(feature) === -1) {
+      this.features.push(feature);
+    }
   }
 
   setup_program() {
     this.program = create_program_object(
       create_shader_object(
         gl.VERTEX_SHADER,
-        this.get_shader_code(
-          this.vertex_shader.variables,
-          this.vertex_shader.body
-        )
+        vertex(this.features)
       ),
-      create_shader_object(gl.FRAGMENT_SHADER,
-        this.get_shader_code(
-          this.fragment_shader.variables,
-          this.fragment_shader.body
-        ))
+      create_shader_object(
+        gl.FRAGMENT_SHADER,
+        fragment(this.features)
+      )
     );
 
     if (this.program.error) {
