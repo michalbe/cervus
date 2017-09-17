@@ -55,6 +55,8 @@ export class PhongMaterial extends Material {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
     gl.drawElements(this.draw_mode, buffers.qty, gl.UNSIGNED_SHORT, 0);
 
+    // TODO: Support multiple lights
+    // https://github.com/michalbe/cervus/issues/86
     const light = Array.from(game.get_entities_by_component(Light))[0];
 
     gl.uniform3fv(this.uniforms.lp, light.get_component(Transform).position);
