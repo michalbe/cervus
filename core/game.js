@@ -220,7 +220,7 @@ export class Game {
   }
 
   get_entities_by_component(component) {
-    return this.entities_by_component.get(component);
+    return Array.from(this.entities_by_component.get(component));
   }
 
   add(entity) {

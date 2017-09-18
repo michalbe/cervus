@@ -1,9 +1,11 @@
 import { Component } from '../core';
+
 import { hex_to_rgb } from '../utils';
+
 
 const default_options = {
   intensity: 0.5,
-  color: '#ff00ff'
+  color: '#ffffff'
 }
 
 export class Light extends Component {

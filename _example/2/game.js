@@ -57,6 +57,8 @@ game.add(group);
 const light = Array.from(game.entities_by_component.get(Cervus.components.Light))[0];
 const light_transform = light.get_component(Cervus.components.Transform);
 const light_light = light.get_component(Cervus.components.Light);
+light_light.color = "#00ff00";
+light_light.intensity = 0.1;
 light_transform.position = [0, 1, 0];
 light_transform.scale = [0.2, 0.2, 0.2];
 light.add_component(
@@ -68,9 +70,28 @@ light.add_component(
   })
 );
 
-game.on('tick', () => {
-  game.camera.get_component(Cervus.components.Transform).look_at(cube_transform.position);
+const light_2 = new Cervus.core.Entity({
+  components: [
+    new Cervus.components.Transform(),
+    new Cervus.components.Light({
+      color: '#ff0000',
+      intensity: 0.1
+    })
+  ]
 });
+game.add(light_2);
+const light_2_transform = light_2.get_component(Cervus.components.Transform);
+const light_2_light = light_2.get_component(Cervus.components.Light);
+light_2_transform.position = [3, 0.5, 0];
+light_2_transform.scale = [0.2, 0.2, 0.2];
+light_2.add_component(
+  new Cervus.components.Render({
+    color: '#ff00ff',
+    material: wireframe,
+    indices: cube_render.indices,
+    vertices: cube_render.vertices
+  })
+);
 
 const tween = new Cervus.tweens.VecTween({
   object: cube_transform,
@@ -112,34 +133,30 @@ setTimeout(()=> {
   });
 }, 1000);
 
-// const light_tween= new Cervus.tweens.ValueTween({
-//   object: game,
-//   property: 'light_intensity',
-//   to: 0.1,
-//   time: 600,
-//   game: game
-// });
-//
-// setTimeout(()=> {
-//   let time = new Date();
-//   light_tween.start().then(() => {
-//     console.log('color done!', new Date() - time)
-//   });
-// }, 1000);
-let dir = 1;
 
+let dir = 1;
 game.on('tick', () => {
+  game.camera.get_component(Cervus.components.Transform).look_at(cube_transform.position);
+
   if (light_transform.position[0] > 3) {
     light_light.color = '#ff00ff';
+    light_2_light.color = '#00ff00';
     dir = -1;
   } else if (light_transform.position[0] < -3) {
     dir = 1;
     light_light.color = '#00ff00';
+    light_2_light.color = '#ff00ff';
   }
 
   light_transform.position = [
     light_transform.position[0] + 0.06 * dir,
     1,
     light_transform.position[2] + 0.06 * dir
+  ];
+
+  light_2_transform.position = [
+    light_2_transform.position[0] - 0.04 * dir,
+    1.5,
+    light_2_transform.position[2] - 0.04 * dir
   ];
 });
