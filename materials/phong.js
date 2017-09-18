@@ -10,7 +10,7 @@ export class PhongMaterial extends Material {
 
     this.setup_program();
     this.get_uniforms_and_attrs(
-      ['p', 'v', 'w', 'lp', 'li', 'lc', 'c', 'frame_delta'],
+      ['p', 'v', 'w', 'lp', 'li', 'lc', 'al', 'c', 'frame_delta'],
       ['P_current', 'P_next', 'N_current', 'N_next']
     );
   }
@@ -55,17 +55,26 @@ export class PhongMaterial extends Material {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
     gl.drawElements(this.draw_mode, buffers.qty, gl.UNSIGNED_SHORT, 0);
 
-    // TODO: Support multiple lights
-    // https://github.com/michalbe/cervus/issues/86
-    const light = Array.from(game.get_entities_by_component(Light))[0];
+    const lights = game.get_entities_by_component(Light);
+    const lights_count = lights.length;
+    let light_position = new Float32Array(lights_count * 3);
+    let light_intensity = new Float32Array(lights_count * 2);
+    let light_color = new Float32Array(lights_count * 3);
 
-    gl.uniform3fv(this.uniforms.lp, light.get_component(Transform).position);
-    gl.uniform2fv(this.uniforms.li, [
-      light.get_component(Light).intensity,
-      1 - light.get_component(Light).intensity
-    ]);
+    for (let i = 0; i < lights_count; i++) {
+      light_position.set(lights[i].get_component(Transform).position, i * 3);
+      light_intensity.set([
+        lights[i].get_component(Light).intensity,
+        1 - lights[i].get_component(Light).intensity
+      ], i * 2);
+      light_color.set(lights[i].get_component(Light).color_vec, i * 3);
+    }
 
-    gl.uniform3fv(this.uniforms.lc, light.get_component(Light).color_vec);
+    gl.uniform1i(this.uniforms.al, lights_count);
+
+    gl.uniform3fv(this.uniforms.lp, light_position);
+    gl.uniform2fv(this.uniforms.li, light_intensity);
+    gl.uniform3fv(this.uniforms.lc, light_color);
 
 
   }
