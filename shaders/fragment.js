@@ -12,7 +12,7 @@ export function fragment(defines) {
     in vec3 fp; // vertex position
 
     #ifdef LIGHTS
-      #define MAX_LIGHTS 25
+      #define MAX_LIGHTS 100
 
       uniform vec3[MAX_LIGHTS] lp; // light position
       uniform vec2[MAX_LIGHTS] li; // light intensity

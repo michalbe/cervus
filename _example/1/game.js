@@ -23,7 +23,8 @@ const basic_material = new Cervus.materials.BasicMaterial({
 
 const game = new Cervus.core.Game({
   width: window.innerWidth,
-  height: window.innerHeight
+  height: window.innerHeight,
+  // light: false
   // fps: 1
 });
 
@@ -33,8 +34,8 @@ const camera_transform = game.camera.get_component(Cervus.components.Transform);
 camera_transform.position = [0, 1, 2];
 camera_transform.rotate_rl(Math.PI);
 
-// game.camera.get_component(Cervus.components.Move).keyboard_controlled = true;
-// game.camera.get_component(Cervus.components.Move).mouse_controlled = true;
+game.camera.get_component(Cervus.components.Move).keyboard_controlled = true;
+game.camera.get_component(Cervus.components.Move).mouse_controlled = true;
 
 
 const cube2 = new Cervus.shapes.Box();
@@ -49,10 +50,10 @@ const [cube8_transform, cube8_render] = cube8.get_components(Cervus.components.T
 cube8_transform.position = [0, 0, -5];
 cube8_render.color = "#cff";
 cube8_render.material = phong_material;
-cube8.add_component(new Cervus.components.Move({
-  keyboard_controlled: true,
-  mouse_controlled: true
-}));
+// cube8.add_component(new Cervus.components.Move({
+//   keyboard_controlled: true,
+//   mouse_controlled: true
+// }));
 game.add(cube8);
 
 const cube = new Cervus.shapes.Box();
@@ -79,6 +80,39 @@ plane3_transform.scale = [ 150, 1, 150 ];
 plane3_render.color = '#ccc';
 plane3_render.material = phong_material;
 game.add(plane3);
+
+// const zone = 100;
+// const colors = [
+//   'ff00ff',
+//   'ff0000',
+//   '00ff00',
+//   '0000ff',
+//   'ffff00',
+//   '00ffff'
+// ];
+//
+// for (let i = 0; i < 100; i++) {
+//   const light = new Cervus.core.Entity({
+//     components: [
+//       new Cervus.components.Transform({
+//         position: [zone/2-(Math.random()*zone), -0.5, zone/2 - (Math.random()*zone)],
+//         scale: [0.2, 0.2, 0.2]
+//       }),
+//       new Cervus.components.Light({
+//         intensity: 0.001,
+//         color: colors[~~(Math.random()*colors.length)]
+//       }),
+//       new Cervus.components.Render({
+//         color: '#ff00ff',
+//         material: wireframe_material,
+//         indices: sphere_render.indices,
+//         vertices: sphere_render.vertices
+//       })
+//     ]
+//   });
+//   console.log(light.get_component(Cervus.components.Transform).position);
+//   game.add(light);
+// }
 
 let dir = 1;
 game.on('tick', () => {
