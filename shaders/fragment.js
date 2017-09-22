@@ -1,3 +1,17 @@
+//
+// Variables used by fragment shader
+//
+// vec4 c; // color
+// vec3 fp; // vertex position
+// vec3[MAX_LIGHTS] lp; // light position
+// vec2[MAX_LIGHTS] li; // light intensity
+// vec3[MAX_LIGHTS] lc; // light color
+// int al; // active lights
+// vec3 fn; // vertex normals
+// vec2 v_t; // texture coordinates
+// sampler2D u_t; //texture
+// sampler2D n_m; // normal map
+
 export function fragment(defines) {
   return `#version 300 es
 
@@ -7,23 +21,23 @@ export function fragment(defines) {
 
     precision mediump float;
 
-    uniform vec4 c; // color
+    uniform vec4 c;
 
-    in vec3 fp; // vertex position
+    in vec3 fp;
 
     #ifdef LIGHTS
       #define MAX_LIGHTS 100
 
-      uniform vec3[MAX_LIGHTS] lp; // light position
-      uniform vec2[MAX_LIGHTS] li; // light intensity
-      uniform vec3[MAX_LIGHTS] lc; // light color
-      uniform int al; // active lights
+      uniform vec3[MAX_LIGHTS] lp;
+      uniform vec2[MAX_LIGHTS] li;
+      uniform vec3[MAX_LIGHTS] lc;
+      uniform int al;
 
-      in vec3 fn; // vertex normals
+      in vec3 fn;
     #endif
 
     #if defined(TEXTURE) || defined(NORMAL_MAP)
-      in vec2 v_t; // texture coordinates
+      in vec2 v_t;
     #endif
 
     #ifdef TEXTURE
