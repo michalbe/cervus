@@ -41,9 +41,7 @@ export function vertex(defines) {
         #ifdef LIGHTS
           fn = (w * vec4(N_next * next_frame_delta + N_current * frame_delta, 0.0)).xyz;
         #endif
-      #endif
-
-      #ifndef MORPH
+      #else 
         fp = (w * vec4(P_current, 1.0)).xyz;
 
         #ifdef LIGHTS
