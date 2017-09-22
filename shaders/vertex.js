@@ -24,6 +24,11 @@ export function vertex(defines) {
       out vec3 fn; // output normal
     #endif
 
+    #ifdef TEXTURE
+      in vec2 a_t; // texture coordinates
+      out vec2 v_t;
+    #endif
+
     out vec3 fp; // output vertex position
 
     void main()
@@ -47,6 +52,10 @@ export function vertex(defines) {
       #endif
 
       gl_Position = p * v * vec4(fp, 1.0);
+
+      #ifdef TEXTURE
+        v_t = a_t;
+      #endif
     }
   `;
 }
