@@ -106,6 +106,7 @@ export class Material {
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
       gl.generateMipmap(gl.TEXTURE_2D);
       this.add_feature('TEXTURE');
+      // this shouldn't happen when `TEXTURE` feature is already added
       this.setup_program();
     })
     .catch(console.error);
@@ -123,6 +124,7 @@ export class Material {
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
       gl.generateMipmap(gl.TEXTURE_2D);
       this.add_feature('NORMAL_MAP');
+      // this shouldn't happen when `NORMAL_MAP` feature is already added
       this.setup_program();
     })
     .catch(console.error);
