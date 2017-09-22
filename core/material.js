@@ -15,6 +15,7 @@ export class Material {
     );
 
     this.texture = options.texture || false;
+    this.normal_map = options.normal_map || false;
   }
 
   add_feature(feature) {
@@ -78,6 +79,21 @@ export class Material {
     return this._texture_url;
   }
 
+  set normal_map(url) {
+    if (url !== this._normal_map_url && url) {
+      this._normal_map_url = url;
+      this.apply_normal_map();
+    } else if (!url) {
+      this._normal_map_url = url;
+      this.remove_feature('NORMAL_MAP');
+      this.setup_program();
+    }
+  }
+
+  get normal_map() {
+    return this._normal_map_url;
+  }
+
   apply_texture() {
     console.log('LADUJE TEXTURE');
     if (!this.gl_texture) {
@@ -90,6 +106,23 @@ export class Material {
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
       gl.generateMipmap(gl.TEXTURE_2D);
       this.add_feature('TEXTURE');
+      this.setup_program();
+    })
+    .catch(console.error);
+  }
+
+  apply_normal_map() {
+    console.log('LADUJE TEXTURE');
+    if (!this.gl_normal_map) {
+      this.gl_normal_map = gl.createTexture();
+    }
+
+    image_loader(this._normal_map_url)
+    .then(image => {
+      gl.bindTexture(gl.TEXTURE_2D, this.gl_normal_map);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
+      gl.generateMipmap(gl.TEXTURE_2D);
+      this.add_feature('NORMAL_MAP');
       this.setup_program();
     })
     .catch(console.error);

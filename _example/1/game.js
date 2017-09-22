@@ -12,7 +12,8 @@ const textured_phong_material = new Cervus.materials.PhongMaterial({
     Cervus.components.Render,
     Cervus.components.Transform
   ],
-  texture: '../textures/3.png'
+  texture: '../textures/4.png',
+  normal_map: '../textures/uv4.png'
 });
 
 const wireframe_material = new Cervus.materials.WireframeMaterial({
@@ -57,7 +58,7 @@ const cube8 = new Cervus.shapes.Box();
 const [cube8_transform, cube8_render] = cube8.get_components(Cervus.components.Transform, Cervus.components.Render);
 cube8_transform.position = [0, 0, -5];
 cube8_render.color = "#cff";
-cube8_render.material = phong_material;
+cube8_render.material = textured_phong_material;
 // cube8.add_component(new Cervus.components.Move({
 //   keyboard_controlled: true,
 //   mouse_controlled: true
@@ -122,6 +123,10 @@ game.add(plane3);
 //   game.add(light);
 // }
 
+const light = Array.from(game.entities_by_component.get(Cervus.components.Light))[0];
+const light_transform = light.get_component(Cervus.components.Transform);
+// const light_light = light.get_component(Cervus.components.Light);
+
 let dir = 1;
 game.on('tick', () => {
   cube_transform.rotate_ud(16/1000);
@@ -134,7 +139,7 @@ game.on('tick', () => {
     dir = 1;
   }
 
-  game.light_position = game.camera.get_component(Cervus.components.Transform).position;
+  light_transform.position = game.camera.get_component(Cervus.components.Transform).position;
 
   sphere_transform.position = [
     sphere_transform.position[0] + 0.06 * dir * -1,

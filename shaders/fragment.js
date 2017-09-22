@@ -22,9 +22,16 @@ export function fragment(defines) {
       in vec3 fn; // vertex normals
     #endif
 
-    #ifdef TEXTURE
+    #if defined(TEXTURE) || defined(NORMAL_MAP)
       in vec2 v_t; // texture coordinates
+    #endif
+
+    #ifdef TEXTURE
       uniform sampler2D u_t;
+    #endif
+
+    #ifdef NORMAL_MAP
+      uniform sampler2D n_m;
     #endif
 
     out vec4 frag_color;
@@ -37,9 +44,15 @@ export function fragment(defines) {
         #else
           vec4 p_c = c;
         #endif
+
+        #ifdef NORMAL_MAP
+          vec3 n = normalize(texture(n_m, v_t).rgb * -2.0 + 1.0);
+        #else
+          vec3 n = fn;
+        #endif
         vec4 light = vec4(0.0, 0.0, 0.0, 1.0);
         for (int i = 0; i < al; i++) {
-          light += vec4(p_c.rgb * li[i].x + li[i].y * max(dot(fn, normalize(lp[i] - fp)) * lc[i], 0.0), p_c.a);
+          light += vec4(p_c.rgb * li[i].x + li[i].y * max(dot(n, normalize(lp[i] - fp)) * lc[i], 0.0), p_c.a);
         }
 
         frag_color = light;

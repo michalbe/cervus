@@ -13,7 +13,7 @@ export class PhongMaterial extends Material {
 
   get_locations() {
     this.get_uniforms_and_attrs(
-      ['p', 'v', 'w', 'lp', 'li', 'lc', 'al', 'c', 'frame_delta'],
+      ['p', 'v', 'w', 'lp', 'li', 'lc', 'al', 'c', 'u_t', 'n_m', 'frame_delta'],
       ['P_current', 'P_next', 'N_current', 'N_next', 'a_t']
     );
   }
@@ -39,10 +39,27 @@ export class PhongMaterial extends Material {
 
     if (render.material.has_feature('TEXTURE')) {
 
+      gl.uniform1i(this.uniforms.u_t, 0);
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, render.material.gl_texture);
+
       gl.bindBuffer(gl.ARRAY_BUFFER, buffers.uvs);
       gl.enableVertexAttribArray(this.attribs.a_t);
       gl.vertexAttribPointer(this.attribs.a_t, 2, gl.FLOAT, true, 0, 0);
 
+    }
+
+    if (render.material.has_feature('NORMAL_MAP')) {
+
+      gl.uniform1i(this.uniforms.n_m, 1);
+      gl.activeTexture(gl.TEXTURE1);
+      gl.bindTexture(gl.TEXTURE_2D, render.material.gl_normal_map);
+
+      if (!render.material.has_feature('TEXTURE')) {
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.uvs);
+        gl.enableVertexAttribArray(this.attribs.a_t);
+        gl.vertexAttribPointer(this.attribs.a_t, 2, gl.FLOAT, true, 0, 0);
+      }
     }
 
     // current frame

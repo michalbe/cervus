@@ -24,7 +24,7 @@ export function vertex(defines) {
       out vec3 fn; // output normal
     #endif
 
-    #ifdef TEXTURE
+    #if defined(TEXTURE) || defined(NORMAL_MAP)
       in vec2 a_t; // texture coordinates
       out vec2 v_t;
     #endif
@@ -41,7 +41,7 @@ export function vertex(defines) {
         #ifdef LIGHTS
           fn = (w * vec4(N_next * next_frame_delta + N_current * frame_delta, 0.0)).xyz;
         #endif
-      #else 
+      #else
         fp = (w * vec4(P_current, 1.0)).xyz;
 
         #ifdef LIGHTS
@@ -51,7 +51,7 @@ export function vertex(defines) {
 
       gl_Position = p * v * vec4(fp, 1.0);
 
-      #ifdef TEXTURE
+      #if defined(TEXTURE) || defined(NORMAL_MAP)
         v_t = a_t;
       #endif
     }

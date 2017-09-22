@@ -13,7 +13,8 @@ const texture_material = new Cervus.materials.PhongMaterial({
     Cervus.components.Render,
     Cervus.components.Transform
   ],
-  texture: '../textures/3.png'
+  texture: '../textures/4.png',
+  normal_map: '../textures/uv4.png'
 });
 
 const material = new Cervus.materials.PhongMaterial({
@@ -65,7 +66,7 @@ game.add(group);
 const light = Array.from(game.entities_by_component.get(Cervus.components.Light))[0];
 const light_transform = light.get_component(Cervus.components.Transform);
 const light_light = light.get_component(Cervus.components.Light);
-light_light.color = "#00ff00";
+// light_light.color = "#00ff00";
 light_light.intensity = 0.1;
 light_transform.position = [0, 1, 0];
 light_transform.scale = [0.2, 0.2, 0.2];
