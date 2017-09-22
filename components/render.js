@@ -7,6 +7,7 @@ const default_options = {
   vertices: [],
   indices: [],
   normals: [],
+  uvs: [],
   color: 'fff',
   opacity: 1
 }
@@ -33,7 +34,8 @@ export class Render extends Component {
       vertices: create_float_buffer(this.vertices),
       indices: create_index_buffer(this.indices),
       qty: this.indices.length,
-      normals: create_float_buffer(this.normals)
+      normals: create_float_buffer(this.normals),
+      uvs: create_float_buffer(this.uvs)
     }
   }
 

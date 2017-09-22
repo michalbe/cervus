@@ -8,9 +8,12 @@ export class BasicMaterial extends Material {
     super(options);
 
     this.setup_program();
+  }
+
+  get_locations() {
     this.get_uniforms_and_attrs(
       ['p', 'v', 'w', 'c', 'frame_delta'],
-      ['P_current', 'P_next']
+      ['P_current', 'P_next', 'a_t']
     );
   }
 
@@ -18,7 +21,7 @@ export class BasicMaterial extends Material {
     const [render, morph] = entity.get_components(Render, Morph);
     let buffers = render.buffers;
 
-    if (morph) {
+    if (render.material.has_feature('MORPH')) {
 
       buffers = render.buffers[morph.current_frame];
 
@@ -32,6 +35,14 @@ export class BasicMaterial extends Material {
       gl.enableVertexAttribArray(this.attribs.P_next);
       gl.uniform1f(this.uniforms.frame_delta, morph.frame_delta);
 
+    }
+
+    if (render.material.has_feature('TEXTURE')) {
+
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffers.uvs);
+      gl.enableVertexAttribArray(this.attribs.a_t);
+      gl.vertexAttribPointer(this.attribs.a_t, 2, gl.FLOAT, true, 0, 0);
+      
     }
 
     // current frame

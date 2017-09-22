@@ -1,5 +1,6 @@
 import { create_program_object, create_shader_object, gl } from './context';
 import { Transform, Render } from '../components';
+import { image_loader } from './';
 
 import { vertex } from '../shaders';
 import { fragment } from '../shaders';
@@ -12,11 +13,20 @@ export class Material {
     this.features = new Set([].concat(
       ...Array.from(options.requires || []).map(comp => comp.features))
     );
-  }
 
+    this.texture = options.texture || false;
+  }
 
   add_feature(feature) {
     this.features.add(feature);
+  }
+
+  has_feature(feature) {
+    return this.features.has(feature);
+  }
+
+  remove_feature(feature) {
+    this.features.delete(feature);
   }
 
   setup_program() {
@@ -33,7 +43,10 @@ export class Material {
 
     if (this.program.error) {
       console.log(this.program.error); return;
+    } else {
+      this.get_locations();
     }
+
   }
 
   get_uniforms_and_attrs(uniforms, attrs) {
@@ -49,6 +62,38 @@ export class Material {
   // apply_shader(entity, game) {
   //
   // }
+
+  set texture(url) {
+    if (url !== this._texture_url && url) {
+      this._texture_url = url;
+      this.apply_texture();
+    } else if (!url) {
+      this._texture_url = url;
+      this.remove_feature('TEXTURE');
+      this.setup_program();
+    }
+  }
+
+  get texture() {
+    return this._texture_url;
+  }
+
+  apply_texture() {
+    console.log('LADUJE TEXTURE');
+    if (!this.gl_texture) {
+      this.gl_texture = gl.createTexture();
+    }
+
+    image_loader(this._texture_url)
+    .then(image => {
+      gl.bindTexture(gl.TEXTURE_2D, this.gl_texture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
+      gl.generateMipmap(gl.TEXTURE_2D);
+      this.add_feature('TEXTURE');
+      this.setup_program();
+    })
+    .catch(console.error);
+  }
 
   render(entity) {
     let ent = entity;
