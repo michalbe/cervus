@@ -34,8 +34,7 @@ export function fragment(defines) {
       #ifdef LIGHTS
         #ifdef TEXTURE
           vec4 p_c = texture(u_t, v_t);
-        #endif
-        #ifndef TEXTURE
+        #else
           vec4 p_c = c;
         #endif
         vec4 light = vec4(0.0, 0.0, 0.0, 1.0);
@@ -44,14 +43,10 @@ export function fragment(defines) {
         }
 
         frag_color = light;
-      #endif
-
-      #ifndef LIGHTS
+      #else
         #ifdef TEXTURE
           frag_color = texture(u_t, v_t);
-        #endif
-
-        #ifndef TEXTURE
+        #else
           frag_color = c;
         #endif
       #endif
