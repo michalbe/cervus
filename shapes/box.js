@@ -72,6 +72,39 @@ const normals = [
   0, 0, -1
 ];
 
+const uvs = [
+  0, 0,
+  1, 0,
+  0, 1,
+  1, 1,
+
+  0, 0,
+  1, 0,
+  0, 1,
+  1, 1,
+
+  0, 0,
+  1, 0,
+  0, 1,
+  1, 1,
+
+  0, 0,
+  1, 0,
+  0, 1,
+  1, 1,
+
+  0, 0,
+  1, 0,
+  0, 1,
+  1, 1,
+
+  0, 0,
+  1, 0,
+  0, 1,
+  1, 1,
+
+];
+
 export class Box extends Entity {
   constructor(options = {}) {
     options.components = [
@@ -80,7 +113,8 @@ export class Box extends Entity {
         vertices,
         indices,
         normals,
-        material: options.material
+        material: options.material,
+        uvs
       })
     ];
 

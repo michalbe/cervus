@@ -22,6 +22,13 @@ const normals = [
   0, 1, 0
 ];
 
+const uvs = [
+  0, 0,
+  1, 0,
+  0, 1,
+  1, 1
+];
+
 export class Plane extends Entity {
   constructor(options = {}) {
     options.components = [
@@ -30,6 +37,7 @@ export class Plane extends Entity {
         vertices,
         indices,
         normals,
+        uvs,
         material: options.material
       })
     ];

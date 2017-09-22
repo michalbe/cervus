@@ -7,6 +7,14 @@ const phong_material = new Cervus.materials.PhongMaterial({
   ]
 });
 
+const textured_phong_material = new Cervus.materials.PhongMaterial({
+  requires: [
+    Cervus.components.Render,
+    Cervus.components.Transform
+  ],
+  texture: '../textures/3.png'
+});
+
 const wireframe_material = new Cervus.materials.WireframeMaterial({
   requires: [
     Cervus.components.Render,
@@ -67,7 +75,7 @@ game.add(cube);
 const sphere = new Cervus.shapes.Sphere();
 const [sphere_transform, sphere_render] = sphere.get_components(Cervus.components.Transform, Cervus.components.Render);
 sphere_render.color = '#ff0000';
-sphere_render.material = phong_material;
+sphere_render.material = textured_phong_material;
 sphere_transform.position = [3, 0, -10];
 sphere_transform.scale = [ 0.5, 0.5, 0.5 ];
 game.add(sphere);
