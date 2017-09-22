@@ -8,6 +8,14 @@ const game = new Cervus.core.Game({
   // fps: 1
 });
 
+const texture_material = new Cervus.materials.PhongMaterial({
+  requires: [
+    Cervus.components.Render,
+    Cervus.components.Transform
+  ],
+  texture: '../textures/3.png'
+});
+
 const material = new Cervus.materials.PhongMaterial({
   requires: [
     Cervus.components.Render,
@@ -50,7 +58,7 @@ const [cube_transform, cube_render] = cube.get_components(Cervus.components.Tran
 cube_transform.position = [0, 1, 3];
 cube_transform.scale = [1, 1, 1];
 cube_render.color = "#bada55";
-cube_render.material = material;
+cube_render.material = texture_material;
 group.add(cube);
 game.add(group);
 
@@ -150,13 +158,13 @@ game.on('tick', () => {
 
   light_transform.position = [
     light_transform.position[0] + 0.06 * dir,
-    1,
+    2,
     light_transform.position[2] + 0.06 * dir
   ];
 
   light_2_transform.position = [
     light_2_transform.position[0] - 0.04 * dir,
-    1.5,
+    2.5,
     light_2_transform.position[2] - 0.04 * dir
   ];
 });
