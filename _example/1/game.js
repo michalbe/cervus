@@ -7,7 +7,7 @@ const phong_material = new Cervus.materials.PhongMaterial({
   ]
 });
 
-const textured_phong_material = new Cervus.materials.PhongMaterial({
+const textured_phong_material = new Cervus.materials.BasicMaterial({
   requires: [
     Cervus.components.Render,
     Cervus.components.Transform

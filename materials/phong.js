@@ -41,7 +41,7 @@ export class PhongMaterial extends Material {
 
       gl.uniform1i(this.uniforms.u_t, 0);
       gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, render.material.gl_texture);
+      gl.bindTexture(gl.TEXTURE_2D, render.material._textures.gl_texture);
 
       gl.bindBuffer(gl.ARRAY_BUFFER, buffers.uvs);
       gl.enableVertexAttribArray(this.attribs.a_t);
@@ -53,7 +53,7 @@ export class PhongMaterial extends Material {
 
       gl.uniform1i(this.uniforms.n_m, 1);
       gl.activeTexture(gl.TEXTURE1);
-      gl.bindTexture(gl.TEXTURE_2D, render.material.gl_normal_map);
+      gl.bindTexture(gl.TEXTURE_2D, render.material._textures.gl_normal_map);
 
       if (!render.material.has_feature('TEXTURE')) {
         gl.bindBuffer(gl.ARRAY_BUFFER, buffers.uvs);

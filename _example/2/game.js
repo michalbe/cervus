@@ -14,7 +14,7 @@ const texture_material = new Cervus.materials.PhongMaterial({
     Cervus.components.Transform
   ],
   texture: '../textures/4.png',
-  normal_map: '../textures/uv4.png'
+  normal_map: '../textures/normal2.jpg'
 });
 
 const material = new Cervus.materials.PhongMaterial({
