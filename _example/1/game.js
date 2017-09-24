@@ -55,7 +55,7 @@ game.add(cube2);
 
 const cube8 = new Cervus.shapes.Box();
 const [cube8_transform, cube8_render] = cube8.get_components(Cervus.components.Transform, Cervus.components.Render);
-cube8_transform.position = [0, 0, -5];
+cube8_transform.position = [2, 0, -5];
 cube8_render.color = "#cff";
 cube8_render.material = textured_phong_material;
 // cube8.add_component(new Cervus.components.Move({
@@ -129,6 +129,7 @@ const light_transform = light.get_component(Cervus.components.Transform);
 let dir = 1;
 game.on('tick', () => {
   cube_transform.rotate_ud(16/1000);
+  cube8_transform.rotate_rl(16/1000);
   sphere_transform.rotate_ud(16/1000);
   sphere_transform.rotate_rl(16/1000);
 
@@ -138,7 +139,7 @@ game.on('tick', () => {
     dir = 1;
   }
 
-  light_transform.position = game.camera.get_component(Cervus.components.Transform).position;
+  // light_transform.position = game.camera.get_component(Cervus.components.Transform).position;
 
   sphere_transform.position = [
     sphere_transform.position[0] + 0.06 * dir * -1,
