@@ -3,8 +3,6 @@
 const game = new Cervus.core.Game({
   width: window.innerWidth,
   height: window.innerHeight,
-  light_position: [-1, 2, 5],
-  light_intensity: 0.9
   // fps: 1
 });
 

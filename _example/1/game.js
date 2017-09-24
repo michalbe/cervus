@@ -33,7 +33,6 @@ const basic_material = new Cervus.materials.BasicMaterial({
 const game = new Cervus.core.Game({
   width: window.innerWidth,
   height: window.innerHeight,
-  light_intensity: 1
   // fps: 1
 });
 
@@ -123,7 +122,7 @@ game.add(plane3);
 //   game.add(light);
 // }
 
-const light = Array.from(game.entities_by_component.get(Cervus.components.Light))[0];
+const light = game.light;
 const light_transform = light.get_component(Cervus.components.Transform);
 // const light_light = light.get_component(Cervus.components.Light);
 
