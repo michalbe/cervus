@@ -7,7 +7,7 @@ const phong_material = new Cervus.materials.PhongMaterial({
   ]
 });
 
-const textured_phong_material = new Cervus.materials.BasicMaterial({
+const textured_phong_material = new Cervus.materials.PhongMaterial({
   requires: [
     Cervus.components.Render,
     Cervus.components.Transform
@@ -33,7 +33,7 @@ const basic_material = new Cervus.materials.BasicMaterial({
 const game = new Cervus.core.Game({
   width: window.innerWidth,
   height: window.innerHeight,
-  // light: false
+  light_intensity: 1
   // fps: 1
 });
 

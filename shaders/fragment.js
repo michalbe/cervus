@@ -60,10 +60,22 @@ export function fragment(defines) {
         #endif
 
         #ifdef NORMAL_MAP
-          vec3 n = normalize(texture(n_m, v_t).rgb * -2.0 + 1.0);
+          vec3 Q1 = dFdx(fp);
+          vec3 Q2 = dFdy(fp);
+
+          vec2 st1 = dFdx(v_t);
+          vec2 st2 = dFdy(v_t);
+
+          vec3 tangent = normalize(Q1 * st2.t - Q2 * st1.t);
+          vec3 bitangent = normalize(-Q1 * st2.s + Q2 * st1.s);
+
+          mat3 TBN = mat3(tangent, bitangent, fn);
+
+          vec3 n = normalize(texture(n_m, v_t).rgb * -2.0 + 1.0) * TBN;
         #else
           vec3 n = fn;
         #endif
+
         vec4 light = vec4(0.0, 0.0, 0.0, 1.0);
         for (int i = 0; i < al; i++) {
           light += vec4(p_c.rgb * li[i].x + li[i].y * max(dot(n, normalize(lp[i] - fp)) * lc[i], 0.0), p_c.a);
