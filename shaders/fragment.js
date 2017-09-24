@@ -71,7 +71,7 @@ export function fragment(defines) {
 
           mat3 TBN = mat3(tangent, bitangent, fn);
 
-          vec3 n = normalize(texture(n_m, v_t).rgb * -2.0 + 1.0) * TBN;
+          vec3 n = normalize(texture(n_m, v_t).rgb * 2.0 - 1.0) * TBN;
         #else
           vec3 n = fn;
         #endif
