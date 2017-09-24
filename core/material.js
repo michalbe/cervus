@@ -14,7 +14,10 @@ export class Material {
       ...Array.from(options.requires || []).map(comp => comp.features))
     );
 
+    this._textures = {};
+
     this.texture = options.texture || false;
+    this.normal_map = options.normal_map || false;
   }
 
   add_feature(feature) {
@@ -64,35 +67,51 @@ export class Material {
   // }
 
   set texture(url) {
-    if (url !== this._texture_url && url) {
-      this._texture_url = url;
-      this.apply_texture();
-    } else if (!url) {
-      this._texture_url = url;
-      this.remove_feature('TEXTURE');
-      this.setup_program();
-    }
+    this.build_texture(url, this._texture_url, 'TEXTURE', 'gl_texture');
   }
 
   get texture() {
     return this._texture_url;
   }
 
-  apply_texture() {
-    console.log('LADUJE TEXTURE');
-    if (!this.gl_texture) {
-      this.gl_texture = gl.createTexture();
-    }
+  set normal_map(url) {
+    this.build_texture(url, this._normal_map_url, 'NORMAL_MAP', 'gl_normal_map');
+  }
 
-    image_loader(this._texture_url)
-    .then(image => {
-      gl.bindTexture(gl.TEXTURE_2D, this.gl_texture);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
-      gl.generateMipmap(gl.TEXTURE_2D);
-      this.add_feature('TEXTURE');
+  get normal_map() {
+    return this._normal_map_url;
+  }
+
+  build_texture(new_url, url_location, feature, gl_texture_key) {
+    if (new_url !== url_location && new_url) {
+
+      url_location = new_url;
+
+      if (!this._textures[gl_texture_key]) {
+        this._textures[gl_texture_key] = gl.createTexture();
+      }
+
+      image_loader(new_url)
+      .then(image => {
+
+        gl.bindTexture(gl.TEXTURE_2D, this._textures[gl_texture_key]);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
+        gl.generateMipmap(gl.TEXTURE_2D);
+
+        if (!this.has_feature(feature)) {
+          this.add_feature(feature);
+          this.setup_program();
+        }
+      })
+      .catch(console.error);
+
+    } else if (!new_url) {
+
+      url_location = new_url;
+      this.remove_feature(feature);
       this.setup_program();
-    })
-    .catch(console.error);
+
+    }
   }
 
   render(entity) {
