@@ -8,7 +8,7 @@ const game = new Cervus.core.Game({
   // fps: 1
 });
 
-const material = new Cervus.materials.BasicMaterial({
+const material = new Cervus.materials.PhongMaterial({
   requires: [
     Cervus.components.Render,
     Cervus.components.Transform,

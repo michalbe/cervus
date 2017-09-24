@@ -14,8 +14,7 @@ const default_options = {
   fov: 60,
   near: 0.35,
   far: 85,
-  clear_color: '#FFFFFF',
-  light: true
+  clear_color: '#FFFFFF'
 };
 
 const EVENTS = ["keydown", "keyup", "mousemove"];
@@ -39,15 +38,14 @@ export class Game {
 
     this.camera.game = this;
 
-    if (this.light) {
-      const light = new Entity({
-        components: [
-          new Transform(),
-          new Light()
-        ]
-      });
-      this.add(light);
-    }
+    this.light = new Entity({
+      components: [
+        new Transform(),
+        new Light()
+      ]
+    });
+    this.add(this.light);
+
 
     this.projMatrix = mat4.create();
     this.viewMatrix = mat4.create();

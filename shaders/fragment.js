@@ -1,3 +1,17 @@
+//
+// Variables used by fragment shader
+//
+// vec4 c; // color
+// vec3 fp; // vertex position
+// vec3[MAX_LIGHTS] lp; // light position
+// vec2[MAX_LIGHTS] li; // light intensity
+// vec3[MAX_LIGHTS] lc; // light color
+// int al; // active lights
+// vec3 fn; // vertex normals
+// vec2 v_t; // texture coordinates
+// sampler2D u_t; //texture
+// sampler2D n_m; // normal map
+
 export function fragment(defines) {
   return `#version 300 es
 
@@ -7,24 +21,31 @@ export function fragment(defines) {
 
     precision mediump float;
 
-    uniform vec4 c; // color
+    uniform vec4 c;
 
-    in vec3 fp; // vertex position
+    in vec3 fp;
 
     #ifdef LIGHTS
       #define MAX_LIGHTS 100
 
-      uniform vec3[MAX_LIGHTS] lp; // light position
-      uniform vec2[MAX_LIGHTS] li; // light intensity
-      uniform vec3[MAX_LIGHTS] lc; // light color
-      uniform int al; // active lights
+      uniform vec3[MAX_LIGHTS] lp;
+      uniform vec2[MAX_LIGHTS] li;
+      uniform vec3[MAX_LIGHTS] lc;
+      uniform int al;
 
-      in vec3 fn; // vertex normals
+      in vec3 fn;
+    #endif
+
+    #if defined(TEXTURE) || defined(NORMAL_MAP)
+      in vec2 v_t;
     #endif
 
     #ifdef TEXTURE
-      in vec2 v_t; // texture coordinates
       uniform sampler2D u_t;
+    #endif
+
+    #ifdef NORMAL_MAP
+      uniform sampler2D n_m;
     #endif
 
     out vec4 frag_color;
@@ -37,9 +58,27 @@ export function fragment(defines) {
         #else
           vec4 p_c = c;
         #endif
+
+        #ifdef NORMAL_MAP
+          vec3 Q1 = dFdx(fp);
+          vec3 Q2 = dFdy(fp);
+
+          vec2 st1 = dFdx(v_t);
+          vec2 st2 = dFdy(v_t);
+
+          vec3 tangent = normalize(Q1 * st2.t - Q2 * st1.t);
+          vec3 bitangent = normalize(-Q1 * st2.s + Q2 * st1.s);
+
+          mat3 TBN = mat3(tangent, bitangent, fn);
+
+          vec3 n = normalize(texture(n_m, v_t).rgb * -2.0 + 1.0) * TBN;
+        #else
+          vec3 n = fn;
+        #endif
+
         vec4 light = vec4(0.0, 0.0, 0.0, 1.0);
         for (int i = 0; i < al; i++) {
-          light += vec4(p_c.rgb * li[i].x + li[i].y * max(dot(fn, normalize(lp[i] - fp)) * lc[i], 0.0), p_c.a);
+          light += vec4(p_c.rgb * li[i].x + li[i].y * max(dot(n, normalize(lp[i] - fp)) * lc[i], 0.0), p_c.a);
         }
 
         frag_color = light;

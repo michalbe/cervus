@@ -4,7 +4,8 @@ const material = new Cervus.materials.PhongMaterial({
     Cervus.components.Render,
     Cervus.components.Transform
   ],
-  texture: '../textures/1.jpg'
+  texture: '../textures/4.png',
+  normal_map: '../textures/normal2.jpg'
 });
 
 const phong_material = new Cervus.materials.PhongMaterial({
@@ -21,7 +22,7 @@ const game = new Cervus.core.Game({
   // fps: 1
 });
 game.camera.get_component(Cervus.components.Move).keyboard_controlled = true;
-game.camera.get_component(Cervus.components.Move).mouse_controlled = true;
+// game.camera.get_component(Cervus.components.Move).mouse_controlled = true;
 
 // By default all entities face the user.
 // Rotate the camera to see the scene.
@@ -53,6 +54,9 @@ const group = new Cervus.core.Entity({
 game.add(group);
 group.add(cube);
 //
-// game.on('tick', () => {
-//   group.get_component(Cervus.components.Transform).rotate_rl(16/1000);
-// });
+
+game.on('tick', () => {
+  // group.get_component(Cervus.components.Transform).rotate_rl(16/1000);
+
+  game.light.get_component(Cervus.components.Transform).position = game.camera.get_component(Cervus.components.Transform).position;
+});

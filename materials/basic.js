@@ -39,10 +39,14 @@ export class BasicMaterial extends Material {
 
     if (render.material.has_feature('TEXTURE')) {
 
+      gl.uniform1i(this.uniforms.u_t, 0);
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, render.material._textures.gl_texture);
+      
       gl.bindBuffer(gl.ARRAY_BUFFER, buffers.uvs);
       gl.enableVertexAttribArray(this.attribs.a_t);
       gl.vertexAttribPointer(this.attribs.a_t, 2, gl.FLOAT, true, 0, 0);
-      
+
     }
 
     // current frame
