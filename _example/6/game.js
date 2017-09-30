@@ -12,7 +12,8 @@ const material = new Cervus.materials.PhongMaterial({
     Cervus.components.Render,
     Cervus.components.Transform,
   ],
-  texture: '../textures/magica.png',
+  texture: '../textures/MAW_diffuse.png',
+  normal_map: '../textures/MAW_normal.png',
 });
 
 const [camera_transform, camera_move] = game.camera.get_components(Cervus.components.Transform, Cervus.components.Move);
@@ -21,7 +22,7 @@ camera_move.keyboard_controlled = true;
 camera_move.mouse_controlled = true;
 
 let animated_model;
-Cervus.core.model_loader('models/pirate.json').then((frames) => {
+Cervus.core.model_loader('models/daemon-animated.json').then((frames) => {
   frames = frames[0];
   console.log(frames);
   for(let i = 0; i < 1; i++) {
@@ -29,7 +30,7 @@ Cervus.core.model_loader('models/pirate.json').then((frames) => {
       components: [
         new Cervus.components.Transform({
           position: [0, 0, 10],
-          scale: [0.2, 0.2, 0.2]
+          scale: [0.02, 0.02, 0.02]
         }),
         new Cervus.components.Render({
           material: material,
