@@ -53,7 +53,7 @@ export function vertex(defines) {
         fp = (w * vec4(P_next * next_frame_delta + P_current * frame_delta, 1.0)).xyz;
 
         #ifdef LIGHTS
-          fn = (w * vec4(N_next * next_frame_delta + N_current * frame_delta, 0.0)).xyz;
+          fn = (w * vec4(N_current * N_next, 0.0)).xyz;
         #endif
       #else
         fp = (w * vec4(P_current, 1.0)).xyz;

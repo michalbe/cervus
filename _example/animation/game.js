@@ -18,19 +18,24 @@ const material = new Cervus.materials.PhongMaterial({
 
 const [camera_transform, camera_move] = game.camera.get_components(Cervus.components.Transform, Cervus.components.Move);
 // camera_transform.position = [0, 1, 2];
-camera_transform.rotate_rl(Math.PI);
+// camera_transform.rotate_rl(Math.PI);
+camera_transform.position = [0.6284782886505127, 0.466666579246521, 2.461822032928467];
+camera_transform.rotation = [-0.11002341657876968, 0.8865047693252563, -0.2734420895576477, -0.3566981256008148];
 camera_move.keyboard_controlled = true;
-camera_move.mouse_controlled = true;
+// camera_move.mouse_controlled = true;
 
 Cervus.core.model_loader('models/bird.json').then((models) => {
   // models.splice(1, 1);
   console.log(models);
-  for(let i = 0; i < 1000; i++) {
+  for(let i = 0; i < 1; i++) {
     setTimeout(() => {
       create_bird(
-        50 - Math.random() * 100,
-        50 - Math.random() * 100,
-        50 - Math.random() * 100,
+        0,
+        0,
+        2,
+        // 50 - Math.random() * 100,
+        // 50 - Math.random() * 100,
+        // 50 - Math.random() * 100,
         models[0].scale,
         models
       );
@@ -50,7 +55,7 @@ const create_bird = (x = 0, y = 0, z = 0, scale, frames) => {
       }),
       new Cervus.components.Render({
         material: material,
-        color:  '#ff00ff'
+        color:  '#0F0'
       }),
       new Cervus.components.Morph({
         frame_time: 16,
@@ -71,7 +76,11 @@ const create_bird = (x = 0, y = 0, z = 0, scale, frames) => {
 };
 
 
+const light = game.light;
+const light_transform = light.get_component(Cervus.components.Transform);
+const light_light = light.get_component(Cervus.components.Light);
+light_light.intensity = 0.5;
 
 game.on('tick', () => {
-  game.light_position = camera_transform.position;
+  light_transform.position = camera_transform.position;
 });

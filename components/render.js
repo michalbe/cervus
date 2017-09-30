@@ -15,7 +15,7 @@ const default_options = {
 export class Render extends Component {
   constructor(options) {
     super(options);
-    Object.assign(this,  default_options, options);
+    Object.assign(this, default_options, options);
 
     this.create_buffers();
   }
