@@ -1,5 +1,6 @@
 import resolve from 'rollup-plugin-node-resolve';
 import minify from 'rollup-plugin-babel-minify';
+import commonjs from 'rollup-plugin-commonjs';
 
 export default {
   input: 'index.js',
@@ -10,6 +11,10 @@ export default {
   },
   plugins: [
     resolve(),
+    commonjs({
+      include: 'node_modules/**',
+      sourceMap: false
+    }),
     minify({ comments: false }),
   ],
 };
