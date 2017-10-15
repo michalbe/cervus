@@ -41,9 +41,16 @@ fetch('models/robot.json').then((data) => {
           indices: json.indices,
           normals: json.normals,
           uvs: json.uvs
+        }),
+        new Cervus.components.Animation({
+          skin_indices: json.skinIndices,
+          skin_weights: json.skinWeights,
+          bones: json.bones
         })
       ]
     });
+
+    animated_model.get_component(Cervus.components.Animation).create_buffers();
     game.add(animated_model);
 
     animated_model.get_component(Cervus.components.Transform).rotate_rl(Math.PI/0.75);
