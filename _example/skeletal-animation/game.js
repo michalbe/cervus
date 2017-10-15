@@ -45,7 +45,8 @@ fetch('models/robot.json').then((data) => {
         new Cervus.components.Animation({
           skin_indices: json.skinIndices,
           skin_weights: json.skinWeights,
-          bones: json.bones
+          bones: json.bones,
+          frames: json.frames
         })
       ]
     });
