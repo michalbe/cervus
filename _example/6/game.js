@@ -12,8 +12,9 @@ const material = new Cervus.materials.PhongMaterial({
     Cervus.components.Render,
     Cervus.components.Transform,
   ],
-  texture: '../textures/MAW_diffuse.png',
-  normal_map: '../textures/MAW_normal.png',
+  texture: '../textures/monster.jpg',
+  // texture: '../textures/MAW_diffuse.png',
+  // normal_map: '../textures/MAW_normal.png',
 });
 
 const [camera_transform, camera_move] = game.camera.get_components(Cervus.components.Transform, Cervus.components.Move);
@@ -22,23 +23,23 @@ camera_move.keyboard_controlled = true;
 camera_move.mouse_controlled = true;
 
 let animated_model;
-Cervus.core.model_loader('models/daemon-animated.json').then((frames) => {
-  frames = frames[0];
-  console.log(frames);
+Cervus.core.model_loader('models/monster.json').then((data) => {
+  console.log(data);
+  data = data[0].meshes;
   for(let i = 0; i < 1; i++) {
     animated_model = new Cervus.core.Entity({
       components: [
         new Cervus.components.Transform({
           position: [0, 0, 10],
-          scale: [0.02, 0.02, 0.02]
+          scale: [0.002, 0.002, 0.002]
         }),
         new Cervus.components.Render({
           material: material,
           color:  '#ff00ff',
-          vertices: frames[0].vertices,
-          indices: frames[0].indices,
-          normals: frames[0].normals,
-          uvs: frames[0].uvs
+          vertices: data[0].vertices,
+          indices: data[0].indices,
+          normals: data[0].normals,
+          uvs: data[0].uvs
         })
       ]
     });
