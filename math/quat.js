@@ -3,6 +3,7 @@ import { fromMat3, normalize } from 'gl-matrix/src/gl-matrix/quat';
 export {
   create,
   multiply,
+  slerp,
   setAxisAngle as set_axis_angle
 } from 'gl-matrix/src/gl-matrix/quat';
 

@@ -5,6 +5,7 @@ export {
   multiply,
   copy,
   fromRotationTranslationScale as compose,
+  fromRotationTranslation as frt,
   getScaling as get_scaling,
   getRotation as get_rotation,
   lookAt as look_at
