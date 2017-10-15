@@ -43,14 +43,10 @@ export function model_loader(urls) {
   function parse_model(json) {
     const meshes = [];
     const bones = [];
+    const frames = [];
     let skinIndices, skinWeights;
 
     console.log(json);
-    for (const animation of json.animations) {
-      animation.channels.forEach((channel) => {
-        // console.log(channel.positionkeys);
-      });
-    }
 
     for (const child of json.rootnode.children) {
       if (!child.meshes) {
@@ -122,6 +118,30 @@ export function model_loader(urls) {
       }
     }
 
+    for (const animation of json.animations) {
+      animation.channels.forEach((bone) => {
+        console.log(bone);
+        const bone_index = find_bone_index(bones, bone.name);
+        bone.positionkeys.forEach((position, i) => {
+          frames[i] = frames[i] || [];
+          frames[i][bone_index] = frames[i][bone_index] || {};
+          frames[i][bone_index].position = position[1];
+        });
+
+        bone.rotationkeys.forEach((rotation, i) => {
+          frames[i] = frames[i] || [];
+          frames[i][bone_index] = frames[i][bone_index] || {};
+          frames[i][bone_index].rotation = rotation[1];
+        });
+
+        bone.scalingkeys.forEach((scale, i) => {
+          frames[i] = frames[i] || [];
+          frames[i][bone_index] = frames[i][bone_index] || {};
+          frames[i][bone_index].scale = scale[1];
+        });
+      });
+    }
+
     if (!meshes.length) {
       throw new Error('Meshes not found.');
     }
@@ -130,7 +150,8 @@ export function model_loader(urls) {
       meshes,
       bones,
       skinIndices,
-      skinWeights
+      skinWeights,
+      frames
     };
   }
 
