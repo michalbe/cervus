@@ -3,6 +3,7 @@ export {
   invert,
   perspective,
   multiply,
+  copy,
   fromRotationTranslationScale as compose,
   getScaling as get_scaling,
   getRotation as get_rotation,
