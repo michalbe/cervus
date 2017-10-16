@@ -33,6 +33,25 @@ export function vertex(defines) {
       in vec3 N_next;
     #endif
 
+    #ifdef ANIMATION
+      uniform mat4 uBones[60];
+      in highp vec2 sWeights;
+      in highp vec2 sIndices;
+
+      mat4 boneTransform() {
+        mat4 ret;
+
+        // Weight normalization factor
+        float normfac = 1.0 / (sWeights.x + sWeights.y);
+
+        // Weight1 * Bone1 + Weight2 * Bone2
+        ret = normfac * sWeights.y * uBones[int(sIndices.y)]
+            + normfac * sWeights.x * uBones[int(sIndices.x)];
+
+        return ret;
+      }
+    #endif
+
     #ifdef LIGHTS
       in vec3 N_current;
       out vec3 fn;
@@ -63,7 +82,21 @@ export function vertex(defines) {
         #endif
       #endif
 
-      gl_Position = p * v * vec4(fp, 1.0);
+      #ifdef ANIMATION
+      mat4 bt = (length(sWeights) > 0.5)?
+        boneTransform()
+        :
+        mat4(
+            1., 0., 0., 0.,
+            0., 1., 0., 0.,
+            0., 0., 1., 0.,
+            0., 0., 0., 1.
+        );
+
+        gl_Position = p * v * w * bt * vec4(P_current, 1.0);
+      #else
+        gl_Position = p * v * vec4(fp, 1.0);
+      #endif
 
       #if defined(TEXTURE) || defined(NORMAL_MAP)
         v_t = a_t;

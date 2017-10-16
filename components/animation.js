@@ -1,5 +1,5 @@
 import { Component } from '../core';
-import { create_index_buffer } from '../core';
+import { create_float_buffer } from '../core';
 
 import * as mat4 from '../math/mat4';
 import * as quat from '../math/quat';
@@ -41,7 +41,7 @@ export class Animation extends Component {
       bone.localMatrix = mat4.create();
       bone.inverseBindpose = mat4.create();
 
-      mat4.copy(bone.localMatrix, localMatrix)
+      mat4.copy(bone.localMatrix, localMatrix);
 
       // ... set it as the world matrix if it is a root bone
       if(bone.parent == -1) {
@@ -57,8 +57,8 @@ export class Animation extends Component {
 
   create_buffers() {
     this.number_of_frames = this.frames.length;
-    this.entity.get_component(Render).buffers.skin_indices = create_index_buffer(this.skin_indices);
-    this.entity.get_component(Render).buffers.skin_weights = create_index_buffer(this.skin_weights);
+    this.entity.get_component(Render).buffers.skin_indices = create_float_buffer(this.skin_indices);
+    this.entity.get_component(Render).buffers.skin_weights = create_float_buffer(this.skin_weights);
   }
 
   get_frame() {

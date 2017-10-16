@@ -13,8 +13,8 @@ export class PhongMaterial extends Material {
 
   get_locations() {
     this.get_uniforms_and_attrs(
-      ['p', 'v', 'w', 'lp', 'li', 'lc', 'al', 'c', 'u_t', 'n_m', 'frame_delta'],
-      ['P_current', 'P_next', 'N_current', 'N_next', 'a_t']
+      ['p', 'v', 'w', 'lp', 'li', 'lc', 'al', 'c', 'u_t', 'n_m', 'frame_delta', 'uBones'],
+      ['P_current', 'P_next', 'N_current', 'N_next', 'a_t', 'sWeights', 'sIndices']
     );
   }
 
@@ -23,8 +23,17 @@ export class PhongMaterial extends Material {
     let buffers = render.buffers;
 
     if (render.material.has_feature('ANIMATION')) {
-      // console.log(animation.get_frame());
-      
+      var boneMatrices = animation.get_frame();
+      gl.uniformMatrix4fv(this.uniforms.uBones, false, boneMatrices);
+
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffers.skin_weights);
+      gl.vertexAttribPointer(this.attribs.sWeights, 2, gl.FLOAT, false, 0, 0);
+      gl.enableVertexAttribArray(this.attribs.sWeights);
+
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffers.skin_indices);
+      gl.vertexAttribPointer(this.attribs.sIndices, 2, gl.FLOAT, false, 0, 0);
+      gl.enableVertexAttribArray(this.attribs.sIndices);
+
     } else if (render.material.has_feature('MORPH')) {
       buffers = render.buffers[morph.current_frame];
 

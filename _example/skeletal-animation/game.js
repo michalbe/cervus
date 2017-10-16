@@ -32,7 +32,7 @@ fetch('models/robot.json').then((data) => {
     components: [
       new Cervus.components.Transform({
         position: [-2, 0, 15],
-        scale: [1, 1, 1]
+        // scale: [1, 1, 1]
       }),
       new Cervus.components.Render({
         material: material,
