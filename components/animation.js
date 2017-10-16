@@ -104,6 +104,6 @@ export class Animation extends Component {
   }
 
   update() {
-
+    this.current_lerp += 0.05;
   }
 }

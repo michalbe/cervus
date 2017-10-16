@@ -1,7 +1,7 @@
 import { gl } from '../core/context';
 import { Material } from '../core';
 
-import { Render, Morph, Light, Transform } from '../components';
+import { Render, Animation, Morph, Light, Transform } from '../components';
 
 export class PhongMaterial extends Material {
   constructor(options) {
@@ -19,10 +19,13 @@ export class PhongMaterial extends Material {
   }
 
   apply_shader(entity, game) {
-    const [render, morph] = entity.get_components(Render, Morph);
+    const [render, morph, animation] = entity.get_components(Render, Morph, Animation);
     let buffers = render.buffers;
 
-    if (render.material.has_feature('MORPH')) {
+    if (render.material.has_feature('ANIMATION')) {
+      // console.log(animation.get_frame());
+      
+    } else if (render.material.has_feature('MORPH')) {
       buffers = render.buffers[morph.current_frame];
 
       // next frame
