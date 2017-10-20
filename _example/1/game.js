@@ -43,7 +43,7 @@ camera_transform.position = [0, 1, 2];
 camera_transform.rotate_rl(Math.PI);
 
 game.camera.get_component(Cervus.components.Move).keyboard_controlled = true;
-game.camera.get_component(Cervus.components.Move).mouse_controlled = true;
+// game.camera.get_component(Cervus.components.Move).mouse_controlled = true;
 
 
 const cube2 = new Cervus.shapes.Box();

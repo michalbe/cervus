@@ -1,5 +1,5 @@
 /* global Cervus */
-const material = new Cervus.materials.WireframeMaterial({
+const material = new Cervus.materials.PhongMaterial({
   requires: [
     Cervus.components.Render,
     Cervus.components.Transform
@@ -37,14 +37,4 @@ cube_render.material = material;
 cube_render.color = "#00ff00";
 cube_transform.position = [0, 1, -10];
 
-const group = new Cervus.core.Entity({
-  components: [
-    new Cervus.components.Transform()
-  ]
-});
-game.add(group);
-group.add(cube);
-//
-// game.on('tick', () => {
-//   group.get_component(Cervus.components.Transform).rotate_rl(16/1000);
-// });
+game.add(cube);
