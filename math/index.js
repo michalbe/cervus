@@ -11,3 +11,7 @@ export {
 export function to_radian(a) {
   return a * Math.PI / 180;
 }
+
+export function to_degrees(a) {
+  return a * 180 / Math.PI;
+}
