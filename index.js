@@ -4,6 +4,7 @@ import * as _math from './math';
 import * as _materials from './materials';
 import * as _shapes from './shapes';
 import * as _tweens from './tweens';
+import * as _OIMO from 'oimo';
 
 export {
   _core as core,
@@ -11,5 +12,6 @@ export {
   _materials as materials,
   _math as math,
   _shapes as shapes,
-  _tweens as tweens
+  _tweens as tweens,
+  _OIMO as OIMO
 };
