@@ -21,6 +21,7 @@
     "rollup-plugin-serve": "^0.3.0"
   },
   "dependencies": {
-    "gl-matrix": "^2.4.0"
+    "gl-matrix": "^2.4.0",
+    "oimo": "^1.0.9"
   }
 }
