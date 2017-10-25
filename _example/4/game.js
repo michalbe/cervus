@@ -15,8 +15,8 @@ const game = new Cervus.core.Game({
   // fps: 10
 });
 
-const physics_world = new Cervus.physics.World( new Cervus.physics.SAPBroadphase(), new Cervus.physics.NarrowPhase(), new Cervus.physics.IterativeSolver() );
-// physics_world.gravity.set(0, 0, -9.82);
+const physics_world = Cervus.physics.world();
+console.log(physics_world);
 
 // By default all entities face the user.
 // Rotate the camera to see the scene.
@@ -31,7 +31,12 @@ const plane_render = plane.get_component(Cervus.components.Render);
 plane_transform.scale = [100, 1, 100];
 plane_render.material = material;
 plane_render.color = "#eeeeee";
-// game.add(plane);
+plane.add_component(new Cervus.components.RigidBody({
+  world: physics_world,
+  shape: 'box',
+  mass: Infinity
+}));
+game.add(plane);
 
 const cube = new Cervus.shapes.Box();
 const cube_transform = cube.get_component(Cervus.components.Transform);
@@ -41,18 +46,11 @@ cube_render.color = "#00ff00";
 cube_transform.position = [0, 10, -10];
 cube.add_component(new Cervus.components.RigidBody({
   world: physics_world,
-  physics: {
-    shape: 'box',
-    move: true,
-    density: 1,
-    friction: 0.2,
-    restitution: 0.2,
-    belongsTo: 1,
-    collidesWith: 0xffffffff
-  }
+  shape: 'box'
 }));
 game.add(cube);
 
 game.on('tick', () => {
+  physics_world.step(1/game.fps);
   camera_transform.look_at(cube_transform.position);
 });

@@ -1,8 +1,7 @@
 import { Component } from '../core/component';
 import { Transform } from './';
 import { to_euler } from '../math/quat';
-
-import * as Goblin from 'goblinphysics';
+import * as physics from '../physics';
 
 const default_options = {
   world: null,
@@ -18,27 +17,17 @@ export class RigidBody extends Component {
 
   mount() {
     this.transform = this.entity.get_component(Transform);
-    // const body_data = Object.assign({},
-    //   this.physics,
-    //   {
-    //     position: transform.position,
-    //     rotation: to_euler(transform.rotation),
-    //     size: transform.scale
-    //   }
-    // );
-    const shape = new Goblin.default.BoxShape(
-      this.transform.scale[0]/2,
-      this.transform.scale[1]/2,
-      this.transform.scale[2]/2
+    const shape = physics.colliders[this.shape](
+      this.transform.scale
     );
 
-    this.body = new Goblin.default.RigidBody(shape, this.mass);
+    this.body = physics.body(shape, this.mass);
+
     [this.body.position.x, this.body.position.y, this.body.position.z] = this.transform.position;
     this.world.addRigidBody(this.body);
   }
 
   update() {
-    this.world.step(1/this.entity.game.fps);
     this.transform.position = [
       this.body.position.x,
       this.body.position.y,
