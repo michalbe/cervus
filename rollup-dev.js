@@ -1,6 +1,8 @@
 import resolve from 'rollup-plugin-node-resolve';
 import serve from 'rollup-plugin-serve'
 import livereload from 'rollup-plugin-livereload'
+import commonjs from 'rollup-plugin-commonjs';
+import json from 'rollup-plugin-json';
 
 export default {
   input: 'index.js',
@@ -17,6 +19,13 @@ export default {
     }),
     livereload({
       watch: ['dist', '_example']
+    }),
+    json(),
+    commonjs({
+      include: 'node_modules/**',  // Default: undefined
+      extensions: [ '.js', '.coffee' ],  // Default: [ '.js' ]
+      ignoreGlobal: false,  // Default: false
+      sourceMap: false  // Default: true
     })
   ],
 };

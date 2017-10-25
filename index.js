@@ -4,8 +4,9 @@ import * as _math from './math';
 import * as _materials from './materials';
 import * as _shapes from './shapes';
 import * as _tweens from './tweens';
-import * as _OIMO from 'oimo';
+import * as _Goblin from 'goblinphysics';
 
+const physics = _Goblin.default;
 export {
   _core as core,
   _components as components,
@@ -13,5 +14,5 @@ export {
   _math as math,
   _shapes as shapes,
   _tweens as tweens,
-  _OIMO as OIMO
+  physics
 };
