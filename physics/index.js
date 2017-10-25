@@ -2,7 +2,7 @@ import * as _Goblin from 'goblinphysics';
 
 const Goblin = _Goblin.default;
 
-export function world() {
+export function World() {
   return new Goblin.World(
     new Goblin.SAPBroadphase(),
     new Goblin.NarrowPhase(),
@@ -10,7 +10,7 @@ export function world() {
   );
 }
 
-export function body(shape, mass) {
+export function Body(shape, mass) {
   return new Goblin.RigidBody(shape, mass);
 }
 

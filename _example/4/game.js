@@ -15,15 +15,14 @@ const game = new Cervus.core.Game({
   // fps: 10
 });
 
-const physics_world = Cervus.physics.world();
-console.log(physics_world);
+const physics_world = new Cervus.physics.World();
 
 // By default all entities face the user.
 // Rotate the camera to see the scene.
 const camera_transform = game.camera.get_component(Cervus.components.Transform);
 camera_transform.position = [0, 3, 5];
 camera_transform.rotate_rl(Math.PI);
-// game.camera.keyboard_controlled = true;
+game.camera.keyboard_controlled = true;
 
 const plane = new Cervus.shapes.Plane();
 const plane_transform = plane.get_component(Cervus.components.Transform);
@@ -38,31 +37,28 @@ plane.add_component(new Cervus.components.RigidBody({
 }));
 game.add(plane);
 
-const cube = new Cervus.shapes.Box();
-const cube_transform = cube.get_component(Cervus.components.Transform);
-const cube_render = cube.get_component(Cervus.components.Render);
-cube_render.material = material;
-cube_render.color = "#00ff00";
-cube_transform.position = [0, 10, -10];
-cube.add_component(new Cervus.components.RigidBody({
-  world: physics_world,
-  shape: 'box'
-}));
-game.add(cube);
+let cube_transform;
+for (let i = 0; i < 15; i++) {
+  const cube = new Cervus.shapes.Box();
+  cube_transform = cube.get_component(Cervus.components.Transform);
 
-const cube2 = new Cervus.shapes.Box();
-const cube2_transform = cube2.get_component(Cervus.components.Transform);
-const cube2_render = cube2.get_component(Cervus.components.Render);
-cube2_render.material = material;
-cube2_render.color = "#00ff00";
-cube2_transform.position = [-0.5, 15, -10];
-cube2.add_component(new Cervus.components.RigidBody({
-  world: physics_world,
-  shape: 'box'
-}));
-game.add(cube2);
+  const cube_render = cube.get_component(Cervus.components.Render);
+  cube_render.material = material;
+  cube_render.color = '#'+Math.floor(Math.random()*1677215).toString(16);
+  cube_transform.position = [
+    0,
+    4 * i,
+    -10
+  ];
+  cube.add_component(new Cervus.components.RigidBody({
+    world: physics_world,
+    shape: 'box',
+    mass: 5
+  }));
+  game.add(cube);
+}
 
 game.on('tick', () => {
   physics_world.step(1/game.fps);
-  camera_transform.look_at(cube_transform.position);
+  // camera_transform.look_at(cube_transform.position);
 });
