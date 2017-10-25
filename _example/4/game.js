@@ -50,6 +50,18 @@ cube.add_component(new Cervus.components.RigidBody({
 }));
 game.add(cube);
 
+const cube2 = new Cervus.shapes.Box();
+const cube2_transform = cube2.get_component(Cervus.components.Transform);
+const cube2_render = cube2.get_component(Cervus.components.Render);
+cube2_render.material = material;
+cube2_render.color = "#00ff00";
+cube2_transform.position = [-0.5, 15, -10];
+cube2.add_component(new Cervus.components.RigidBody({
+  world: physics_world,
+  shape: 'box'
+}));
+game.add(cube2);
+
 game.on('tick', () => {
   physics_world.step(1/game.fps);
   camera_transform.look_at(cube_transform.position);

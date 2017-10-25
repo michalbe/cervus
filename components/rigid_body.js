@@ -1,6 +1,5 @@
 import { Component } from '../core/component';
 import { Transform } from './';
-import { to_euler } from '../math/quat';
 import * as physics from '../physics';
 
 const default_options = {
@@ -32,6 +31,13 @@ export class RigidBody extends Component {
       this.body.position.x,
       this.body.position.y,
       this.body.position.z
+    ];
+
+    this.transform.rotation = [
+      this.body.rotation.x,
+      this.body.rotation.y,
+      this.body.rotation.z,
+      this.body.rotation.w
     ];
   }
 }
