@@ -33,6 +33,7 @@ export class RigidBody extends Component {
     );
 
     this.body = new Goblin.default.RigidBody(shape, this.mass);
+    [this.body.position.x, this.body.position.y, this.body.position.z] = this.transform.position;
     this.world.addRigidBody(this.body);
   }
 
