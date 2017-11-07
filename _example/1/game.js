@@ -12,8 +12,8 @@ const textured_phong_material = new Cervus.materials.PhongMaterial({
     Cervus.components.Render,
     Cervus.components.Transform
   ],
-  texture: '../textures/4.png',
-  normal_map: '../textures/uv4.png'
+  texture: Cervus.core.image_loader('../textures/4.png'),
+  normal_map: Cervus.core.image_loader('../textures/uv4.png')
 });
 
 const wireframe_material = new Cervus.materials.WireframeMaterial({
