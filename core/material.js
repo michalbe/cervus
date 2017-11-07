@@ -1,6 +1,5 @@
 import { create_program_object, create_shader_object, gl } from './context';
 import { Transform, Render } from '../components';
-import { image_loader } from './';
 
 import { vertex } from '../shaders';
 import { fragment } from '../shaders';
@@ -66,48 +65,47 @@ export class Material {
   //
   // }
 
-  set texture(url) {
-    this.build_texture(url, this._texture_url, 'TEXTURE', 'gl_texture');
+  set texture(image_promise) {
+    this.build_texture(image_promise, this._texture_image, 'TEXTURE', 'gl_texture');
   }
 
   get texture() {
-    return this._texture_url;
+    return this._texture_image;
   }
 
-  set normal_map(url) {
-    this.build_texture(url, this._normal_map_url, 'NORMAL_MAP', 'gl_normal_map');
+  set normal_map(image_promise) {
+    this.build_texture(image_promise, this._normal_map_image, 'NORMAL_MAP', 'gl_normal_map');
   }
 
   get normal_map() {
-    return this._normal_map_url;
+    return this._normal_map_image;
   }
 
-  build_texture(new_url, url_location, feature, gl_texture_key) {
-    if (new_url !== url_location && new_url) {
-
-      url_location = new_url;
-
+  build_texture(image_promise, url_location, feature, gl_texture_key) {
+    if (image_promise) {
       if (!this._textures[gl_texture_key]) {
         this._textures[gl_texture_key] = gl.createTexture();
       }
 
-      image_loader(new_url)
-      .then(image => {
+      image_promise.then(image => {
+        if (url_location !== image) {
+          url_location = image;
 
-        gl.bindTexture(gl.TEXTURE_2D, this._textures[gl_texture_key]);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
-        gl.generateMipmap(gl.TEXTURE_2D);
+          gl.bindTexture(gl.TEXTURE_2D, this._textures[gl_texture_key]);
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
+          gl.generateMipmap(gl.TEXTURE_2D);
 
-        if (!this.has_feature(feature)) {
-          this.add_feature(feature);
-          this.setup_program();
+          if (!this.has_feature(feature)) {
+            this.add_feature(feature);
+            this.setup_program();
+          }
         }
       })
       .catch(console.error);
 
-    } else if (!new_url) {
+    } else if (!image_promise) {
 
-      url_location = new_url;
+      url_location = null;
       this.remove_feature(feature);
       this.setup_program();
 
