@@ -6,3 +6,4 @@ export * from './image-loader';
 export * from './component';
 export * from './tween';
 export * from './material';
+export * from './random';
