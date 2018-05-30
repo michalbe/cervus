@@ -14,7 +14,8 @@ const default_options = {
   fov: 60,
   near: 0.35,
   far: 85,
-  clear_color: '#FFFFFF'
+  clear_color: '#FFFFFF',
+  clear_opacity: 1
 };
 
 const EVENTS = ["keydown", "keyup", "mousemove"];
@@ -88,8 +89,24 @@ export class Game {
       color_vec[0],
       color_vec[1],
       color_vec[2],
-      1
+      this.clear_opacity
     );
+  }
+
+  set clear_opacity(value) {
+    this._clear_opacity = value;
+    const color_vec = hex_to_rgb(this._clear_color);
+
+    gl.clearColor(
+      color_vec[0],
+      color_vec[1],
+      color_vec[2],
+      this._clear_opacity
+    );
+  }
+
+  get clear_opacity() {
+    return this._clear_opacity;
   }
 
   stop() {
