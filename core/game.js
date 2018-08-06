@@ -14,8 +14,13 @@ const default_options = {
   fov: 60,
   near: 0.35,
   far: 85,
+  left: -10,
+  right: 10,
+  bottom: -10,
+  top: 10,
   clear_color: '#FFFFFF',
-  clear_opacity: 1
+  clear_opacity: 1,
+  projection: 'perspective'
 };
 
 const EVENTS = ["keydown", "keyup", "mousemove"];
@@ -51,13 +56,11 @@ export class Game {
     this.projMatrix = mat4.create();
     this.viewMatrix = mat4.create();
 
-    mat4.perspective(
-      this.projMatrix,
-      to_radian(this.fov),
-      this.width / this.height,
-      this.near,
-      this.far
-    );
+    if (this.projection === 'ortho') {
+      this.setup_ortho_camera();
+    } else {
+      this.setup_perspective_camera();
+    }
 
     this.tick_delta = 1000 / this.fps;
 
@@ -75,6 +78,28 @@ export class Game {
     gl.enable(gl.DEPTH_TEST);
 
     gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
+  }
+
+  setup_ortho_camera() {
+    mat4.ortho(
+      this.projMatrix,
+      this.left,
+      this.right,
+      this.bottom,
+      this.top,
+      this.near,
+      this.far
+    );
+  }
+
+  setup_perspective_camera() {
+    mat4.perspective(
+      this.projMatrix,
+      to_radian(this.fov),
+      this.width / this.height,
+      this.near,
+      this.far
+    );
   }
 
   get clear_color() {
