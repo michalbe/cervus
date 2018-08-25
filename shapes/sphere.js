@@ -121,18 +121,18 @@ const uvs = [
 ];
 export class Sphere extends Entity {
   constructor(options = {}) {
-    options.components = [
-      new Transform(),
-      new Render({
-        vertices,
-        indices,
-        normals,
-        uvs,
-        material: options.material
-      })
-    ];
-
-    super(options);
+    super(Object.assign({
+      components: [
+        new Transform(),
+        new Render({
+          vertices,
+          indices,
+          normals,
+          uvs,
+          material: options.material
+        })
+      ]
+    }, options));
   }
   // TODO: https://github.com/hughsk/icosphere/blob/master/index.js
 }

@@ -107,17 +107,17 @@ const uvs = [
 
 export class Box extends Entity {
   constructor(options = {}) {
-    options.components = [
-      new Transform(),
-      new Render({
-        vertices,
-        indices,
-        normals,
-        material: options.material,
-        uvs
-      })
-    ];
-
-    super(options);
+    super(Object.assign({
+      components: [
+        new Transform(),
+        new Render({
+          vertices,
+          indices,
+          normals,
+          material: options.material,
+          uvs
+        })
+      ]
+    }, options));
   }
 }

@@ -31,17 +31,17 @@ const uvs = [
 
 export class Plane extends Entity {
   constructor(options = {}) {
-    options.components = [
-      new Transform(),
-      new Render({
-        vertices,
-        indices,
-        normals,
-        uvs,
-        material: options.material
-      })
-    ];
-
-    super(options);
+    super(Object.assign({
+      components: [
+        new Transform(),
+        new Render({
+          vertices,
+          indices,
+          normals,
+          uvs,
+          material: options.material
+        })
+      ]
+    }, options));
   }
 }
