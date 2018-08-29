@@ -246,7 +246,9 @@ export class Game {
     this.emit('afterrender');
   }
 
-  add_to_components_sets(entity) {
+  track_entity(entity) {
+    entity.game = this;
+
     for (let component of entity.components.values()) {
       if (!this.entities_by_component.has(component.constructor)) {
         this.entities_by_component.set(component.constructor, new Set());
@@ -254,18 +256,20 @@ export class Game {
       this.entities_by_component.get(component.constructor).add(entity);
     }
 
-    // Recursively add children's components, too.
+    // Recursively track children.
     for (let child of entity.entities) {
-      this.add_to_components_sets(child);
+      this.track_entity(child);
     }
   }
 
-  remove_from_components_sets(entity) {
+  untrack_entity(entity) {
+    entity.game = null;
+
     for (let component of entity.components.values()) {
       this.entities_by_component.get(component.constructor).delete(entity);
     }
 
-    // Recursively remove children's components, too.
+    // Recursively untrack children.
     for (let child of entity.entities) {
       this.remove_from_components_sets(child);
     }
@@ -276,13 +280,12 @@ export class Game {
   }
 
   add(entity) {
-    entity.game = this;
     this.entities.add(entity);
-    this.add_to_components_sets(entity);
+    this.track_entity(entity);
   }
 
   remove(entity) {
-    this.remove_from_components_sets(entity);
     this.entities.delete(entity);
+    this.untrack_entity(entity);
   }
 }
