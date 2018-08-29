@@ -96,7 +96,9 @@ export class PhongMaterial extends Material {
     let light_color = new Float32Array(lights_count * 3);
 
     for (let i = 0; i < lights_count; i++) {
-      light_position.set(lights[i].get_component(Transform).position, i * 3);
+      let light_transform = lights[i].get_component(Transform);
+      let world_position = light_transform.world_matrix.slice(12, 15);
+      light_position.set(world_position, i * 3);
       light_intensity.set([
         lights[i].get_component(Light).intensity,
         1 - lights[i].get_component(Light).intensity
