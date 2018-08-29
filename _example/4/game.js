@@ -6,6 +6,10 @@ const material = new Cervus.materials.PhongMaterial({
   ]
 });
 
+material.add_fog({
+  color: [1, 1, 1],
+  distance: new Float32Array([1, 15])
+});
 const game = new Cervus.core.Game({
   width: window.innerWidth,
   height: window.innerHeight,

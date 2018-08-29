@@ -38,6 +38,11 @@ export function vertex(defines) {
       out vec3 fn;
     #endif
 
+    #ifdef FOG
+      uniform vec3 camera;
+      out float f_distance;
+    #endif
+
     #if defined(TEXTURE) || defined(NORMAL_MAP)
       in vec2 a_t;
       out vec2 v_t;
@@ -59,7 +64,7 @@ export function vertex(defines) {
         fp = (w * vec4(P_current, 1.0)).xyz;
 
         #ifdef LIGHTS
-          fn = (w * vec4(N_current, 0.0)).xyz;
+          fn = (vec4(N_current, 0.0)).xyz;
         #endif
       #endif
 
@@ -67,6 +72,10 @@ export function vertex(defines) {
 
       #if defined(TEXTURE) || defined(NORMAL_MAP)
         v_t = a_t;
+      #endif
+
+      #ifdef FOG
+        f_distance = distance(w * vec4(P_current, 1.0), vec4(camera, 1.0));
       #endif
     }
   `;

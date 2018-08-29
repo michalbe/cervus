@@ -13,7 +13,7 @@ export class PhongMaterial extends Material {
 
   get_locations() {
     this.get_uniforms_and_attrs(
-      ['p', 'v', 'w', 'lp', 'li', 'lc', 'al', 'c', 'u_t', 'n_m', 'frame_delta'],
+      ['p', 'v', 'w', 'lp', 'li', 'lc', 'al', 'c', 'u_t', 'n_m', 'frame_delta', 'fog_color', 'fog_distance', 'camera'],
       ['P_current', 'P_next', 'N_current', 'N_next', 'a_t']
     );
   }
@@ -60,6 +60,12 @@ export class PhongMaterial extends Material {
         gl.enableVertexAttribArray(this.attribs.a_t);
         gl.vertexAttribPointer(this.attribs.a_t, 2, gl.FLOAT, true, 0, 0);
       }
+    }
+
+    if (render.material.has_feature('FOG')) {
+      gl.uniform3fv(this.uniforms.fog_color, this.fog.color);
+      gl.uniform2fv(this.uniforms.fog_distance, this.fog.distance);
+      gl.uniform3fv(this.uniforms.camera, game.camera.get_component(Transform).position);
     }
 
     // current frame

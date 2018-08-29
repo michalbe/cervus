@@ -1,7 +1,7 @@
 import { gl } from '../core/context';
 import { Material } from '../core';
 
-import { Render, Morph } from '../components';
+import { Render, Morph, Transform } from '../components';
 
 export class BasicMaterial extends Material {
   constructor(options) {
@@ -12,12 +12,12 @@ export class BasicMaterial extends Material {
 
   get_locations() {
     this.get_uniforms_and_attrs(
-      ['p', 'v', 'w', 'c', 'frame_delta'],
+      ['p', 'v', 'w', 'c', 'frame_delta', 'fog_color', 'fog_distance', 'camera'],
       ['P_current', 'P_next', 'a_t']
     );
   }
 
-  apply_shader(entity) {
+  apply_shader(entity, game) {
     const [render, morph] = entity.get_components(Render, Morph);
     let buffers = render.buffers;
 
@@ -42,11 +42,17 @@ export class BasicMaterial extends Material {
       gl.uniform1i(this.uniforms.u_t, 0);
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, render.material._textures.gl_texture);
-      
+
       gl.bindBuffer(gl.ARRAY_BUFFER, buffers.uvs);
       gl.enableVertexAttribArray(this.attribs.a_t);
       gl.vertexAttribPointer(this.attribs.a_t, 2, gl.FLOAT, true, 0, 0);
 
+    }
+
+    if (render.material.has_feature('FOG')) {
+      gl.uniform3fv(this.uniforms.fog_color, this.fog.color);
+      gl.uniform2fv(this.uniforms.fog_distance, this.fog.distance);
+      gl.uniform3fv(this.uniforms.camera, game.camera.get_component(Transform).position);
     }
 
     // current frame
