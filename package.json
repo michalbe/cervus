@@ -5,19 +5,16 @@
   "repository": "git@github.com:michalbe/cervus.git",
   "module": "./index.js",
   "scripts": {
-    "prod": "./node_modules/.bin/rollup -c rollup-prod.js && printf \"Size gzipped: %s\n\" $(gzip dist/cervus.min.js --stdout | wc -c | awk '{print $1/1024\"K\"}')",
-    "dev": "./node_modules/.bin/rollup -c rollup-dev.js -w"
+    "prod": "rollup -c rollup-prod.js && printf \"Size gzipped: %s\n\" $(gzip dist/cervus.min.js --stdout | wc -c | awk '{print $1/1024\"K\"}')",
+    "dev": "rollup -c rollup-dev.js -w"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
-    "babel-plugin-external-helpers": "^6.22.0",
-    "babel-preset-latest": "^6.24.1",
     "eslint": "^3.19.0",
     "eslint-config-defaults": "^9.0.0",
     "rollup": "^0.49.0",
     "rollup-plugin-babel-minify": "^3.1.2",
     "rollup-plugin-commonjs": "^8.2.4",
-    "rollup-plugin-json": "^2.3.0",
     "rollup-plugin-livereload": "^0.4.0",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-serve": "^0.3.0"
