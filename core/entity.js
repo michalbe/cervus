@@ -34,6 +34,12 @@ export class Entity {
   add(entity) {
     entity.parent = this;
     this.entities.add(entity);
+
+    if (this.game) {
+      // If this entity already exists, make sure its children's components are
+      // accounted for.
+      this.game.add_to_components_sets(entity);
+    }
   }
 
   update(tick_delta) {

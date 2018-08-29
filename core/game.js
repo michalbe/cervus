@@ -254,12 +254,22 @@ export class Game {
 
       this.entities_by_component.get(component.constructor).add(entity);
     }));
+
+    // Recursively add children's components, too.
+    for (let child of entity.entities) {
+      this.add_to_components_sets(child);
+    }
   }
 
   remove_from_components_sets(entity) {
     entity.components.forEach((component => {
       this.entities_by_component.get(component.constructor).delete(entity);
     }));
+
+    // Recursively remove children's components, too.
+    for (let child of entity.entities) {
+      this.remove_from_components_sets(child);
+    }
   }
 
   get_entities_by_component(component) {
