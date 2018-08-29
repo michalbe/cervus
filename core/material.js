@@ -31,6 +31,17 @@ export class Material {
     this.features.delete(feature);
   }
 
+  add_fog(options = {}) {
+    this.add_feature('FOG');
+    this.fog = {
+      color: options.color || new Float32Array([0, 0, 0]),
+      // Distance of fog [where fog starts, where fog completely covers object]
+      distance: options.distance || new Float32Array([10, 30])
+    };
+
+    this.setup_program();
+  }
+
   setup_program() {
     this.program = create_program_object(
       create_shader_object(

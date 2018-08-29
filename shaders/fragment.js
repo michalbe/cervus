@@ -48,10 +48,20 @@ export function fragment(defines) {
       uniform sampler2D n_m;
     #endif
 
+    #ifdef FOG
+      uniform vec3 fog_color;
+      uniform vec2 fog_distance;
+      in float f_distance;
+    #endif
+
     out vec4 frag_color;
 
     void main()
     {
+      #ifdef FOG
+        float fog_factor = clamp((fog_distance.y - f_distance) / (fog_distance.y - fog_distance.x), 0.0, 1.0);
+      #endif
+
       #ifdef LIGHTS
         #ifdef TEXTURE
           vec4 p_c = texture(u_t, v_t);
@@ -81,12 +91,24 @@ export function fragment(defines) {
           light += vec4(p_c.rgb * li[i].x + li[i].y * max(dot(n, normalize(lp[i] - fp)) * lc[i], 0.0), p_c.a);
         }
 
-        frag_color = light;
+        #ifdef FOG
+          frag_color = mix(vec4(fog_color, 1.0), light, fog_factor);
+        #else
+          frag_color = light;
+        #endif
       #else
         #ifdef TEXTURE
-          frag_color = texture(u_t, v_t);
+            #ifdef FOG
+              frag_color = mix(vec4(fog_color, 1.0), texture(u_t, v_t), fog_factor);
+            #else
+              frag_color = texture(u_t, v_t);
+            #endif
         #else
-          frag_color = c;
+          #ifdef FOG
+            frag_color = mix(vec4(fog_color, 1.0), c, fog_factor);
+          #else
+            frag_color = c;
+          #endif
         #endif
       #endif
     }
