@@ -247,13 +247,12 @@ export class Game {
   }
 
   add_to_components_sets(entity) {
-    entity.components.forEach((component => {
+    for (let component of entity.components.values()) {
       if (!this.entities_by_component.has(component.constructor)) {
         this.entities_by_component.set(component.constructor, new Set());
       }
-
       this.entities_by_component.get(component.constructor).add(entity);
-    }));
+    }
 
     // Recursively add children's components, too.
     for (let child of entity.entities) {
@@ -262,9 +261,9 @@ export class Game {
   }
 
   remove_from_components_sets(entity) {
-    entity.components.forEach((component => {
+    for (let component of entity.components.values()) {
       this.entities_by_component.get(component.constructor).delete(entity);
-    }));
+    }
 
     // Recursively remove children's components, too.
     for (let child of entity.entities) {
