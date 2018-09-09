@@ -4,7 +4,7 @@ import * as _math from './math';
 import * as _materials from './materials';
 import * as _shapes from './shapes';
 import * as _tweens from './tweens';
-import * as _physics from './physics';
+// import * as _physics from './physics';
 
 export {
   _core as core,
@@ -13,5 +13,5 @@ export {
   _math as math,
   _shapes as shapes,
   _tweens as tweens,
-  _physics as physics
+  // _physics as physics
 };
