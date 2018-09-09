@@ -36,9 +36,8 @@ export class Entity {
     this.entities.add(entity);
 
     if (this.game) {
-      // If this entity already exists, make sure its children's components are
-      // accounted for.
-      this.game.add_to_components_sets(entity);
+      // Track the child if the current entity already exists in the scene.
+      this.game.track_entity(entity);
     }
   }
 
