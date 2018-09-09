@@ -4,8 +4,8 @@
 // vec4 c; // color
 // vec3 fp; // vertex position
 // vec3[MAX_LIGHTS] lp; // light position
-// vec2[MAX_LIGHTS] li; // light intensity
 // vec3[MAX_LIGHTS] lc; // light color
+// float[MAX_LIGHTS] li; // light intensity
 // int al; // active lights
 // vec3 fn; // vertex normals
 // vec2 v_t; // texture coordinates
@@ -29,8 +29,8 @@ export function fragment(defines) {
       #define MAX_LIGHTS 100
 
       uniform vec3[MAX_LIGHTS] lp;
-      uniform vec2[MAX_LIGHTS] li;
       uniform vec3[MAX_LIGHTS] lc;
+      uniform float[MAX_LIGHTS] li;
       uniform int al;
 
       in vec3 fn;
@@ -88,7 +88,12 @@ export function fragment(defines) {
 
         vec4 light = vec4(0.0, 0.0, 0.0, 1.0);
         for (int i = 0; i < al; i++) {
-          light += vec4(p_c.rgb * li[i].x + li[i].y * max(dot(n, normalize(lp[i] - fp)) * lc[i], 0.0), p_c.a);
+          vec3 light_dir = lp[i] - fp;
+          vec3 L = normalize(light_dir);
+          float light_dist = length(light_dir);
+          float diffuse_factor = max(dot(n, L), 0.0);
+          vec3 rgb = p_c.rgb * diffuse_factor * lc[i] * li[i] / light_dist;
+          light += vec4(rgb, p_c.a);
         }
 
         #ifdef FOG
