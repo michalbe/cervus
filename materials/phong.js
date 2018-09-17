@@ -89,18 +89,18 @@ export class PhongMaterial extends Material {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
     gl.drawElements(this.draw_mode, buffers.qty, gl.UNSIGNED_SHORT, 0);
 
-    const lights = game.get_entities_by_component(Light);
+    const lights = Array.from(game.components.get(Light));
     const lights_count = lights.length;
     let light_position = new Float32Array(lights_count * 3);
     let light_color = new Float32Array(lights_count * 3);
     let light_intensity = new Float32Array(lights_count);
 
     for (let i = 0; i < lights_count; i++) {
-      let light_transform = lights[i].get_component(Transform);
+      let light_transform = lights[i].entity.get_component(Transform);
       let world_position = light_transform.world_matrix.slice(12, 15);
       light_position.set(world_position, i * 3);
-      light_color.set(lights[i].get_component(Light).color_vec, i * 3);
-      light_intensity[i] = lights[i].get_component(Light).intensity;
+      light_color.set(lights[i].color_vec, i * 3);
+      light_intensity[i] = lights[i].intensity;
     }
 
     gl.uniform1i(this.uniforms.al, lights_count);

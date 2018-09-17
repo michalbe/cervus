@@ -149,7 +149,7 @@ export class Game {
     this.listeners = new Map();
     this.keys = {};
     this.mouse_delta = {x: 0, y: 0};
-    this.entities_by_component = new WeakMap();
+    this.components = new WeakMap();
   }
 
   destroy() {
@@ -250,10 +250,10 @@ export class Game {
     entity.game = this;
 
     for (let component of entity.components.values()) {
-      if (!this.entities_by_component.has(component.constructor)) {
-        this.entities_by_component.set(component.constructor, new Set());
+      if (!this.components.has(component.constructor)) {
+        this.components.set(component.constructor, new Set());
       }
-      this.entities_by_component.get(component.constructor).add(entity);
+      this.components.get(component.constructor).add(component);
     }
 
     // Recursively track children.
@@ -266,17 +266,13 @@ export class Game {
     entity.game = null;
 
     for (let component of entity.components.values()) {
-      this.entities_by_component.get(component.constructor).delete(entity);
+      this.components.get(component.constructor).delete(component);
     }
 
     // Recursively untrack children.
     for (let child of entity.entities) {
       this.remove_from_components_sets(child);
     }
-  }
-
-  get_entities_by_component(component) {
-    return Array.from(this.entities_by_component.get(component));
   }
 
   add(entity) {
