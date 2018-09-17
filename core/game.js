@@ -271,7 +271,7 @@ export class Game {
 
     // Recursively untrack children.
     for (let child of entity.entities) {
-      this.remove_from_components_sets(child);
+      this.untrack_entity(child);
     }
   }
 
