@@ -172,6 +172,7 @@ export class Game {
     }
 
     this.listeners.get(event_name).add(handler);
+    return handler;
   }
 
   off(event_name, handler) {
