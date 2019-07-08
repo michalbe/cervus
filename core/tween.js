@@ -1,11 +1,15 @@
+const default_options = {
+  time: 1000,
+  // to
+  // cb
+  // game
+  // object
+  // property
+};
+
 export class Tween {
   constructor(options) {
-    this.to = options.to;
-    this.time = options.time || 1000;
-    this.game = options.game;
-    this.object = options.object;
-    this.property = options.property;
-    this.cb = options.cb;
+    Object.assign(this, default_options, options);
   }
 
   do_step(tick) {

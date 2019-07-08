@@ -5,18 +5,22 @@ import { vertex } from '../shaders';
 import { fragment } from '../shaders';
 
 export class Material {
-  constructor(options) {
+  constructor({
+    requires = [],
+    texture = false,
+    normal_map = false,
+  } = {}) {
     this.uniforms = {};
     this.attribs = {};
     this.draw_mode = gl.TRIANGLES;
     this.features = new Set([].concat(
-      ...Array.from(options.requires || []).map(comp => comp.features))
-    );
+      ...Array.from(requires || [], comp => comp.features)
+    ));
 
     this._textures = {};
 
-    this.texture = options.texture || false;
-    this.normal_map = options.normal_map || false;
+    this.texture = texture;
+    this.normal_map = normal_map;
   }
 
   add_feature(feature) {

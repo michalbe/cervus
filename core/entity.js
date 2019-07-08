@@ -4,7 +4,7 @@ const default_options = {
 };
 
 export class Entity {
-  constructor(options = {}) {
+  constructor(options) {
     Object.assign(this, default_options, options);
 
     this.entities = new Set();
